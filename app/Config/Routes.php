@@ -97,13 +97,17 @@ $routes->group('admin', ['filter' => 'role:admin'], function($routes) {
     $routes->get('promo/edit/(:num)', 'Admin\Route::edit/$1');
     $routes->post('promo/update/(:num)', 'Admin\Promo::update/$1');
     $routes->get('promo/delete/(:num)', 'Admin\Promo::delete/$1');
+    
 });
 
+// Boarding Monitor Routes (Accessible by both admin and petugas roles)
+$routes->get('admin/boarding', 'Admin\Boarding::index', ['filter' => 'role:admin,petugas']);
+$routes->get('admin/boarding/manifest/(:num)', 'Admin\Boarding::manifest/$1', ['filter' => 'role:admin,petugas']);
+$routes->get('admin/boarding/print/(:num)', 'Admin\Boarding::printReport/$1', ['filter' => 'role:admin,petugas']);
+
 // Petugas Routes (Protected)
-$routes->group('petugas', ['filter' => 'role:petugas,admin'], function($routes) {
+$routes->group('petugas', ['filter' => 'role:petugas'], function($routes) {
     $routes->get('scan', 'Petugas\Scan::index');
     $routes->post('scan/verify', 'Petugas\Scan::verify');
     $routes->post('scan/confirm', 'Petugas\Scan::confirmBoarding');
-    $routes->get('scan/manifest/(:num)', 'Petugas\Scan::manifest/$1');
-    $routes->get('scan/print/(:num)', 'Petugas\Scan::printReport/$1');
 });

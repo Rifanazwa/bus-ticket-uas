@@ -209,8 +209,11 @@
                                 <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 inline -mt-0.5"></i> Admin Panel
                             </a>
                         <?php elseif ($role === 'petugas'): ?>
-                            <a href="<?= base_url('petugas/scan') ?>" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-teal-500/10 text-teal-400 border border-teal-500/20 hover:bg-teal-500/20 transition-all">
-                                <i data-lucide="scan-line" class="w-3.5 h-3.5 inline -mt-0.5"></i> Portal Petugas
+                            <a href="<?= base_url('petugas/scan') ?>" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-teal-500/10 text-teal-400 border border-teal-500/20 hover:bg-teal-500/20 transition-all mr-2">
+                                <i data-lucide="scan" class="w-3.5 h-3.5 inline -mt-0.5"></i> Scan Boarding
+                            </a>
+                            <a href="<?= base_url('admin/boarding') ?>" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 hover:bg-indigo-500/20 transition-all">
+                                <i data-lucide="scan-line" class="w-3.5 h-3.5 inline -mt-0.5"></i> Portal Boarding
                             </a>
                         <?php endif; ?>
                         <div class="flex items-center gap-2 pl-3 border-l border-white/10">
@@ -274,7 +277,10 @@
                         </a>
                     <?php elseif (session()->get('isLoggedIn') && session()->get('userRole') === 'petugas'): ?>
                         <a href="<?= base_url('petugas/scan') ?>" class="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-teal-400 hover:text-white hover:bg-white/5 transition-all">
-                            <i data-lucide="scan-line" class="w-4 h-4"></i> Portal Petugas
+                            <i data-lucide="scan" class="w-4 h-4"></i> Scan Boarding
+                        </a>
+                        <a href="<?= base_url('admin/boarding') ?>" class="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-indigo-400 hover:text-white hover:bg-white/5 transition-all">
+                            <i data-lucide="scan-line" class="w-4 h-4"></i> Portal Boarding
                         </a>
                     <?php endif; ?>
                 <?php endif; ?>

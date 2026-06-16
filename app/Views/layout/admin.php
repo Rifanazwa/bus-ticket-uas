@@ -216,85 +216,101 @@
         <!-- Navigation -->
         <nav class="flex-1 overflow-y-auto px-3 py-5 space-y-0.5">
 
-            <p class="px-3 text-[9px] font-bold text-slate-600 uppercase tracking-widest mb-2">Menu Utama</p>
+            <?php if (session()->get('userRole') === 'admin'): ?>
+                <p class="px-3 text-[9px] font-bold text-slate-600 uppercase tracking-widest mb-2">Menu Utama</p>
 
-            <a href="<?= base_url('admin/dashboard') ?>"
-               class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl <?= service('router')->getMatchedRoute()[0] === 'admin/dashboard' ? 'nav-item-active' : 'text-slate-400' ?>">
-                <i data-lucide="layout-dashboard" class="w-4 h-4 flex-shrink-0"></i>
-                <span>Dashboard</span>
-                <?php if(service('router')->getMatchedRoute()[0] === 'admin/dashboard'): ?>
-                    <span class="ml-auto w-1.5 h-1.5 rounded-full bg-brand-400 dot-pulse"></span>
-                <?php endif; ?>
-            </a>
-
-            <a href="<?= base_url('admin/bus') ?>"
-               class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl <?= strpos(service('router')->getMatchedRoute()[0], 'admin/bus') === 0 ? 'nav-item-active' : 'text-slate-400' ?>">
-                <i data-lucide="truck" class="w-4 h-4 flex-shrink-0"></i>
-                <span>Data Armada Bus</span>
-            </a>
-
-            <a href="<?= base_url('admin/route') ?>"
-               class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl <?= strpos(service('router')->getMatchedRoute()[0], 'admin/route') === 0 ? 'nav-item-active' : 'text-slate-400' ?>">
-                <i data-lucide="map-pinned" class="w-4 h-4 flex-shrink-0"></i>
-                <span>Data Rute</span>
-            </a>
-
-            <a href="<?= base_url('admin/officer') ?>"
-               class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl <?= strpos(service('router')->getMatchedRoute()[0], 'admin/officer') === 0 ? 'nav-item-active' : 'text-slate-400' ?>">
-                <i data-lucide="users" class="w-4 h-4 flex-shrink-0"></i>
-                <span>Data Petugas</span>
-            </a>
-
-            <a href="<?= base_url('admin/schedule') ?>"
-               class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl <?= strpos(service('router')->getMatchedRoute()[0], 'admin/schedule') === 0 ? 'nav-item-active' : 'text-slate-400' ?>">
-                <i data-lucide="calendar-days" class="w-4 h-4 flex-shrink-0"></i>
-                <span>Jadwal Keberangkatan</span>
-            </a>
-
-            <a href="<?= base_url('admin/promo') ?>"
-               class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl <?= strpos(service('router')->getMatchedRoute()[0], 'admin/promo') === 0 ? 'nav-item-active' : 'text-slate-400' ?>">
-                <i data-lucide="ticket-percent" class="w-4 h-4 flex-shrink-0"></i>
-                <span>Voucher &amp; Promo</span>
-            </a>
-
-            <!-- Divider -->
-            <div class="pt-4 mt-3 border-t border-slate-800/50">
-                <p class="px-3 text-[9px] font-bold text-slate-600 uppercase tracking-widest mb-2">AI Analytics</p>
-
-                <a href="<?= base_url('admin/predictions') ?>"
-                   class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl <?= service('router')->getMatchedRoute()[0] === 'admin/predictions' ? 'nav-item-active' : 'text-slate-400' ?>">
-                    <i data-lucide="trending-up" class="w-4 h-4 flex-shrink-0 text-indigo-400"></i>
-                    <span>Prediksi Okupansi</span>
-                    <span class="ml-auto text-[9px] font-bold px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">AI</span>
+                <a href="<?= base_url('admin/dashboard') ?>"
+                   class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl <?= service('router')->getMatchedRoute()[0] === 'admin/dashboard' ? 'nav-item-active' : 'text-slate-400' ?>">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4 flex-shrink-0"></i>
+                    <span>Dashboard</span>
+                    <?php if(service('router')->getMatchedRoute()[0] === 'admin/dashboard'): ?>
+                        <span class="ml-auto w-1.5 h-1.5 rounded-full bg-brand-400 dot-pulse"></span>
+                    <?php endif; ?>
                 </a>
 
-                <a href="<?= base_url('admin/anomalies') ?>"
-                   class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl <?= service('router')->getMatchedRoute()[0] === 'admin/anomalies' ? 'nav-item-active' : 'text-slate-400' ?>">
-                    <i data-lucide="shield-alert" class="w-4 h-4 flex-shrink-0 text-rose-400"></i>
-                    <span>Deteksi Anomali</span>
+                <a href="<?= base_url('admin/bus') ?>"
+                   class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl <?= strpos(service('router')->getMatchedRoute()[0], 'admin/bus') === 0 ? 'nav-item-active' : 'text-slate-400' ?>">
+                    <i data-lucide="truck" class="w-4 h-4 flex-shrink-0"></i>
+                    <span>Data Armada Bus</span>
                 </a>
 
-                <a href="<?= base_url('admin/reviews') ?>"
-                   class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl <?= service('router')->getMatchedRoute()[0] === 'admin/reviews' ? 'nav-item-active' : 'text-slate-400' ?>">
-                    <i data-lucide="message-circle" class="w-4 h-4 flex-shrink-0 text-emerald-400"></i>
-                    <span>Sentimen Review</span>
+                <a href="<?= base_url('admin/route') ?>"
+                   class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl <?= strpos(service('router')->getMatchedRoute()[0], 'admin/route') === 0 ? 'nav-item-active' : 'text-slate-400' ?>">
+                    <i data-lucide="map-pinned" class="w-4 h-4 flex-shrink-0"></i>
+                    <span>Data Rute</span>
                 </a>
-            </div>
 
-            <!-- Divider -->
-            <div class="pt-4 mt-3 border-t border-slate-800/50">
-                <p class="px-3 text-[9px] font-bold text-slate-600 uppercase tracking-widest mb-2">Operasional</p>
+                <a href="<?= base_url('admin/officer') ?>"
+                   class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl <?= strpos(service('router')->getMatchedRoute()[0], 'admin/officer') === 0 ? 'nav-item-active' : 'text-slate-400' ?>">
+                    <i data-lucide="users" class="w-4 h-4 flex-shrink-0"></i>
+                    <span>Data Petugas</span>
+                </a>
+
+                <a href="<?= base_url('admin/schedule') ?>"
+                   class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl <?= strpos(service('router')->getMatchedRoute()[0], 'admin/schedule') === 0 ? 'nav-item-active' : 'text-slate-400' ?>">
+                    <i data-lucide="calendar-days" class="w-4 h-4 flex-shrink-0"></i>
+                    <span>Jadwal Keberangkatan</span>
+                </a>
+
+                <a href="<?= base_url('admin/promo') ?>"
+                   class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl <?= strpos(service('router')->getMatchedRoute()[0], 'admin/promo') === 0 ? 'nav-item-active' : 'text-slate-400' ?>">
+                    <i data-lucide="ticket-percent" class="w-4 h-4 flex-shrink-0"></i>
+                    <span>Voucher &amp; Promo</span>
+                </a>
+
+                <!-- Divider -->
+                <div class="pt-4 mt-3 border-t border-slate-800/50">
+                    <p class="px-3 text-[9px] font-bold text-slate-600 uppercase tracking-widest mb-2">AI Analytics</p>
+
+                    <a href="<?= base_url('admin/predictions') ?>"
+                       class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl <?= service('router')->getMatchedRoute()[0] === 'admin/predictions' ? 'nav-item-active' : 'text-slate-400' ?>">
+                        <i data-lucide="trending-up" class="w-4 h-4 flex-shrink-0 text-indigo-400"></i>
+                        <span>Prediksi Okupansi</span>
+                        <span class="ml-auto text-[9px] font-bold px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">AI</span>
+                    </a>
+
+                    <a href="<?= base_url('admin/anomalies') ?>"
+                       class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl <?= service('router')->getMatchedRoute()[0] === 'admin/anomalies' ? 'nav-item-active' : 'text-slate-400' ?>">
+                        <i data-lucide="shield-alert" class="w-4 h-4 flex-shrink-0 text-rose-400"></i>
+                        <span>Deteksi Anomali</span>
+                    </a>
+
+                    <a href="<?= base_url('admin/reviews') ?>"
+                       class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl <?= service('router')->getMatchedRoute()[0] === 'admin/reviews' ? 'nav-item-active' : 'text-slate-400' ?>">
+                        <i data-lucide="message-circle" class="w-4 h-4 flex-shrink-0 text-emerald-400"></i>
+                        <span>Sentimen Review</span>
+                    </a>
+                </div>
+
+                <!-- Divider -->
+                <div class="pt-4 mt-3 border-t border-slate-800/50">
+                    <p class="px-3 text-[9px] font-bold text-slate-600 uppercase tracking-widest mb-2">Operasional</p>
+                    <a href="<?= base_url('admin/boarding') ?>"
+                       class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl <?= service('router')->getMatchedRoute()[0] === 'admin/boarding' ? 'nav-item-active' : 'text-slate-400' ?>">
+                        <i data-lucide="scan-line" class="w-4 h-4 flex-shrink-0 text-teal-400"></i>
+                        <span>Portal Boarding Petugas</span>
+                    </a>
+                    <a href="<?= base_url('customer/home') ?>"
+                       class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl text-slate-400">
+                        <i data-lucide="globe" class="w-4 h-4 flex-shrink-0"></i>
+                        <span>Lihat Situs Pelanggan</span>
+                    </a>
+                </div>
+            <?php elseif (session()->get('userRole') === 'petugas'): ?>
+                <p class="px-3 text-[9px] font-bold text-slate-600 uppercase tracking-widest mb-2">Menu Petugas</p>
+                
                 <a href="<?= base_url('petugas/scan') ?>"
                    class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl text-slate-400">
+                    <i data-lucide="scan" class="w-4 h-4 flex-shrink-0 text-teal-400"></i>
+                    <span>Scan Tiket Boarding</span>
+                </a>
+                
+                <a href="<?= base_url('admin/boarding') ?>"
+                   class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl <?= service('router')->getMatchedRoute()[0] === 'admin/boarding' ? 'nav-item-active' : 'text-slate-400' ?>">
                     <i data-lucide="scan-line" class="w-4 h-4 flex-shrink-0 text-teal-400"></i>
-                    <span>Portal Boarding Petugas</span>
+                    <span>Portal Boarding</span>
                 </a>
-                <a href="<?= base_url('customer/home') ?>"
-                   class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl text-slate-400">
-                    <i data-lucide="globe" class="w-4 h-4 flex-shrink-0"></i>
-                    <span>Lihat Situs Pelanggan</span>
-                </a>
-            </div>
+            <?php endif; ?>
         </nav>
 
         <!-- User Profile Footer -->

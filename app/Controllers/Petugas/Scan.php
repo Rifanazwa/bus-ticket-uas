@@ -6,41 +6,25 @@ use App\Controllers\BaseController;
 use App\Models\TicketModel;
 use App\Models\BookingModel;
 use App\Models\BookingSeatModel;
-use App\Models\ScheduleModel;
 
 class Scan extends BaseController
 {
     protected $ticketModel;
     protected $bookingModel;
     protected $bookingSeatModel;
-    protected $scheduleModel;
 
     public function __construct()
     {
         $this->ticketModel      = new TicketModel();
         $this->bookingModel     = new BookingModel();
         $this->bookingSeatModel = new BookingSeatModel();
-        $this->scheduleModel    = new ScheduleModel();
         helper(['form', 'url']);
     }
 
     public function index()
     {
-        // Auto-generate schedules for today and the next 2 days to ensure active schedule data
-        for ($i = 0; $i < 3; $i++) {
-            $targetDate = date('Y-m-d', strtotime("+$i days"));
-            $this->scheduleModel->checkAndGenerateSchedulesForDate($targetDate);
-        }
-
-        $today = date('Y-m-d');
-        $schedules = $this->scheduleModel->getDetailedSchedules(null, $today);
-
-        // Sort by departure_time ascending
-        usort($schedules, fn($a, $b) => strtotime($a['departure_time']) <=> strtotime($b['departure_time']));
-
         return view('petugas/scan', [
-            'title'     => 'Portal Boarding Petugas - SiTeBus',
-            'schedules' => $schedules
+            'title' => 'Portal Boarding Petugas - SiTeBus'
         ]);
     }
 
@@ -87,6 +71,8 @@ class Scan extends BaseController
         // Get detailed booking info
         $details = $this->ticketModel->getDetailedTicket($ticket['id']);
 
+        // (Assignment enforcement removed to allow all officers to scan all tickets)
+
         $seats = $this->bookingSeatModel->where('booking_id', $ticket['booking_id'])->findAll();
 
         return $this->response->setJSON([
@@ -116,6 +102,8 @@ class Scan extends BaseController
             ]);
         }
 
+        // (Assignment enforcement removed to allow all officers to confirm all boarding tickets)
+
         if ($ticket['status'] === 'boarded') {
             return $this->response->setJSON([
                 'status'  => 'error',
@@ -127,59 +115,13 @@ class Scan extends BaseController
         if ($this->ticketModel->update($ticketId, ['status' => 'boarded'])) {
             return $this->response->setJSON([
                 'status'  => 'success',
-                'message' => 'Boarding berhasil dikonfirmasi. Selamat jalan penumpang!',
-                'schedule_id' => $this->bookingModel->find($ticket['booking_id'])['schedule_id'] ?? null
+                'message' => 'Boarding berhasil dikonfirmasi. Selamat jalan penumpang!'
             ]);
         }
 
         return $this->response->setJSON([
             'status'  => 'error',
             'message' => 'Gagal melakukan konfirmasi boarding.'
-        ]);
-    }
-
-    public function manifest($scheduleId)
-    {
-        $schedule = $this->scheduleModel->getDetailedSchedules($scheduleId);
-        if (!$schedule) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Jadwal tidak ditemukan.']);
-        }
-
-        $manifest = $this->bookingSeatModel
-            ->select('booking_seats.seat_number, booking_seats.passenger_name, tickets.status as boarding_status, tickets.qr_code, bookings.booking_code, tickets.id as ticket_id')
-            ->join('bookings', 'bookings.id = booking_seats.booking_id')
-            ->join('tickets', 'tickets.booking_id = bookings.id')
-            ->where('bookings.schedule_id', $scheduleId)
-            ->where('bookings.booking_status !=', 'cancelled')
-            ->orderBy('booking_seats.seat_number', 'ASC')
-            ->findAll();
-
-        return $this->response->setJSON([
-            'status'   => 'success',
-            'schedule' => $schedule,
-            'manifest' => $manifest
-        ]);
-    }
-
-    public function printReport($scheduleId)
-    {
-        $schedule = $this->scheduleModel->getDetailedSchedules($scheduleId);
-        if (!$schedule) {
-            return "Jadwal tidak ditemukan.";
-        }
-
-        $manifest = $this->bookingSeatModel
-            ->select('booking_seats.seat_number, booking_seats.passenger_name, tickets.status as boarding_status, tickets.qr_code, bookings.booking_code')
-            ->join('bookings', 'bookings.id = booking_seats.booking_id')
-            ->join('tickets', 'tickets.booking_id = bookings.id')
-            ->where('bookings.schedule_id', $scheduleId)
-            ->where('bookings.booking_status !=', 'cancelled')
-            ->orderBy('booking_seats.seat_number', 'ASC')
-            ->findAll();
-
-        return view('petugas/print_report', [
-            'schedule' => $schedule,
-            'manifest' => $manifest
         ]);
     }
 }
