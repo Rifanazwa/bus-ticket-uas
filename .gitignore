@@ -44,3 +44,5 @@ Desktop.ini
 # Temporary scratch files in this project
 /scratch_*.php
 /test_e2e_ticket.pdf
+/vendor.zip
+

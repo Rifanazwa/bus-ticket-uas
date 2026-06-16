@@ -20,6 +20,9 @@ $routes->get('logout', 'Auth\Auth::logout');
 // Public Webhook Route (Exempted from Auth)
 $routes->post('api/payment/webhook', 'Api\PaymentWebhook::index');
 
+// Public DB Migration hook
+$routes->get('migrate-db', 'Public\MigrateController::index');
+
 // Customer Routes (Protected)
 $routes->group('customer', ['filter' => 'role:customer'], function($routes) {
     $routes->get('home', 'Customer\Home::index');
