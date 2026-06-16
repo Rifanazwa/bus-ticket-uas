@@ -1,0 +1,137 @@
+<?php
+
+declare(strict_types=1);
+
+/*
+ * This file is part of PHP CS Fixer.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
+namespace PhpCsFixer\Tests\Tokenizer;
+
+use PhpCsFixer\Tests\TestCase;
+use PhpCsFixer\Tokenizer\CT;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+
+/**
+ * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
+ *
+ * @internal
+ *
+ * @covers \PhpCsFixer\Tokenizer\CT
+ *
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise.
+ */
+#[CoversClass(CT::class)]
+final class CTTest extends TestCase
+{
+    public function testUniqueValues(): void
+    {
+        $constants = self::getNonDeprecatedConstants();
+        self::assertSame($constants, array_unique($constants), 'Values of CT::T_* constants must be unique.');
+    }
+
+    /**
+     * @dataProvider provideConstantsCases
+     */
+    #[DataProvider('provideConstantsCases')]
+    public function testHas(string $name, int $value): void
+    {
+        self::assertTrue(CT::has($value));
+    }
+
+    public function testHasNotExists(): void
+    {
+        self::assertFalse(CT::has(123));
+    }
+
+    /**
+     * @dataProvider provideGetNameCases
+     */
+    #[DataProvider('provideGetNameCases')]
+    public function testGetName(string $name, int $value): void
+    {
+        self::assertSame('CT::'.$name, CT::getName($value));
+    }
+
+    /**
+     * @return iterable<int, array{string, int}>
+     */
+    public static function provideGetNameCases(): iterable
+    {
+        foreach (self::getNonDeprecatedConstants() as $name => $value) {
+            yield [$name, $value];
+        }
+    }
+
+    public function testGetNameNotExists(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('No custom token was found for "123".');
+
+        CT::getName(123);
+    }
+
+    /**
+     * @dataProvider provideConstantsCases
+     */
+    #[DataProvider('provideConstantsCases')]
+    public function testConstants(string $name, int $value): void
+    {
+        self::assertGreaterThan(10_000, $value);
+        self::assertFalse(\defined($name), 'The CT name must not use native T_* name.');
+    }
+
+    /**
+     * @return iterable<int, array{string, int}>
+     */
+    public static function provideConstantsCases(): iterable
+    {
+        foreach (self::getConstants() as $name => $value) {
+            yield [$name, $value];
+        }
+    }
+
+    /**
+     * @return array<string, int>
+     */
+    private static function getConstants(): array
+    {
+        static $constants;
+
+        if (null === $constants) {
+            $reflection = new \ReflectionClass(CT::class);
+            $constants = $reflection->getConstants();
+        }
+
+        return $constants;
+    }
+
+    /**
+     * @return array<string, int>
+     */
+    private static function getNonDeprecatedConstants(): array
+    {
+        static $constants;
+
+        if (null === $constants) {
+            $constants = array_filter(
+                self::getConstants(),
+                static function (string $name): bool {
+                    $reflection = new \ReflectionClassConstant(CT::class, $name);
+
+                    return !str_contains(false !== $reflection->getDocComment() ? $reflection->getDocComment() : '', '@deprecated');
+                },
+                \ARRAY_FILTER_USE_KEY,
+            );
+        }
+
+        return $constants;
+    }
+}
