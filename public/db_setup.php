@@ -60,6 +60,49 @@ if (isset($_GET['debug'])) {
     }
     exit;
 }
+
+if ($action === 'setup_env') {
+    header('Content-Type: text/plain');
+    $envContent = <<<EOT
+CI_ENVIRONMENT = production
+
+app.baseURL = 'https://uas.mondigi.biz.id/'
+app.forceGlobalSecureRequests = true
+app.CSPEnabled = false
+
+database.default.hostname = localhost
+database.default.database = zabhkkbq_uas
+database.default.username = zabhkkbq_uas
+database.default.password = UasWeb1234
+database.default.DBDriver = MySQLi
+database.default.DBPrefix =
+database.default.port = 3306
+database.default.charset = utf8mb4
+database.default.DBCollat = utf8mb4_general_ci
+
+encryption.key = hex2bin:31e0517bad8306bff122298fb1c01d9b739310e0e88f7192593949aea082b80b
+
+session.driver = 'CodeIgniter\Session\Handlers\FileHandler'
+session.savePath = writable/session
+
+logger.threshold = 4
+
+gemini.apiKey = 'AIzaSyDsL9yzlw-vXrp631BtCZGeiS77Mp8Sg8g'
+
+midtrans.serverKey = 'SB-Mid-server-YOUR_SERVER_KEY'
+midtrans.clientKey = 'SB-Mid-client-YOUR_CLIENT_KEY'
+midtrans.isProduction = false
+midtrans.isSanitized = true
+midtrans.is3ds = true
+EOT;
+    if (file_put_contents(__DIR__ . '/../.env', $envContent)) {
+        echo "SUCCESS: Server .env configured successfully.\n";
+    } else {
+        echo "ERROR: Failed to write .env file.\n";
+    }
+    exit;
+}
+
 require FCPATH . '../app/Config/Paths.php';
 $paths = new Config\Paths();
 require $paths->systemDirectory . '/Boot.php';
