@@ -1,0 +1,43 @@
+name: Deploy via FTP/SFTP
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+  # Uncomment the lines below to trigger automatically on push to the main branch
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    name: Build and Upload via FTP/SFTP
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1' # Change to match your server's PHP version (e.g. 8.1, 8.2, etc.)
+          extensions: json, mbstring, xml, openssl, curl, zip, intl
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --no-dev --optimize-autoloader --no-interaction
+
+      - name: Sync files to Server
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: ${{ secrets.FTP_PORT || '21' }} # Change to 22 if using SFTP protocol
+          protocol: ftp # Change to 'sftp' if using SFTP (highly recommended for security)
+          local-dir: ./
+          server-dir: ${{ secrets.FTP_SERVER_DIR }} # e.g. /public_html/ or /path/to/app/
+          # exclude: |
+          #   **/.git*
+          #   **/.git*/**
+          #   **/node_modules/**
+          #   **/tests/**
