@@ -85,8 +85,14 @@ class Predictions extends BaseController
             $bookedSeats = 0;
             
             foreach ($scheds as $s) {
+                $count = $this->bookingSeatModel
+                    ->join('bookings', 'bookings.id = booking_seats.booking_id')
+                    ->where('bookings.schedule_id', $s['id'])
+                    ->where('bookings.booking_status !=', 'cancelled')
+                    ->countAllResults();
+
                 $totalSeats += $s['total_seats'];
-                $bookedSeats += $s['booked_seats'];
+                $bookedSeats += $count;
             }
             
             $actualOccupancy = $totalSeats > 0 ? ($bookedSeats / $totalSeats) * 100 : 0;
