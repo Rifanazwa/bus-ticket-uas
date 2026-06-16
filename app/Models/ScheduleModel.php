@@ -12,7 +12,7 @@ class ScheduleModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['route_id', 'bus_id', 'departure_time', 'arrival_time', 'price', 'status'];
+    protected $allowedFields    = ['route_id', 'bus_id', 'departure_time', 'arrival_time', 'price', 'status', 'driver_1', 'driver_2', 'conductor'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -32,6 +32,9 @@ class ScheduleModel extends Model
         'arrival_time'   => 'required',
         'price'          => 'required|decimal',
         'status'         => 'required|in_list[scheduled,ongoing,completed,cancelled]',
+        'driver_1'       => 'permit_empty|max_length[100]',
+        'driver_2'       => 'permit_empty|max_length[100]',
+        'conductor'      => 'permit_empty|max_length[100]',
     ];
     protected $validationMessages   = [];
     protected $skipValidation       = false;

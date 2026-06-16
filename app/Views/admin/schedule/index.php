@@ -145,6 +145,9 @@ $subtitle = 'Daftar Jadwal Keberangkatan Bus';
                             </td>
                             <td class="py-4 px-6 text-center">
                                 <div class="flex items-center justify-center gap-2">
+                                    <a href="<?= base_url('admin/schedule/manifest/' . $sched['id']) ?>" target="_blank" class="p-1.5 bg-emerald-500/10 hover:bg-emerald-500 text-emerald-450 hover:text-white rounded-lg transition-colors border border-emerald-500/20" title="Cetak Surat Jalan">
+                                        <i data-lucide="printer" class="w-4 h-4"></i>
+                                    </a>
                                     <a href="<?= base_url('admin/schedule/edit/' . $sched['id']) ?>" class="p-1.5 bg-slate-850 hover:bg-slate-800 text-slate-300 hover:text-white rounded-lg transition-colors border border-slate-800" title="Edit">
                                         <i data-lucide="edit-3" class="w-4 h-4"></i>
                                     </a>

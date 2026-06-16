@@ -78,6 +78,13 @@ class ScheduleSeeder extends Seeder
                 $arrivalTimestamp = $departureTimestamp + ($route['estimated_duration'] * 60);
                 $arrivalTime = date('Y-m-d H:i:s', $arrivalTimestamp);
  
+                $drivers = ['Bambang Wijaya', 'Sutrisno', 'Joko Sunarto', 'Heri Prasetyo', 'Ahmad Subagyo', 'Budi Raharjo', 'Dwi Cahyono', 'Eko Susilo', 'Rudi Hermawan', 'Agus Santoso'];
+                $conductors = ['Asep Sunandar', 'Dadang Hermawan', 'Maman Suherman', 'Cecep Solihin', 'Ujang Sutisna', 'Gatot Subroto', 'Teguh Saputra', 'Indra Wijaya', 'Yayan Ruhian', 'Rian Hidayat'];
+                
+                $d1 = $drivers[($busIndex + $day) % count($drivers)];
+                $d2 = $drivers[($busIndex + $day + 1) % count($drivers)];
+                $cond = $conductors[($busIndex + $day) % count($conductors)];
+
                 $schedules[] = [
                     'route_id'       => $route['id'],
                     'bus_id'         => $bus['id'],
@@ -85,6 +92,9 @@ class ScheduleSeeder extends Seeder
                     'arrival_time'   => $arrivalTime,
                     'price'          => $price,
                     'status'         => 'scheduled',
+                    'driver_1'       => $d1,
+                    'driver_2'       => $d2,
+                    'conductor'      => $cond,
                     'created_at'     => $now,
                     'updated_at'     => $now,
                 ];

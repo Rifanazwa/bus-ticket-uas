@@ -40,6 +40,21 @@ class CreateSchedulesTable extends Migration
                 'constraint' => ['scheduled', 'ongoing', 'completed', 'cancelled'],
                 'default'    => 'scheduled',
             ],
+            'driver_1' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 100,
+                'null'       => true,
+            ],
+            'driver_2' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 100,
+                'null'       => true,
+            ],
+            'conductor' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 100,
+                'null'       => true,
+            ],
             'created_at' => [
                 'type' => 'DATETIME',
                 'null' => true,

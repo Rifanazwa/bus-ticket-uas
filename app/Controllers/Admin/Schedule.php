@@ -38,6 +38,9 @@ class Schedule extends BaseController
                   ->orLike('buses.name', $search)
                   ->orLike('buses.type', $search)
                   ->orLike('schedules.departure_time', $search)
+                  ->orLike('schedules.driver_1', $search)
+                  ->orLike('schedules.driver_2', $search)
+                  ->orLike('schedules.conductor', $search)
                   ->groupEnd();
         }
         
@@ -74,6 +77,9 @@ class Schedule extends BaseController
             'arrival_time'   => 'required',
             'price'          => 'required|decimal',
             'status'         => 'required|in_list[scheduled,ongoing,completed,cancelled]',
+            'driver_1'       => 'permit_empty|max_length[100]',
+            'driver_2'       => 'permit_empty|max_length[100]',
+            'conductor'      => 'permit_empty|max_length[100]',
         ];
 
         if (!$this->validate($rules)) {
@@ -87,6 +93,9 @@ class Schedule extends BaseController
             'arrival_time'   => $this->request->getPost('arrival_time'),
             'price'          => $this->request->getPost('price'),
             'status'         => $this->request->getPost('status'),
+            'driver_1'       => $this->request->getPost('driver_1'),
+            'driver_2'       => $this->request->getPost('driver_2'),
+            'conductor'      => $this->request->getPost('conductor'),
         ];
 
         if ($this->scheduleModel->save($data)) {
@@ -123,6 +132,9 @@ class Schedule extends BaseController
             'arrival_time'   => 'required',
             'price'          => 'required|decimal',
             'status'         => 'required|in_list[scheduled,ongoing,completed,cancelled]',
+            'driver_1'       => 'permit_empty|max_length[100]',
+            'driver_2'       => 'permit_empty|max_length[100]',
+            'conductor'      => 'permit_empty|max_length[100]',
         ];
 
         if (!$this->validate($rules)) {
@@ -137,6 +149,9 @@ class Schedule extends BaseController
             'arrival_time'   => $this->request->getPost('arrival_time'),
             'price'          => $this->request->getPost('price'),
             'status'         => $this->request->getPost('status'),
+            'driver_1'       => $this->request->getPost('driver_1'),
+            'driver_2'       => $this->request->getPost('driver_2'),
+            'conductor'      => $this->request->getPost('conductor'),
         ];
 
         if ($this->scheduleModel->save($data)) {
@@ -165,11 +180,11 @@ class Schedule extends BaseController
         $output = fopen('php://output', 'w');
         
         // CSV Header
-        fputcsv($output, ['origin', 'destination', 'bus_name', 'departure_time', 'arrival_time', 'price', 'status']);
+        fputcsv($output, ['origin', 'destination', 'bus_name', 'departure_time', 'arrival_time', 'price', 'status', 'driver_1', 'driver_2', 'conductor']);
         
         // Sample rows
-        fputcsv($output, ['Jakarta', 'Bandung', 'Joss Bus 1', '2026-06-17 08:00:00', '2026-06-17 11:00:00', '120000', 'scheduled']);
-        fputcsv($output, ['Bandung', 'Jakarta', 'Joss Bus 2', '2026-06-17 13:00:00', '2026-06-17 16:00:00', '125000', 'scheduled']);
+        fputcsv($output, ['Jakarta', 'Bandung', 'Joss Bus 1', '2026-06-17 08:00:00', '2026-06-17 11:00:00', '120000', 'scheduled', 'Bambang Wijaya', 'Sutrisno', 'Asep Sunandar']);
+        fputcsv($output, ['Bandung', 'Jakarta', 'Joss Bus 2', '2026-06-17 13:00:00', '2026-06-17 16:00:00', '125000', 'scheduled', 'Joko Sunarto', 'Heri Prasetyo', 'Dadang Hermawan']);
         
         fclose($output);
         exit();
@@ -187,7 +202,7 @@ class Schedule extends BaseController
         $output = fopen('php://output', 'w');
         
         // CSV Header
-        fputcsv($output, ['origin', 'destination', 'bus_name', 'departure_time', 'arrival_time', 'price', 'status']);
+        fputcsv($output, ['origin', 'destination', 'bus_name', 'departure_time', 'arrival_time', 'price', 'status', 'driver_1', 'driver_2', 'conductor']);
         
         foreach ($schedules as $sched) {
             fputcsv($output, [
@@ -197,7 +212,10 @@ class Schedule extends BaseController
                 $sched['departure_time'],
                 $sched['arrival_time'],
                 $sched['price'],
-                $sched['status']
+                $sched['status'],
+                $sched['driver_1'] ?? '',
+                $sched['driver_2'] ?? '',
+                $sched['conductor'] ?? ''
             ]);
         }
         
@@ -229,7 +247,7 @@ class Schedule extends BaseController
         $headers = fgetcsv($handle, 1000, ',');
         if (!$headers || count($headers) < 7) {
             fclose($handle);
-            return redirect()->back()->with('error', 'Format CSV tidak valid. Harus memiliki header: origin, destination, bus_name, departure_time, arrival_time, price, status');
+            return redirect()->back()->with('error', 'Format CSV tidak valid. Harus memiliki setidaknya header: origin, destination, bus_name, departure_time, arrival_time, price, status');
         }
         
         // Clean headers (remove BOM or spaces)
@@ -245,6 +263,9 @@ class Schedule extends BaseController
         $arrivalIdx = array_search('arrival_time', $headers);
         $priceIdx = array_search('price', $headers);
         $statusIdx = array_search('status', $headers);
+        $driver1Idx = array_search('driver_1', $headers);
+        $driver2Idx = array_search('driver_2', $headers);
+        $conductorIdx = array_search('conductor', $headers);
         
         if ($originIdx === false || $destinationIdx === false || $busNameIdx === false || 
             $departureIdx === false || $arrivalIdx === false || $priceIdx === false || $statusIdx === false) {
@@ -292,10 +313,13 @@ class Schedule extends BaseController
             $arrivalTime = isset($row[$arrivalIdx]) ? trim($row[$arrivalIdx]) : '';
             $price = isset($row[$priceIdx]) ? trim($row[$priceIdx]) : '';
             $status = isset($row[$statusIdx]) ? trim(strtolower($row[$statusIdx])) : '';
+            $driver_1 = ($driver1Idx !== false && isset($row[$driver1Idx])) ? trim($row[$driver1Idx]) : '';
+            $driver_2 = ($driver2Idx !== false && isset($row[$driver2Idx])) ? trim($row[$driver2Idx]) : '';
+            $conductor = ($conductorIdx !== false && isset($row[$conductorIdx])) ? trim($row[$conductorIdx]) : '';
             
             // Validations
             if (empty($origin) || empty($destination) || empty($busName) || empty($departureTime) || empty($arrivalTime) || empty($price) || empty($status)) {
-                $errors[] = "Baris {$rowNum}: Data tidak lengkap (semua kolom harus diisi).";
+                $errors[] = "Baris {$rowNum}: Data tidak lengkap (semua kolom utama harus diisi).";
                 continue;
             }
             
@@ -342,6 +366,20 @@ class Schedule extends BaseController
                 $errors[] = "Baris {$rowNum}: Status '{$status}' tidak valid (harus scheduled, ongoing, completed, atau cancelled).";
                 continue;
             }
+
+            // Crew validation lengths
+            if (strlen($driver_1) > 100) {
+                $errors[] = "Baris {$rowNum}: Nama Sopir 1 terlalu panjang (max 100 karakter).";
+                continue;
+            }
+            if (strlen($driver_2) > 100) {
+                $errors[] = "Baris {$rowNum}: Nama Sopir 2 terlalu panjang (max 100 karakter).";
+                continue;
+            }
+            if (strlen($conductor) > 100) {
+                $errors[] = "Baris {$rowNum}: Nama Kondektur terlalu panjang (max 100 karakter).";
+                continue;
+            }
             
             // Duplicate check (same bus at same departure time)
             $formattedDepTime = date('Y-m-d H:i:s', $depTimestamp);
@@ -362,6 +400,9 @@ class Schedule extends BaseController
                 'arrival_time'   => $formattedArrTime,
                 'price'          => (float)$price,
                 'status'         => $status,
+                'driver_1'       => !empty($driver_1) ? $driver_1 : null,
+                'driver_2'       => !empty($driver_2) ? $driver_2 : null,
+                'conductor'      => !empty($conductor) ? $conductor : null,
                 'created_at'     => date('Y-m-d H:i:s'),
                 'updated_at'     => date('Y-m-d H:i:s'),
             ];
@@ -380,5 +421,37 @@ class Schedule extends BaseController
         $this->scheduleModel->insertBatch($importData);
         
         return redirect()->to(base_url('admin/schedule'))->with('success', count($importData) . ' Jadwal keberangkatan berhasil diimport.');
+    }
+
+    /**
+     * Prints the Surat Jalan / Passenger Manifest for a specific schedule.
+     * Accessible via: GET /admin/schedule/manifest/(:num)
+     */
+    public function manifest($id)
+    {
+        $schedule = $this->scheduleModel->getDetailedSchedules($id);
+        if (!$schedule) {
+            return redirect()->to(base_url('admin/schedule'))->with('error', 'Jadwal tidak ditemukan.');
+        }
+
+        // Get list of booked tickets that are checked in / boarded
+        $db = \Config\Database::connect();
+        
+        // We select bookings for this schedule that are confirmed/completed (not cancelled)
+        // We join tickets, users
+        $passengers = $db->table('booking_seats')
+            ->select('booking_seats.seat_number, bookings.booking_code, bookings.passenger_name, bookings.passenger_phone, bookings.boarding_status')
+            ->join('bookings', 'bookings.id = booking_seats.booking_id')
+            ->where('bookings.schedule_id', $id)
+            ->where('bookings.booking_status !=', 'cancelled')
+            ->orderBy('CAST(booking_seats.seat_number AS UNSIGNED)', 'ASC')
+            ->orderBy('booking_seats.seat_number', 'ASC')
+            ->get()->getResultArray();
+
+        return view('admin/schedule/manifest', [
+            'title'      => 'Surat Jalan & Manifes Penumpang — SiTeBus',
+            'schedule'   => $schedule,
+            'passengers' => $passengers
+        ]);
     }
 }
