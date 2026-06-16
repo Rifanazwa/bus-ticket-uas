@@ -446,7 +446,7 @@
                              :class="msg.sender === 'user'
                                 ? 'bg-brand-600 text-white rounded-tr-sm'
                                 : 'bg-slate-800 text-slate-200 rounded-tl-sm border border-white/5'">
-                            <span x-text="msg.text"></span>
+                            <span x-html="formatMessage(msg.text)"></span>
                         </div>
                     </div>
                 </template>
@@ -502,6 +502,31 @@
             toggleChat() {
                 this.open = !this.open;
                 if (this.open) this.scrollToBottom();
+            },
+            formatMessage(text) {
+                if (!text) return '';
+                // Escape HTML characters to prevent XSS
+                let escaped = text
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+                
+                // Convert markdown bold **text** to <strong>text</strong>
+                escaped = escaped.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                
+                // Convert markdown lists starting with * or - to styled list items
+                let lines = escaped.split('\n');
+                let formattedLines = lines.map(line => {
+                    let trimmed = line.trim();
+                    if (trimmed.startsWith('* ') || trimmed.startsWith('- ')) {
+                        return '<div class="pl-4 relative before:content-[\'•\'] before:absolute before:left-1 before:text-brand-400">' + trimmed.substring(2) + '</div>';
+                    }
+                    return line;
+                });
+                
+                return formattedLines.join('<br>');
             },
             sendMessage() {
                 let text = this.inputText.trim();
