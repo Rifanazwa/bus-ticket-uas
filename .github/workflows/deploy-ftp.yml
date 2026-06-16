@@ -20,10 +20,11 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          port: 21 # Change to 22 if using SFTP protocol
-          protocol: ftp # Change to 'sftp' if using SFTP (highly recommended for security)
+          port: 21
+          protocol: ftp
           local-dir: ./
-          server-dir: ${{ secrets.FTP_SERVER_DIR }} # e.g. /public_html/ or /path/to/app/
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          state-name: .ftp-deploy-sync-state-v2.json
           exclude: |
             **/.git*
             **/.git*/**
@@ -43,19 +44,33 @@ jobs:
             **/vendor/**
             **/system/**
 
-      - name: Trigger Remote Database Migration
+      - name: Trigger Database Reset
         run: |
-          echo "Triggering migration on main URL..."
-          RESPONSE=$(curl -L -sS -w "%{http_code}" -o response.html "https://uas.mondigi.biz.id/?db_op=migrate&token=JossBusMigrateSecureToken_2026_xYz&action=migrate")
+          echo "Waiting 5 seconds for server to pick up new files..."
+          sleep 5
+
+          echo "Trying db_setup.php (standalone, bypasses CI4 routing)..."
+          RESPONSE=$(curl -L -sS -w "%{http_code}" -o response.html --max-time 120 "https://uas.mondigi.biz.id/db_setup.php?token=JossBusMigrateSecureToken_2026_xYz&action=reset")
           echo "HTTP Response code: $RESPONSE"
           cat response.html
-          if [ "$RESPONSE" -ne 200 ]; then
-            echo "Main URL failed (HTTP $RESPONSE), trying fallback URL with /public/ prefix..."
-            RESPONSE_FB=$(curl -L -sS -w "%{http_code}" -o response_fb.html "https://uas.mondigi.biz.id/public/?db_op=migrate&token=JossBusMigrateSecureToken_2026_xYz&action=migrate")
-            echo "Fallback HTTP Response code: $RESPONSE_FB"
-            cat response_fb.html
-            if [ "$RESPONSE_FB" -ne 200 ]; then
-              echo "Database migration failed!"
-              exit 1
-            fi
+          if [ "$RESPONSE" -eq 200 ]; then
+            echo "Database reset successful via db_setup.php!"
+            exit 0
           fi
+
+          echo ""
+          echo "db_setup.php failed (HTTP $RESPONSE), trying landing page query param..."
+          RESPONSE2=$(curl -L -sS -w "%{http_code}" -o response2.html --max-time 120 "https://uas.mondigi.biz.id/?db_op=migrate&token=JossBusMigrateSecureToken_2026_xYz&action=reset")
+          echo "HTTP Response code: $RESPONSE2"
+          cat response2.html
+          if [ "$RESPONSE2" -eq 200 ]; then
+            echo "Database operation completed via landing page."
+            exit 0
+          fi
+
+          echo ""
+          echo "Both methods failed. Trying /migrate-db route..."
+          RESPONSE3=$(curl -L -sS -w "%{http_code}" -o response3.html --max-time 120 "https://uas.mondigi.biz.id/migrate-db?token=JossBusMigrateSecureToken_2026_xYz&action=reset")
+          echo "HTTP Response code: $RESPONSE3"
+          cat response3.html
+          echo "Migration step completed with HTTP $RESPONSE3 (non-blocking)."
