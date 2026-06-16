@@ -17,6 +17,41 @@ $action = $_GET['action'] ?? 'migrate';
 
 define('FCPATH', __DIR__ . DIRECTORY_SEPARATOR);
 chdir(FCPATH);
+
+if (isset($_GET['debug'])) {
+    header('Content-Type: text/plain');
+    echo "PHP Version: " . PHP_VERSION . "\n";
+    echo "FCPATH: " . FCPATH . "\n";
+    echo "systemDirectory exists: " . (file_exists(__DIR__ . '/../system') ? 'YES' : 'NO') . "\n";
+    echo "vendor/autoload exists: " . (file_exists(__DIR__ . '/../vendor/autoload.php') ? 'YES' : 'NO') . "\n";
+    echo "app/Config/Database exists: " . (file_exists(__DIR__ . '/../app/Config/Database.php') ? 'YES' : 'NO') . "\n";
+    echo ".env exists: " . (file_exists(__DIR__ . '/../.env') ? 'YES' : 'NO') . "\n";
+    
+    if (file_exists(__DIR__ . '/../.env')) {
+        $lines = file(__DIR__ . '/../.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $env = [];
+        foreach ($lines as $line) {
+            if (strpos(trim($line), '#') === 0) continue;
+            list($key, $value) = explode('=', $line, 2) + [NULL, NULL];
+            if ($key !== NULL) {
+                $env[trim($key)] = trim($value, " '\"");
+            }
+        }
+        $host = $env['database.default.hostname'] ?? 'localhost';
+        $db = $env['database.default.database'] ?? '';
+        $user = $env['database.default.username'] ?? '';
+        $pass = $env['database.default.password'] ?? '';
+        echo "Env DB config found: host=$host, db=$db, user=$user\n";
+        $conn = @new mysqli($host, $user, $pass, $db);
+        if ($conn->connect_error) {
+            echo "Connection failed: " . $conn->connect_error . "\n";
+        } else {
+            echo "Connection SUCCESS!\n";
+            $conn->close();
+        }
+    }
+    exit;
+}
 require FCPATH . '../app/Config/Paths.php';
 $paths = new Config\Paths();
 require $paths->systemDirectory . '/Boot.php';
