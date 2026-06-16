@@ -92,8 +92,9 @@ class Dashboard extends BaseController
         $pendingBookings = $this->bookingModel->where('payment_status', 'pending')->countAllResults();
         $paidBookings    = $this->bookingModel->where('payment_status', 'paid')->countAllResults();
 
-        // ── 3. RATA-RATA OKUPANSI & STATUS KAPASITAS per JADWAL ───────────
-        $schedules  = $this->scheduleModel->getDetailedSchedules();
+        // ── 3. RATA-RATA OKUPANSI & STATUS KAPASITAS per JADWAL (Hanya hari ini) ───────────
+        $today = date('Y-m-d');
+        $schedules  = $this->scheduleModel->getDetailedSchedules(null, $today);
         $totalSeats = 0;
         $bookedSeats = 0;
 
@@ -301,10 +302,18 @@ class Dashboard extends BaseController
         array $sentiment,
         int $anomalyCount
     ): array {
+        $cache = \Config\Services::cache();
+        $cacheKey = 'dashboard_ai_prediction_' . date('Ymd_H') . '_' . round($avgOccupancy);
+        
+        $cached = $cache->get($cacheKey);
+        if ($cached !== null) {
+            return $cached;
+        }
+
         // Fallback
         $fallback = [
             'percentage' => $avgOccupancy > 0 ? min(95, (int) round($avgOccupancy * 1.1)) : 75,
-            'analysis'   => 'Data sedang diproses. Prediksi awal berdasarkan tren ocupansi historis.',
+            'analysis'   => 'Data sedang diproses. Prediksi awal berdasarkan tren okupansi historis.',
         ];
 
         if ($totalSeats === 0) return $fallback;
@@ -327,10 +336,12 @@ class Dashboard extends BaseController
         $result = $this->geminiClient->generateJson($prompt, "Anda adalah analis AI untuk sistem manajemen armada bus Indonesia.");
 
         if ($result && isset($result['percentage'], $result['analysis'])) {
-            return [
+            $prediction = [
                 'percentage' => (int) max(0, min(100, $result['percentage'])),
                 'analysis'   => (string) $result['analysis'],
             ];
+            $cache->save($cacheKey, $prediction, 600);
+            return $prediction;
         }
 
         return $fallback;

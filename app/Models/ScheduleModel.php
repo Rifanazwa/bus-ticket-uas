@@ -41,7 +41,7 @@ class ScheduleModel extends Model
     protected $cleanValidationRules = true;
 
     // Fetch schedule with route and bus details
-    public function getDetailedSchedules($id = null)
+    public function getDetailedSchedules($id = null, string $date = null)
     {
         $builder = $this->select('schedules.*, 
                                   routes.origin, routes.destination, routes.distance_km, routes.estimated_duration, 
@@ -55,6 +55,10 @@ class ScheduleModel extends Model
 
         if ($id !== null) {
             return $builder->where('schedules.id', $id)->first();
+        }
+
+        if ($date !== null) {
+            $builder->where('DATE(schedules.departure_time)', $date);
         }
 
         return $builder->findAll();
