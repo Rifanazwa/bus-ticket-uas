@@ -77,6 +77,9 @@ $routes->group('admin', ['filter' => 'role:admin'], function($routes) {
 
     // Schedule CRUD
     $routes->get('schedule', 'Admin\Schedule::index');
+    $routes->get('schedule/export', 'Admin\Schedule::export');
+    $routes->get('schedule/template', 'Admin\Schedule::template');
+    $routes->post('schedule/import', 'Admin\Schedule::import');
     $routes->get('schedule/create', 'Admin\Schedule::create');
     $routes->post('schedule/store', 'Admin\Schedule::store');
     $routes->get('schedule/edit/(:num)', 'Admin\Schedule::edit/$1');

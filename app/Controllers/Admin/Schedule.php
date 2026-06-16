@@ -23,12 +23,33 @@ class Schedule extends BaseController
 
     public function index()
     {
-        // Fetch schedules with joined bus and route details
-        $schedules = $this->scheduleModel->getDetailedSchedules();
+        $search = $this->request->getGet('search');
+        
+        // Base query with joins
+        $query = $this->scheduleModel->select('schedules.*, routes.origin, routes.destination, buses.name as bus_name, buses.type as bus_type')
+                                      ->join('routes', 'routes.id = schedules.route_id')
+                                      ->join('buses', 'buses.id = schedules.bus_id')
+                                      ->orderBy('schedules.departure_time', 'ASC');
+        
+        if (!empty($search)) {
+            $query->groupStart()
+                  ->like('routes.origin', $search)
+                  ->orLike('routes.destination', $search)
+                  ->orLike('buses.name', $search)
+                  ->orLike('buses.type', $search)
+                  ->orLike('schedules.departure_time', $search)
+                  ->groupEnd();
+        }
+        
+        // Paginate schedules, 10 per page
+        $schedules = $query->paginate(10, 'schedules');
+        $pager = $this->scheduleModel->pager;
 
         return view('admin/schedule/index', [
             'title'     => 'Manajemen Jadwal - SiTeBus',
-            'schedules' => $schedules
+            'schedules' => $schedules,
+            'pager'     => $pager,
+            'search'    => $search
         ]);
     }
 
@@ -132,5 +153,232 @@ class Schedule extends BaseController
         }
 
         return redirect()->to(base_url('admin/schedule'))->with('error', 'Gagal menghapus jadwal.');
+    }
+
+    public function template()
+    {
+        $filename = 'template_import_jadwal.csv';
+        
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename=' . $filename);
+        
+        $output = fopen('php://output', 'w');
+        
+        // CSV Header
+        fputcsv($output, ['origin', 'destination', 'bus_name', 'departure_time', 'arrival_time', 'price', 'status']);
+        
+        // Sample rows
+        fputcsv($output, ['Jakarta', 'Bandung', 'Joss Bus 1', '2026-06-17 08:00:00', '2026-06-17 11:00:00', '120000', 'scheduled']);
+        fputcsv($output, ['Bandung', 'Jakarta', 'Joss Bus 2', '2026-06-17 13:00:00', '2026-06-17 16:00:00', '125000', 'scheduled']);
+        
+        fclose($output);
+        exit();
+    }
+
+    public function export()
+    {
+        $schedules = $this->scheduleModel->getDetailedSchedules();
+        
+        $filename = 'jadwal_keberangkatan_' . date('Ymd_His') . '.csv';
+        
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename=' . $filename);
+        
+        $output = fopen('php://output', 'w');
+        
+        // CSV Header
+        fputcsv($output, ['origin', 'destination', 'bus_name', 'departure_time', 'arrival_time', 'price', 'status']);
+        
+        foreach ($schedules as $sched) {
+            fputcsv($output, [
+                $sched['origin'],
+                $sched['destination'],
+                $sched['bus_name'],
+                $sched['departure_time'],
+                $sched['arrival_time'],
+                $sched['price'],
+                $sched['status']
+            ]);
+        }
+        
+        fclose($output);
+        exit();
+    }
+
+    public function import()
+    {
+        $file = $this->request->getFile('csv_file');
+        
+        if (!$file || !$file->isValid()) {
+            return redirect()->back()->with('error', 'File upload gagal atau file tidak valid.');
+        }
+        
+        $ext = $file->getClientExtension();
+        if ($ext !== 'csv') {
+            return redirect()->back()->with('error', 'Hanya file CSV (.csv) yang diperbolehkan.');
+        }
+        
+        $filePath = $file->getTempName();
+        $handle = fopen($filePath, 'r');
+        
+        if ($handle === false) {
+            return redirect()->back()->with('error', 'Gagal membuka file CSV.');
+        }
+        
+        // Read header row
+        $headers = fgetcsv($handle, 1000, ',');
+        if (!$headers || count($headers) < 7) {
+            fclose($handle);
+            return redirect()->back()->with('error', 'Format CSV tidak valid. Harus memiliki header: origin, destination, bus_name, departure_time, arrival_time, price, status');
+        }
+        
+        // Clean headers (remove BOM or spaces)
+        $headers = array_map(function($h) {
+            return trim(strtolower(preg_replace('/[\x{FEFF}\x{200B}-\x{200D}]/u', '', $h)));
+        }, $headers);
+        
+        // Find indices
+        $originIdx = array_search('origin', $headers);
+        $destinationIdx = array_search('destination', $headers);
+        $busNameIdx = array_search('bus_name', $headers);
+        $departureIdx = array_search('departure_time', $headers);
+        $arrivalIdx = array_search('arrival_time', $headers);
+        $priceIdx = array_search('price', $headers);
+        $statusIdx = array_search('status', $headers);
+        
+        if ($originIdx === false || $destinationIdx === false || $busNameIdx === false || 
+            $departureIdx === false || $arrivalIdx === false || $priceIdx === false || $statusIdx === false) {
+            fclose($handle);
+            return redirect()->back()->with('error', 'Kolom header tidak sesuai. Pastikan ada kolom: origin, destination, bus_name, departure_time, arrival_time, price, status');
+        }
+        
+        // Cache routes and buses to optimize lookup speed
+        $routes = $this->routeModel->findAll();
+        $routeMap = [];
+        foreach ($routes as $r) {
+            $routeMap[strtolower($r['origin']) . '-' . strtolower($r['destination'])] = $r['id'];
+        }
+        
+        $buses = $this->busModel->findAll();
+        $busMap = [];
+        foreach ($buses as $b) {
+            $busMap[strtolower($b['name'])] = $b['id'];
+        }
+        
+        $rowNum = 1;
+        $errors = [];
+        $importData = [];
+        
+        // Cache existing schedules to prevent double scheduling a bus at the same time
+        $existingSchedules = $this->scheduleModel->findAll();
+        $existingKeys = [];
+        foreach ($existingSchedules as $s) {
+            $existingKeys[] = $s['bus_id'] . '-' . strtolower($s['departure_time']);
+        }
+        $seenKeys = [];
+        
+        while (($row = fgetcsv($handle, 1000, ',')) !== false) {
+            $rowNum++;
+            
+            // Skip empty rows
+            if (empty(array_filter($row))) {
+                continue;
+            }
+            
+            $origin = isset($row[$originIdx]) ? trim($row[$originIdx]) : '';
+            $destination = isset($row[$destinationIdx]) ? trim($row[$destinationIdx]) : '';
+            $busName = isset($row[$busNameIdx]) ? trim($row[$busNameIdx]) : '';
+            $departureTime = isset($row[$departureIdx]) ? trim($row[$departureIdx]) : '';
+            $arrivalTime = isset($row[$arrivalIdx]) ? trim($row[$arrivalIdx]) : '';
+            $price = isset($row[$priceIdx]) ? trim($row[$priceIdx]) : '';
+            $status = isset($row[$statusIdx]) ? trim(strtolower($row[$statusIdx])) : '';
+            
+            // Validations
+            if (empty($origin) || empty($destination) || empty($busName) || empty($departureTime) || empty($arrivalTime) || empty($price) || empty($status)) {
+                $errors[] = "Baris {$rowNum}: Data tidak lengkap (semua kolom harus diisi).";
+                continue;
+            }
+            
+            // Check route
+            $routeKey = strtolower($origin) . '-' . strtolower($destination);
+            if (!isset($routeMap[$routeKey])) {
+                $errors[] = "Baris {$rowNum}: Rute dari '{$origin}' ke '{$destination}' tidak terdaftar.";
+                continue;
+            }
+            $routeId = $routeMap[$routeKey];
+            
+            // Check bus
+            $busKey = strtolower($busName);
+            if (!isset($busMap[$busKey])) {
+                $errors[] = "Baris {$rowNum}: Bus '{$busName}' tidak terdaftar.";
+                continue;
+            }
+            $busId = $busMap[$busKey];
+            
+            // Format check for dates
+            $depTimestamp = strtotime($departureTime);
+            $arrTimestamp = strtotime($arrivalTime);
+            if (!$depTimestamp) {
+                $errors[] = "Baris {$rowNum}: Waktu keberangkatan '{$departureTime}' tidak valid.";
+                continue;
+            }
+            if (!$arrTimestamp) {
+                $errors[] = "Baris {$rowNum}: Waktu kedatangan '{$arrivalTime}' tidak valid.";
+                continue;
+            }
+            if ($arrTimestamp <= $depTimestamp) {
+                $errors[] = "Baris {$rowNum}: Waktu kedatangan harus setelah waktu keberangkatan.";
+                continue;
+            }
+            
+            // Price check
+            if (!is_numeric($price) || (float)$price <= 0) {
+                $errors[] = "Baris {$rowNum}: Harga tiket '{$price}' tidak valid.";
+                continue;
+            }
+            
+            // Status check
+            if (!in_array($status, ['scheduled', 'ongoing', 'completed', 'cancelled'])) {
+                $errors[] = "Baris {$rowNum}: Status '{$status}' tidak valid (harus scheduled, ongoing, completed, atau cancelled).";
+                continue;
+            }
+            
+            // Duplicate check (same bus at same departure time)
+            $formattedDepTime = date('Y-m-d H:i:s', $depTimestamp);
+            $formattedArrTime = date('Y-m-d H:i:s', $arrTimestamp);
+            
+            $schedKey = $busId . '-' . strtolower($formattedDepTime);
+            if (in_array($schedKey, $existingKeys) || in_array($schedKey, $seenKeys)) {
+                $errors[] = "Baris {$rowNum}: Jadwal untuk Bus '{$busName}' pada waktu {$formattedDepTime} sudah terdaftar atau duplikat di file.";
+                continue;
+            }
+            
+            $seenKeys[] = $schedKey;
+            
+            $importData[] = [
+                'route_id'       => $routeId,
+                'bus_id'         => $busId,
+                'departure_time' => $formattedDepTime,
+                'arrival_time'   => $formattedArrTime,
+                'price'          => (float)$price,
+                'status'         => $status,
+                'created_at'     => date('Y-m-d H:i:s'),
+                'updated_at'     => date('Y-m-d H:i:s'),
+            ];
+        }
+        
+        fclose($handle);
+        
+        if (!empty($errors)) {
+            return redirect()->back()->with('errors', $errors);
+        }
+        
+        if (empty($importData)) {
+            return redirect()->back()->with('error', 'Tidak ada data valid yang diimport.');
+        }
+        
+        $this->scheduleModel->insertBatch($importData);
+        
+        return redirect()->to(base_url('admin/schedule'))->with('success', count($importData) . ' Jadwal keberangkatan berhasil diimport.');
     }
 }
