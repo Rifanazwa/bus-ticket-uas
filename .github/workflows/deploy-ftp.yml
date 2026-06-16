@@ -26,6 +26,9 @@ jobs:
       - name: Install dependencies
         run: composer install --no-dev --optimize-autoloader --no-interaction
 
+      - name: Zip vendor folder
+        run: zip -r vendor.zip vendor/
+
       - name: Sync files to Server
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
@@ -45,13 +48,33 @@ jobs:
             **/tests/**
             **/phpunit.xml.dist
             **/db_bus_ticket.sql
-            **/vendor.zip
             **/scratch_*.php
             **/test_e2e_ticket.pdf
             **/writable/session/**
             **/writable/cache/**
             **/writable/debugbar/**
             **/writable/logs/**
+            **/vendor/**
+
+      - name: Unzip Vendor on Server
+        run: |
+          echo "Triggering vendor extraction..."
+          RESPONSE=$(curl -L -sS -w "%{http_code}" -o unzip_response.html "https://uas.mondigi.biz.id/unzip.php?token=JossBusMigrateSecureToken_2026_xYz")
+          echo "Unzip Response code: $RESPONSE"
+          cat unzip_response.html
+          if [ "$RESPONSE" -eq 404 ]; then
+            echo "Trying fallback unzip URL with /public/ prefix..."
+            RESPONSE_FB=$(curl -L -sS -w "%{http_code}" -o unzip_fb.html "https://uas.mondigi.biz.id/public/unzip.php?token=JossBusMigrateSecureToken_2026_xYz")
+            echo "Fallback Unzip Response code: $RESPONSE_FB"
+            cat unzip_fb.html
+            if [ "$RESPONSE_FB" -ne 200 ]; then
+              echo "Vendor unzipping failed!"
+              exit 1
+            fi
+          elif [ "$RESPONSE" -ne 200 ]; then
+            echo "Vendor unzipping failed!"
+            exit 1
+          fi
 
       - name: Trigger Remote Database Migration
         run: |
@@ -72,4 +95,5 @@ jobs:
             echo "Database migration failed!"
             exit 1
           fi
+
 
