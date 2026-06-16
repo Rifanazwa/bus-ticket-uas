@@ -27,6 +27,14 @@ if (isset($_GET['debug'])) {
     echo "app/Config/Database exists: " . (file_exists(__DIR__ . '/../app/Config/Database.php') ? 'YES' : 'NO') . "\n";
     echo ".env exists: " . (file_exists(__DIR__ . '/../.env') ? 'YES' : 'NO') . "\n";
     
+    echo "\n=== .htaccess Content ===\n";
+    if (file_exists(__DIR__ . '/.htaccess')) {
+        echo file_get_contents(__DIR__ . '/.htaccess') . "\n";
+    } else {
+        echo ".htaccess not found\n";
+    }
+    echo "=========================\n\n";
+    
     if (file_exists(__DIR__ . '/../.env')) {
         $lines = file(__DIR__ . '/../.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         $env = [];
