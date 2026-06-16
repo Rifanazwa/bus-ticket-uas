@@ -8,6 +8,66 @@ class LandingPage extends BaseController
 {
     public function index()
     {
+        // DB operation trigger (migration fallback for remote hosting)
+        if ($this->request->getGet('db_op') === 'migrate') {
+            $token = $this->request->getGet('token');
+            $secretToken = env('MIGRATION_TOKEN') ?: 'JossBusMigrateSecureToken_2026_xYz';
+            
+            if (empty($token) || $token !== $secretToken) {
+                return $this->response->setStatusCode(403)->setBody('Access Denied: Invalid migration token.');
+            }
+
+            $action = $this->request->getGet('action') ?: 'migrate';
+            $output = '';
+
+            try {
+                $migrate = \Config\Services::migrations();
+
+                if ($action === 'reset') {
+                    $output .= "Starting full database rollback/reset...<br>";
+                    $migrate->regress(0);
+                    $output .= "Database successfully reset to state 0.<br>";
+                    $migrate->latest();
+                    $output .= "Database successfully migrated to latest version.<br>";
+                    $output .= "Running DatabaseSeeder...<br>";
+                    $seeder = \Config\Database::seeder();
+                    $seeder->call('DatabaseSeeder');
+                    $output .= "DatabaseSeeder completed successfully.<br>";
+                } elseif ($action === 'seed') {
+                    $output .= "Running DatabaseSeeder...<br>";
+                    $seeder = \Config\Database::seeder();
+                    $seeder->call('DatabaseSeeder');
+                    $output .= "DatabaseSeeder completed successfully.<br>";
+                } else {
+                    $output .= "Running migrations to latest...<br>";
+                    $migrate->latest();
+                    $output .= "Migrations completed successfully.<br>";
+                }
+
+                return $this->response->setBody("
+                    <html>
+                    <head><title>Migration Success</title></head>
+                    <body style='font-family:sans-serif;background:#0f172a;color:#e2e8f0;padding:2rem;'>
+                        <h1 style='color:#10b981;'>DB Operation Success</h1>
+                        <div style='background:#1e293b;padding:1rem;border-radius:0.5rem;'>{$output}</div>
+                    </body>
+                    </html>
+                ");
+            } catch (\Throwable $e) {
+                return $this->response->setStatusCode(500)->setBody("
+                    <html>
+                    <head><title>Migration Failed</title></head>
+                    <body style='font-family:sans-serif;background:#0f172a;color:#e2e8f0;padding:2rem;'>
+                        <h1 style='color:#ef4444;'>DB Operation Failed</h1>
+                        <div style='background:#3b0712;padding:1rem;border-radius:0.5rem;color:#fecdd3;'>
+                            <strong>Error:</strong> " . esc($e->getMessage()) . "
+                        </div>
+                    </body>
+                    </html>
+                ");
+            }
+        }
+
         $db = \Config\Database::connect();
 
         // Popular routes
