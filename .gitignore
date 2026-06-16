@@ -1,0 +1,46 @@
+# CodeIgniter 4 .gitignore
+
+# Composer dependencies
+/vendor/
+
+# Writeable directories (session, cache, logs, etc.)
+/writable/cache/*
+!/writable/cache/index.html
+/writable/session/*
+!/writable/session/index.html
+/writable/debugbar/*
+!/writable/debugbar/index.html
+/writable/logs/*
+!/writable/logs/index.html
+/writable/uploads/*
+!/writable/uploads/index.html
+
+# Environment Configuration
+.env
+.env.*
+!env
+
+# SQLite Database (if used)
+/*.db
+
+# Testing
+/tests/_support/vfs
+/tests/_support/_generated
+.phpunit.result.cache
+
+# IDE / System files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+Thumbs.db
+EHthumbs_db
+Desktop.ini
+.DS_Store
+
+# Temporary scratch files in this project
+/scratch_*.php
+/test_e2e_ticket.pdf
