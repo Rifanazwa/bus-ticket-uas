@@ -41,6 +41,9 @@ $routes->group('customer', ['filter' => 'role:customer'], function($routes) {
 $routes->group('admin', ['filter' => 'role:admin'], function($routes) {
     $routes->get('dashboard', 'Admin\Dashboard::index');
     $routes->get('dashboard/stats', 'Admin\Dashboard::stats');
+    $routes->get('predictions', 'Admin\Predictions::index');
+    $routes->get('anomalies', 'Admin\Anomalies::index');
+    $routes->get('reviews', 'Admin\Reviews::index');
 
     // Bus CRUD
     $routes->get('bus', 'Admin\Bus::index');

@@ -261,21 +261,21 @@
             <div class="pt-4 mt-3 border-t border-slate-800/50">
                 <p class="px-3 text-[9px] font-bold text-slate-600 uppercase tracking-widest mb-2">AI Analytics</p>
 
-                <a href="<?= base_url('admin/dashboard') ?>#ai-occupancy"
-                   class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl text-slate-400">
+                <a href="<?= base_url('admin/predictions') ?>"
+                   class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl <?= service('router')->getMatchedRoute()[0] === 'admin/predictions' ? 'nav-item-active' : 'text-slate-400' ?>">
                     <i data-lucide="trending-up" class="w-4 h-4 flex-shrink-0 text-indigo-400"></i>
                     <span>Prediksi Okupansi</span>
                     <span class="ml-auto text-[9px] font-bold px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">AI</span>
                 </a>
 
-                <a href="<?= base_url('admin/dashboard') ?>#ai-anomaly"
-                   class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl text-slate-400">
+                <a href="<?= base_url('admin/anomalies') ?>"
+                   class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl <?= service('router')->getMatchedRoute()[0] === 'admin/anomalies' ? 'nav-item-active' : 'text-slate-400' ?>">
                     <i data-lucide="shield-alert" class="w-4 h-4 flex-shrink-0 text-rose-400"></i>
                     <span>Deteksi Anomali</span>
                 </a>
 
-                <a href="<?= base_url('admin/dashboard') ?>#ai-sentiment"
-                   class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl text-slate-400">
+                <a href="<?= base_url('admin/reviews') ?>"
+                   class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl <?= service('router')->getMatchedRoute()[0] === 'admin/reviews' ? 'nav-item-active' : 'text-slate-400' ?>">
                     <i data-lucide="message-circle" class="w-4 h-4 flex-shrink-0 text-emerald-400"></i>
                     <span>Sentimen Review</span>
                 </a>

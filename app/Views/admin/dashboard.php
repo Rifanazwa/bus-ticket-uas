@@ -262,21 +262,48 @@ if (!function_exists('renderAnomalies')) {
 
         <!-- Status Kapasitas per Jadwal -->
         <div id="schedule-capacity" class="panel-card p-6 space-y-4">
-            <div class="flex items-center justify-between">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <h3 class="text-sm font-bold text-white flex items-center gap-2">
                     <div class="p-1.5 bg-teal-500/10 text-teal-400 rounded-lg border border-teal-500/20">
                         <i data-lucide="calendar-days" class="w-4 h-4"></i>
                     </div>
                     Status Kapasitas per Jadwal
-                    <span class="text-[9px] text-slate-500 font-normal ml-1">(<?= count($schedules) ?> jadwal)</span>
+                    <span class="text-[9px] text-slate-500 font-normal ml-1" id="schedule-total-badge">(<?= count($schedules) ?> jadwal)</span>
                 </h3>
                 <a href="<?= base_url('admin/schedule') ?>" class="text-[10px] font-bold text-brand-400 hover:text-brand-300 flex items-center gap-1 transition-colors">
                     Kelola Semua <i data-lucide="arrow-right" class="w-3 h-3"></i>
                 </a>
             </div>
 
+            <!-- Search and Pagination info -->
+            <div class="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between pt-1">
+                <div class="relative flex-1 max-w-xs">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
+                        <i data-lucide="search" class="w-3.5 h-3.5"></i>
+                    </span>
+                    <input type="text" id="schedule-search" placeholder="Cari rute atau armada..."
+                           class="w-full pl-9 pr-4 py-1.5 text-xs input-field"
+                           oninput="handleSearch(this.value)">
+                </div>
+                <p class="text-[10px] text-slate-500" id="pagination-info">Menampilkan 0-0 dari 0 jadwal</p>
+            </div>
+
             <div id="schedule-table-wrap" class="overflow-x-auto rounded-xl">
                 <?= includeScheduleTable($schedules) ?>
+            </div>
+
+            <!-- Pagination Controls -->
+            <div class="flex items-center justify-between pt-3 border-t border-slate-800/40">
+                <button id="prev-page" onclick="changePage(-1)" 
+                        class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-[10px] font-semibold text-slate-400 hover:text-slate-200 disabled:opacity-40 disabled:pointer-events-none transition-all flex items-center gap-1">
+                    <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i> Sebelumnya
+                </button>
+                <div class="flex items-center gap-1" id="page-numbers">
+                </div>
+                <button id="next-page" onclick="changePage(1)" 
+                        class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-[10px] font-semibold text-slate-400 hover:text-slate-200 disabled:opacity-40 disabled:pointer-events-none transition-all flex items-center gap-1">
+                    Selanjutnya <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                </button>
             </div>
         </div>
 
@@ -389,6 +416,77 @@ const STATS_URL = '<?= base_url('admin/dashboard/stats') ?>';
 let sentimentChart = null;
 let refreshTimer   = null;
 let countdown      = 30;
+
+// Pagination & Search state
+let localSchedules = <?= json_encode($schedules) ?>;
+let currentPage = 1;
+const itemsPerPage = 5;
+let searchQuery = '';
+
+function renderPaginatedSchedules() {
+    const filtered = localSchedules.filter(s => {
+        const query = searchQuery.toLowerCase();
+        return s.origin.toLowerCase().includes(query) ||
+               s.destination.toLowerCase().includes(query) ||
+               (s.bus_name && s.bus_name.toLowerCase().includes(query)) ||
+               (s.bus_type && s.bus_type.toLowerCase().includes(query));
+    });
+
+    const totalItems = filtered.length;
+    const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+    const paginated = filtered.slice(startIndex, endIndex);
+
+    const stw = document.getElementById('schedule-table-wrap');
+    if (stw) stw.innerHTML = buildScheduleTable(paginated);
+
+    const infoEl = document.getElementById('pagination-info');
+    if (infoEl) {
+        if (totalItems === 0) {
+            infoEl.textContent = 'Tidak ada jadwal ditemukan';
+        } else {
+            infoEl.textContent = `Menampilkan ${startIndex + 1}-${endIndex} dari ${totalItems} jadwal`;
+        }
+    }
+
+    const prevBtn = document.getElementById('prev-page');
+    const nextBtn = document.getElementById('next-page');
+    if (prevBtn) prevBtn.disabled = (currentPage === 1);
+    if (nextBtn) nextBtn.disabled = (currentPage === totalPages);
+
+    const numWrap = document.getElementById('page-numbers');
+    if (numWrap) {
+        let pageBtns = '';
+        for (let i = 1; i <= totalPages; i++) {
+            const activeClass = i === currentPage 
+                ? 'bg-brand-600 text-white border-brand-500/40 px-2 py-0.5' 
+                : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200 px-2 py-0.5';
+            pageBtns += `<button onclick="goToPage(${i})" class="rounded-md border text-[9px] font-bold transition-all ${activeClass}">${i}</button>`;
+        }
+        numWrap.innerHTML = pageBtns;
+    }
+    lucide.createIcons();
+}
+
+function handleSearch(val) {
+    searchQuery = val;
+    currentPage = 1;
+    renderPaginatedSchedules();
+}
+
+function changePage(dir) {
+    currentPage += dir;
+    renderPaginatedSchedules();
+}
+
+function goToPage(page) {
+    currentPage = page;
+    renderPaginatedSchedules();
+}
 
 // ─── Build schedule table HTML from JSON data ────────────────────────────────
 function buildScheduleTable(schedules) {
@@ -526,8 +624,10 @@ async function forceRefresh() {
         }
 
         // ── Schedule Table ───────────────────────────────────────────────────
-        const stw = document.getElementById('schedule-table-wrap');
-        if (stw) stw.innerHTML = buildScheduleTable(data.schedules);
+        localSchedules = data.schedules;
+        const totalBadge = document.getElementById('schedule-total-badge');
+        if (totalBadge) totalBadge.textContent = `(${localSchedules.length} jadwal)`;
+        renderPaginatedSchedules();
 
         // ── Anomaly List ─────────────────────────────────────────────────────
         const anomList = document.getElementById('anomaly-list');
@@ -626,6 +726,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Render paginated table initial state
+    renderPaginatedSchedules();
 
     // Start auto-refresh
     startCountdown();
