@@ -1,0 +1,121 @@
+CRITICAL - 2026-06-16 07:45:41 --> TypeError: Cannot assign CodeIgniter\HTTP\CLIRequest to property CodeIgniter\Security\Security::$request of type CodeIgniter\HTTP\IncomingRequest
+[Method: CLI, Route: /]
+in SYSTEMPATH\Security\Security.php on line 210.
+ 1 SYSTEMPATH\Config\Services.php(657): CodeIgniter\Security\Security->__construct(Object(Config\Security))
+ 2 SYSTEMPATH\Config\BaseService.php(325): CodeIgniter\Config\Services::security(Object(Config\Security), false)
+ 3 SYSTEMPATH\Config\BaseService.php(264): CodeIgniter\Config\BaseService::__callStatic('security', [...])
+ 4 SYSTEMPATH\Config\Services.php(652): CodeIgniter\Config\BaseService::getSharedInstance('security', null)
+ 5 SYSTEMPATH\Config\BaseService.php(334): CodeIgniter\Config\Services::security()
+ 6 SYSTEMPATH\Config\BaseService.php(203): CodeIgniter\Config\BaseService::__callStatic('security', [])
+ 7 SYSTEMPATH\Common.php(1078): CodeIgniter\Config\BaseService::get('security')
+ 8 SYSTEMPATH\Common.php(266): service('security')
+ 9 SYSTEMPATH\Common.php(302): csrf_token()
+10 APPPATH\Views\customer\home.php(602): csrf_field()
+11 SYSTEMPATH\View\View.php(240): include('D:\\Learn\\KULIAH\\WEB LANJUTAN\\UAS\\uas-bus\\bus-ticket-uas\\app\\Views\\customer\\home.php')
+12 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+13 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('customer/home', [], true)
+14 APPPATH\Controllers\Customer\Home.php(107): view('customer/home', [...])
+15 ROOTPATH\scratch_test_customer_home.php(22): App\Controllers\Customer\Home->index()
+CRITICAL - 2026-06-16 07:45:47 --> TypeError: Cannot assign CodeIgniter\HTTP\CLIRequest to property CodeIgniter\Security\Security::$request of type CodeIgniter\HTTP\IncomingRequest
+[Method: CLI, Route: /]
+in SYSTEMPATH\Security\Security.php on line 210.
+ 1 SYSTEMPATH\Config\Services.php(657): CodeIgniter\Security\Security->__construct(Object(Config\Security))
+ 2 SYSTEMPATH\Config\BaseService.php(325): CodeIgniter\Config\Services::security(Object(Config\Security), false)
+ 3 SYSTEMPATH\Config\BaseService.php(264): CodeIgniter\Config\BaseService::__callStatic('security', [...])
+ 4 SYSTEMPATH\Config\Services.php(652): CodeIgniter\Config\BaseService::getSharedInstance('security', null)
+ 5 SYSTEMPATH\Config\BaseService.php(334): CodeIgniter\Config\Services::security()
+ 6 SYSTEMPATH\Config\BaseService.php(203): CodeIgniter\Config\BaseService::__callStatic('security', [])
+ 7 SYSTEMPATH\Common.php(1078): CodeIgniter\Config\BaseService::get('security')
+ 8 SYSTEMPATH\Common.php(266): service('security')
+ 9 SYSTEMPATH\Common.php(302): csrf_token()
+10 APPPATH\Views\customer\home.php(602): csrf_field()
+11 SYSTEMPATH\View\View.php(240): include('D:\\Learn\\KULIAH\\WEB LANJUTAN\\UAS\\uas-bus\\bus-ticket-uas\\app\\Views\\customer\\home.php')
+12 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+13 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('customer/home', [], true)
+14 APPPATH\Controllers\Customer\Home.php(107): view('customer/home', [...])
+15 ROOTPATH\scratch_test_customer_home.php(22): App\Controllers\Customer\Home->index()
+CRITICAL - 2026-06-16 07:46:06 --> TypeError: Cannot assign CodeIgniter\HTTP\CLIRequest to property CodeIgniter\Security\Security::$request of type CodeIgniter\HTTP\IncomingRequest
+[Method: CLI, Route: /]
+in SYSTEMPATH\Security\Security.php on line 210.
+ 1 SYSTEMPATH\Config\Services.php(657): CodeIgniter\Security\Security->__construct(Object(Config\Security))
+ 2 SYSTEMPATH\Config\BaseService.php(325): CodeIgniter\Config\Services::security(Object(Config\Security), false)
+ 3 SYSTEMPATH\Config\BaseService.php(264): CodeIgniter\Config\BaseService::__callStatic('security', [...])
+ 4 SYSTEMPATH\Config\Services.php(652): CodeIgniter\Config\BaseService::getSharedInstance('security', null)
+ 5 SYSTEMPATH\Config\BaseService.php(334): CodeIgniter\Config\Services::security()
+ 6 SYSTEMPATH\Config\BaseService.php(203): CodeIgniter\Config\BaseService::__callStatic('security', [])
+ 7 SYSTEMPATH\Common.php(1078): CodeIgniter\Config\BaseService::get('security')
+ 8 SYSTEMPATH\Common.php(266): service('security')
+ 9 SYSTEMPATH\Common.php(302): csrf_token()
+10 APPPATH\Views\customer\home.php(602): csrf_field()
+11 SYSTEMPATH\View\View.php(240): include('D:\\Learn\\KULIAH\\WEB LANJUTAN\\UAS\\uas-bus\\bus-ticket-uas\\app\\Views\\customer\\home.php')
+12 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+13 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('customer/home', [], true)
+14 APPPATH\Controllers\Customer\Home.php(107): view('customer/home', [...])
+15 ROOTPATH\scratch_test_customer_home.php(22): App\Controllers\Customer\Home->index()
+CRITICAL - 2026-06-16 07:46:27 --> TypeError: Cannot assign CodeIgniter\HTTP\CLIRequest to property CodeIgniter\Security\Security::$request of type CodeIgniter\HTTP\IncomingRequest
+[Method: CLI, Route: /]
+in SYSTEMPATH\Security\Security.php on line 210.
+ 1 SYSTEMPATH\Config\Services.php(657): CodeIgniter\Security\Security->__construct(Object(Config\Security))
+ 2 SYSTEMPATH\Config\BaseService.php(325): CodeIgniter\Config\Services::security(Object(Config\Security), false)
+ 3 SYSTEMPATH\Config\BaseService.php(264): CodeIgniter\Config\BaseService::__callStatic('security', [...])
+ 4 SYSTEMPATH\Config\Services.php(652): CodeIgniter\Config\BaseService::getSharedInstance('security', null)
+ 5 SYSTEMPATH\Config\BaseService.php(334): CodeIgniter\Config\Services::security()
+ 6 SYSTEMPATH\Config\BaseService.php(203): CodeIgniter\Config\BaseService::__callStatic('security', [])
+ 7 SYSTEMPATH\Common.php(1078): CodeIgniter\Config\BaseService::get('security')
+ 8 SYSTEMPATH\Common.php(266): service('security')
+ 9 SYSTEMPATH\Common.php(302): csrf_token()
+10 APPPATH\Views\customer\home.php(602): csrf_field()
+11 SYSTEMPATH\View\View.php(240): include('D:\\Learn\\KULIAH\\WEB LANJUTAN\\UAS\\uas-bus\\bus-ticket-uas\\app\\Views\\customer\\home.php')
+12 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+13 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('customer/home', [], true)
+14 APPPATH\Controllers\Customer\Home.php(107): view('customer/home', [...])
+15 ROOTPATH\scratch_test_customer_home.php(22): App\Controllers\Customer\Home->index()
+ERROR - 2026-06-16 13:51:36 --> Gemini API Error: {"error":{"code":429,"message":"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https:\/\/ai.google.dev\/gemini-api\/docs\/rate-limits. To monitor your current usage, head to: https:\/\/ai.dev\/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com\/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 28.041564802s.","status":"RESOURCE_EXHAUSTED","details":[{"@type":"type.googleapis.com\/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https:\/\/ai.google.dev\/gemini-api\/docs\/rate-limits"}]},{"@type":"type.googleapis.com\/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com\/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier","quotaDimensions":{"location":"global","model":"gemini-2.5-flash"},"quotaValue":"20"}]},{"@type":"type.googleapis.com\/google.rpc.RetryInfo","retryDelay":"28s"}]}}
+ERROR - 2026-06-16 13:51:49 --> Gemini API Error: {"error":{"code":429,"message":"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https:\/\/ai.google.dev\/gemini-api\/docs\/rate-limits. To monitor your current usage, head to: https:\/\/ai.dev\/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com\/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 15.197431641s.","status":"RESOURCE_EXHAUSTED","details":[{"@type":"type.googleapis.com\/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https:\/\/ai.google.dev\/gemini-api\/docs\/rate-limits"}]},{"@type":"type.googleapis.com\/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com\/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier","quotaDimensions":{"location":"global","model":"gemini-2.5-flash"},"quotaValue":"20"}]},{"@type":"type.googleapis.com\/google.rpc.RetryInfo","retryDelay":"15s"}]}}
+ERROR - 2026-06-16 15:08:04 --> Error connecting to the database: mysqli_sql_exception: Unknown database 'db_bus_ticket' in D:\bus-ticket-uas\bus-ticket-uas\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 D:\bus-ticket-uas\bus-ticket-uas\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('127.0.0.1', 'root', Object(SensitiveParameterValue), 'db_bus_ticket', 3306, '', 0)
+#1 D:\bus-ticket-uas\bus-ticket-uas\system\Database\BaseConnection.php(555): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 D:\bus-ticket-uas\bus-ticket-uas\system\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#3 D:\bus-ticket-uas\bus-ticket-uas\system\Database\BaseConnection.php(1706): CodeIgniter\Database\BaseConnection->query('SHOW TABLES FRO...')
+#4 D:\bus-ticket-uas\bus-ticket-uas\system\Database\BaseConnection.php(1726): CodeIgniter\Database\BaseConnection->listTables()
+#5 D:\bus-ticket-uas\bus-ticket-uas\system\Database\MigrationRunner.php(821): CodeIgniter\Database\BaseConnection->tableExists('migrations')
+#6 D:\bus-ticket-uas\bus-ticket-uas\system\Database\MigrationRunner.php(699): CodeIgniter\Database\MigrationRunner->ensureTable()
+#7 D:\bus-ticket-uas\bus-ticket-uas\system\Commands\Database\MigrateStatus.php(115): CodeIgniter\Database\MigrationRunner->getHistory('')
+#8 D:\bus-ticket-uas\bus-ticket-uas\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\MigrateStatus->run(Array)
+#9 D:\bus-ticket-uas\bus-ticket-uas\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate:status', Array)
+#10 D:\bus-ticket-uas\bus-ticket-uas\system\Boot.php(442): CodeIgniter\CLI\Console->run()
+#11 D:\bus-ticket-uas\bus-ticket-uas\system\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#12 D:\bus-ticket-uas\bus-ticket-uas\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#13 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Unknown database 'db_bus_ticket' in D:\bus-ticket-uas\bus-ticket-uas\system\Database\MySQLi\Connection.php:231
+Stack trace:
+#0 D:\bus-ticket-uas\bus-ticket-uas\system\Database\BaseConnection.php(555): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 D:\bus-ticket-uas\bus-ticket-uas\system\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#2 D:\bus-ticket-uas\bus-ticket-uas\system\Database\BaseConnection.php(1706): CodeIgniter\Database\BaseConnection->query('SHOW TABLES FRO...')
+#3 D:\bus-ticket-uas\bus-ticket-uas\system\Database\BaseConnection.php(1726): CodeIgniter\Database\BaseConnection->listTables()
+#4 D:\bus-ticket-uas\bus-ticket-uas\system\Database\MigrationRunner.php(821): CodeIgniter\Database\BaseConnection->tableExists('migrations')
+#5 D:\bus-ticket-uas\bus-ticket-uas\system\Database\MigrationRunner.php(699): CodeIgniter\Database\MigrationRunner->ensureTable()
+#6 D:\bus-ticket-uas\bus-ticket-uas\system\Commands\Database\MigrateStatus.php(115): CodeIgniter\Database\MigrationRunner->getHistory('')
+#7 D:\bus-ticket-uas\bus-ticket-uas\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\MigrateStatus->run(Array)
+#8 D:\bus-ticket-uas\bus-ticket-uas\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate:status', Array)
+#9 D:\bus-ticket-uas\bus-ticket-uas\system\Boot.php(442): CodeIgniter\CLI\Console->run()
+#10 D:\bus-ticket-uas\bus-ticket-uas\system\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#11 D:\bus-ticket-uas\bus-ticket-uas\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#12 {main}
+CRITICAL - 2026-06-16 15:08:04 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: Unknown database 'db_bus_ticket'
+[Method: CLI, Route: migrate:status]
+in SYSTEMPATH\Database\BaseConnection.php on line 606.
+ 1 SYSTEMPATH\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseConnection.php(1706): CodeIgniter\Database\BaseConnection->query('SHOW TABLES FROM `db_bus_ticket`')
+ 3 SYSTEMPATH\Database\BaseConnection.php(1726): CodeIgniter\Database\BaseConnection->listTables()
+ 4 SYSTEMPATH\Database\MigrationRunner.php(821): CodeIgniter\Database\BaseConnection->tableExists('migrations')
+ 5 SYSTEMPATH\Database\MigrationRunner.php(699): CodeIgniter\Database\MigrationRunner->ensureTable()
+ 6 SYSTEMPATH\Commands\Database\MigrateStatus.php(115): CodeIgniter\Database\MigrationRunner->getHistory('')
+ 7 SYSTEMPATH\CLI\Commands.php(74): CodeIgniter\Commands\Database\MigrateStatus->run([])
+ 8 SYSTEMPATH\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate:status', [])
+ 9 SYSTEMPATH\Boot.php(442): CodeIgniter\CLI\Console->run()
+10 SYSTEMPATH\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+11 ROOTPATH\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))

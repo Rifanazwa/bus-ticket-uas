@@ -1,0 +1,333 @@
+ERROR - 2026-06-13 01:41:32 --> Can't create table `db_bus_ticket`.`booking_seats` (errno: 150 "Foreign key constraint is incorrectly formed")
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('CREATE TABLE `booking_seats` (
+	`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`booking_id` INT(11) UNSIGNED NOT NULL,
+	`seat_number` VARCHAR(10) NOT NULL,
+	`passenger_name` VARCHAR(100) NOT NULL,
+	CONSTRAINT `pk_booking_seats` PRIMARY KEY(`id`),
+	CONSTRAINT `booking_seats_booking_id_foreign` FOREIGN KEY (`booking_id`) REFERENCES `bookings`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('CREATE TABLE `booking_seats` (
+	`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`booking_id` INT(11) UNSIGNED NOT NULL,
+	`seat_number` VARCHAR(10) NOT NULL,
+	`passenger_name` VARCHAR(100) NOT NULL,
+	CONSTRAINT `pk_booking_seats` PRIMARY KEY(`id`),
+	CONSTRAINT `booking_seats_booking_id_foreign` FOREIGN KEY (`booking_id`) REFERENCES `bookings`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE TABLE `booking_seats` (
+	`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`booking_id` INT(11) UNSIGNED NOT NULL,
+	`seat_number` VARCHAR(10) NOT NULL,
+	`passenger_name` VARCHAR(100) NOT NULL,
+	CONSTRAINT `pk_booking_seats` PRIMARY KEY(`id`),
+	CONSTRAINT `booking_seats_booking_id_foreign` FOREIGN KEY (`booking_id`) REFERENCES `bookings`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci')
+ 4 SYSTEMPATH\Database\Forge.php(570): CodeIgniter\Database\BaseConnection->query('CREATE TABLE `booking_seats` (
+	`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`booking_id` INT(11) UNSIGNED NOT NULL,
+	`seat_number` VARCHAR(10) NOT NULL,
+	`passenger_name` VARCHAR(100) NOT NULL,
+	CONSTRAINT `pk_booking_seats` PRIMARY KEY(`id`),
+	CONSTRAINT `booking_seats_booking_id_foreign` FOREIGN KEY (`booking_id`) REFERENCES `bookings`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci')
+ 5 APPPATH\Database\Migrations\2026-06-13-014030_CreateBookingSeatsTable.php(34): CodeIgniter\Database\Forge->createTable('booking_seats')
+ 6 SYSTEMPATH\Database\MigrationRunner.php(1014): App\Database\Migrations\CreateBookingSeatsTable->up()
+ 7 SYSTEMPATH\Database\MigrationRunner.php(202): CodeIgniter\Database\MigrationRunner->migrate('up', Object(stdClass))
+ 8 SYSTEMPATH\Commands\Database\Migrate.php(89): CodeIgniter\Database\MigrationRunner->latest(null)
+ 9 SYSTEMPATH\CLI\SignalTrait.php(245): CodeIgniter\Commands\Database\Migrate::CodeIgniter\Commands\Database\{closure}()
+10 SYSTEMPATH\Commands\Database\Migrate.php(88): CodeIgniter\Commands\Database\Migrate->withSignalsBlocked(Object(Closure))
+11 SYSTEMPATH\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run([])
+12 SYSTEMPATH\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate', [])
+13 SYSTEMPATH\Boot.php(442): CodeIgniter\CLI\Console->run()
+14 SYSTEMPATH\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+15 ROOTPATH\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+ERROR - 2026-06-13 02:08:35 --> Duplicate entry 'admin@bus.com' for key 'email'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('INSERT INTO `users` (`created_at`, `email`, `name`, `password`, `phone`, `role`, `updated_at`)
+VALUES (\'2026-06-13 02:08:35\',\'admin@bus.com\',\'Super Admin PO Bus\',\'$2y$10$dMzWOIZrOPxdxdz74KC.wuHLxhJrxi7A567Btgx.LcVxPpfofuHJC\',\'081234567890\',\'admin\',\'2026-06-13 02:08:35\'), (\'2026-06-13 02:08:35\',\'petugas@bus.com\',\'Budi Petugas Terminal\',\'$2y$10$5G4WxNZ3JHYaE0rcV8/FUeigI834HDcyPDI6UIlAAYdaT4s2HZgNq\',\'081234567891\',\'petugas\',\'2026-06-13 02:08:35\'), (\'2026-06-13 02:08:35\',\'customer@bus.com\',\'Andi Penumpang Setia\',\'$2y$10$G0LCRO9W3MbolqwKyH03ZuEhZXO0.2jLziwbZ4k6E1jZ.A6/kW/tC\',\'081234567892\',\'customer\',\'2026-06-13 02:08:35\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `users` (`created_at`, `email`, `name`, `password`, `phone`, `role`, `updated_at`)
+VALUES (\'2026-06-13 02:08:35\',\'admin@bus.com\',\'Super Admin PO Bus\',\'$2y$10$dMzWOIZrOPxdxdz74KC.wuHLxhJrxi7A567Btgx.LcVxPpfofuHJC\',\'081234567890\',\'admin\',\'2026-06-13 02:08:35\'), (\'2026-06-13 02:08:35\',\'petugas@bus.com\',\'Budi Petugas Terminal\',\'$2y$10$5G4WxNZ3JHYaE0rcV8/FUeigI834HDcyPDI6UIlAAYdaT4s2HZgNq\',\'081234567891\',\'petugas\',\'2026-06-13 02:08:35\'), (\'2026-06-13 02:08:35\',\'customer@bus.com\',\'Andi Penumpang Setia\',\'$2y$10$G0LCRO9W3MbolqwKyH03ZuEhZXO0.2jLziwbZ4k6E1jZ.A6/kW/tC\',\'081234567892\',\'customer\',\'2026-06-13 02:08:35\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `users` (`created_at`, `email`, `name`, `password`, `phone`, `role`, `updated_at`)
+VALUES (\'2026-06-13 02:08:35\',\'admin@bus.com\',\'Super Admin PO Bus\',\'$2y$10$dMzWOIZrOPxdxdz74KC.wuHLxhJrxi7A567Btgx.LcVxPpfofuHJC\',\'081234567890\',\'admin\',\'2026-06-13 02:08:35\'), (\'2026-06-13 02:08:35\',\'petugas@bus.com\',\'Budi Petugas Terminal\',\'$2y$10$5G4WxNZ3JHYaE0rcV8/FUeigI834HDcyPDI6UIlAAYdaT4s2HZgNq\',\'081234567891\',\'petugas\',\'2026-06-13 02:08:35\'), (\'2026-06-13 02:08:35\',\'customer@bus.com\',\'Andi Penumpang Setia\',\'$2y$10$G0LCRO9W3MbolqwKyH03ZuEhZXO0.2jLziwbZ4k6E1jZ.A6/kW/tC\',\'081234567892\',\'customer\',\'2026-06-13 02:08:35\')')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1841): CodeIgniter\Database\BaseConnection->query('INSERT INTO `users` (`created_at`, `email`, `name`, `password`, `phone`, `role`, `updated_at`)
+VALUES (\'2026-06-13 02:08:35\',\'admin@bus.com\',\'Super Admin PO Bus\',\'$2y$10$dMzWOIZrOPxdxdz74KC.wuHLxhJrxi7A567Btgx.LcVxPpfofuHJC\',\'081234567890\',\'admin\',\'2026-06-13 02:08:35\'), (\'2026-06-13 02:08:35\',\'petugas@bus.com\',\'Budi Petugas Terminal\',\'$2y$10$5G4WxNZ3JHYaE0rcV8/FUeigI834HDcyPDI6UIlAAYdaT4s2HZgNq\',\'081234567891\',\'petugas\',\'2026-06-13 02:08:35\'), (\'2026-06-13 02:08:35\',\'customer@bus.com\',\'Andi Penumpang Setia\',\'$2y$10$G0LCRO9W3MbolqwKyH03ZuEhZXO0.2jLziwbZ4k6E1jZ.A6/kW/tC\',\'081234567892\',\'customer\',\'2026-06-13 02:08:35\')', null, false)
+ 5 SYSTEMPATH\Database\BaseBuilder.php(2230): CodeIgniter\Database\BaseBuilder->batchExecute('_insertBatch', 100)
+ 6 APPPATH\Database\Seeds\UserSeeder.php(41): CodeIgniter\Database\BaseBuilder->insertBatch([...])
+ 7 SYSTEMPATH\Database\Seeder.php(155): App\Database\Seeds\UserSeeder->run()
+ 8 APPPATH\Database\Seeds\DatabaseSeeder.php(11): CodeIgniter\Database\Seeder->call('App\\Database\\Seeds\\UserSeeder')
+ 9 SYSTEMPATH\Database\Seeder.php(155): App\Database\Seeds\DatabaseSeeder->run()
+10 SYSTEMPATH\Commands\Database\Seed.php(79): CodeIgniter\Database\Seeder->call('App\\Database\\Seeds\\DatabaseSeeder')
+11 SYSTEMPATH\CLI\Commands.php(74): CodeIgniter\Commands\Database\Seed->run([])
+12 SYSTEMPATH\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('db:seed', [...])
+13 SYSTEMPATH\Boot.php(442): CodeIgniter\CLI\Console->run()
+14 SYSTEMPATH\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+15 ROOTPATH\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+ERROR - 2026-06-13 04:11:20 --> Gemini API Error: {"error":{"code":404,"message":"models\/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}
+CRITICAL - 2026-06-13 04:21:21 --> Error: Call to undefined method CodeIgniter\Database\MySQLi\Builder::first()
+[Method: CLI, Route: /]
+in ROOTPATH\scratch_test_e2e.php on line 52.
+
+CRITICAL - 2026-06-13 02:22:07 --> ErrorException: Undefined array key "remaining_seats"
+[Method: GET, Route: admin/dashboard]
+in APPPATH\Views\admin\dashboard.php on line 135.
+ 1 APPPATH\Views\admin\dashboard.php(135): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "remaining_seats"', 'D:\\Learn\\KULIAH\\WEB LANJUTAN\\UAS\\uas-bus\\bus-ticket-uas\\app\\Views\\admin\\dashboard.php', 135)
+ 2 SYSTEMPATH\View\View.php(240): include('D:\\Learn\\KULIAH\\WEB LANJUTAN\\UAS\\uas-bus\\bus-ticket-uas\\app\\Views\\admin\\dashboard.php')
+ 3 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('admin/dashboard', [], true)
+ 5 APPPATH\Controllers\Admin\Dashboard.php(107): view('admin/dashboard', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Admin\Dashboard->index()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin\Dashboard))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\Learn\\KULIAH\\WEB LANJUTAN\\UAS\\uas-bus\\bus-ticket-uas\\public\\index.php')
+CRITICAL - 2026-06-13 04:22:12 --> Error: Call to undefined method CodeIgniter\HTTP\CLIRequest::getJSON()
+[Method: CLI, Route: /]
+in APPPATH\Controllers\Api\PaymentWebhook.php on line 26.
+ 1 ROOTPATH\scratch_test_e2e.php(189): App\Controllers\Api\PaymentWebhook->index()
+CRITICAL - 2026-06-13 02:26:20 --> ErrorException: Undefined array key "remaining_seats"
+[Method: GET, Route: admin/dashboard]
+in APPPATH\Views\admin\dashboard.php on line 135.
+ 1 APPPATH\Views\admin\dashboard.php(135): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "remaining_seats"', 'D:\\Learn\\KULIAH\\WEB LANJUTAN\\UAS\\uas-bus\\bus-ticket-uas\\app\\Views\\admin\\dashboard.php', 135)
+ 2 SYSTEMPATH\View\View.php(240): include('D:\\Learn\\KULIAH\\WEB LANJUTAN\\UAS\\uas-bus\\bus-ticket-uas\\app\\Views\\admin\\dashboard.php')
+ 3 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('admin/dashboard', [], true)
+ 5 APPPATH\Controllers\Admin\Dashboard.php(107): view('admin/dashboard', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Admin\Dashboard->index()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin\Dashboard))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\Learn\\KULIAH\\WEB LANJUTAN\\UAS\\uas-bus\\bus-ticket-uas\\public\\index.php')
+CRITICAL - 2026-06-13 03:07:26 --> Error: Call to undefined method Endroid\QrCode\Builder\Builder::create()
+[Method: GET, Route: customer/ticket/download/4]
+in APPPATH\Controllers\Customer\Ticket.php on line 52.
+ 1 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Customer\Ticket->download('4')
+ 2 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Customer\Ticket))
+ 3 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 7 SYSTEMPATH\rewrite.php(44): require_once('D:\\Learn\\KULIAH\\WEB LANJUTAN\\UAS\\uas-bus\\bus-ticket-uas\\public\\index.php')
+ERROR - 2026-06-13 05:18:55 --> Gemini API Error: {"error":{"code":429,"message":"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https:\/\/ai.google.dev\/gemini-api\/docs\/rate-limits. To monitor your current usage, head to: https:\/\/ai.dev\/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com\/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 5.7315762s.","status":"RESOURCE_EXHAUSTED","details":[{"@type":"type.googleapis.com\/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https:\/\/ai.google.dev\/gemini-api\/docs\/rate-limits"}]},{"@type":"type.googleapis.com\/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com\/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier","quotaDimensions":{"location":"global","model":"gemini-2.5-flash"},"quotaValue":"20"}]},{"@type":"type.googleapis.com\/google.rpc.RetryInfo","retryDelay":"5s"}]}}
+ERROR - 2026-06-13 05:53:52 --> Gemini API Error: {"error":{"code":429,"message":"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https:\/\/ai.google.dev\/gemini-api\/docs\/rate-limits. To monitor your current usage, head to: https:\/\/ai.dev\/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com\/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 8.768759337s.","status":"RESOURCE_EXHAUSTED","details":[{"@type":"type.googleapis.com\/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https:\/\/ai.google.dev\/gemini-api\/docs\/rate-limits"}]},{"@type":"type.googleapis.com\/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com\/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier","quotaDimensions":{"model":"gemini-2.5-flash","location":"global"},"quotaValue":"20"}]},{"@type":"type.googleapis.com\/google.rpc.RetryInfo","retryDelay":"8s"}]}}
+ERROR - 2026-06-13 03:55:14 --> Column count doesn't match value count at row 1
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('INSERT INTO `users` ()
+VALUES (\'2026-06-13 03:55:14\',\'admin@bus.com\',\'Super Admin PO Bus\',\'$2y$10$5WX6Kn8Y5mXZr8mqJsYDm.ziRVbQOJYA8ZSQ78AScTL.j3rzqOkzy\',\'081234567890\',\'admin\',\'2026-06-13 03:55:14\'), ()', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `users` ()
+VALUES (\'2026-06-13 03:55:14\',\'admin@bus.com\',\'Super Admin PO Bus\',\'$2y$10$5WX6Kn8Y5mXZr8mqJsYDm.ziRVbQOJYA8ZSQ78AScTL.j3rzqOkzy\',\'081234567890\',\'admin\',\'2026-06-13 03:55:14\'), ()')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `users` ()
+VALUES (\'2026-06-13 03:55:14\',\'admin@bus.com\',\'Super Admin PO Bus\',\'$2y$10$5WX6Kn8Y5mXZr8mqJsYDm.ziRVbQOJYA8ZSQ78AScTL.j3rzqOkzy\',\'081234567890\',\'admin\',\'2026-06-13 03:55:14\'), ()')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1841): CodeIgniter\Database\BaseConnection->query('INSERT INTO `users` ()
+VALUES (\'2026-06-13 03:55:14\',\'admin@bus.com\',\'Super Admin PO Bus\',\'$2y$10$5WX6Kn8Y5mXZr8mqJsYDm.ziRVbQOJYA8ZSQ78AScTL.j3rzqOkzy\',\'081234567890\',\'admin\',\'2026-06-13 03:55:14\'), ()', null, false)
+ 5 SYSTEMPATH\Database\BaseBuilder.php(2230): CodeIgniter\Database\BaseBuilder->batchExecute('_insertBatch', 100)
+ 6 APPPATH\Database\Seeds\UserSeeder.php(42): CodeIgniter\Database\BaseBuilder->insertBatch([...])
+ 7 SYSTEMPATH\Database\Seeder.php(155): App\Database\Seeds\UserSeeder->run()
+ 8 APPPATH\Database\Seeds\DatabaseSeeder.php(11): CodeIgniter\Database\Seeder->call('App\\Database\\Seeds\\UserSeeder')
+ 9 SYSTEMPATH\Database\Seeder.php(155): App\Database\Seeds\DatabaseSeeder->run()
+10 SYSTEMPATH\Commands\Database\Seed.php(79): CodeIgniter\Database\Seeder->call('App\\Database\\Seeds\\DatabaseSeeder')
+11 SYSTEMPATH\CLI\Commands.php(74): CodeIgniter\Commands\Database\Seed->run([])
+12 SYSTEMPATH\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('db:seed', [...])
+13 SYSTEMPATH\Boot.php(442): CodeIgniter\CLI\Console->run()
+14 SYSTEMPATH\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+15 ROOTPATH\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+ERROR - 2026-06-13 03:55:27 --> Cannot add or update a child row: a foreign key constraint fails (`db_bus_ticket`.`users`, CONSTRAINT `fk_users_bus_id` FOREIGN KEY (`bus_id`) REFERENCES `buses` (`id`) ON DELETE SET NULL ON UPDATE CASCADE)
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('INSERT INTO `users` (`bus_id`, `created_at`, `email`, `name`, `password`, `phone`, `role`, `updated_at`)
+VALUES (NULL,\'2026-06-13 03:55:27\',\'admin@bus.com\',\'Super Admin PO Bus\',\'$2y$10$Yk1iKz1ia5.VXuE5DFqk0ur0YcsGo7q.8od9gsvXYHypBrPJ0CTim\',\'081234567890\',\'admin\',\'2026-06-13 03:55:27\'), (1,\'2026-06-13 03:55:27\',\'petugas@bus.com\',\'Budi Petugas Terminal\',\'$2y$10$HHUXZ9u09Hj7VbNIdggoFuJx2JA1ko.Vk/tlapGBYG1Ihg8DiJy8S\',\'081234567891\',\'petugas\',\'2026-06-13 03:55:27\'), (NULL,\'2026-06-13 03:55:27\',\'customer@bus.com\',\'Andi Penumpang Setia\',\'$2y$10$eAGGIK3v4rj.p7e.6M0Y3O2oggMlHwnIZGvM/gIJ7eNXD3Y2qWQXO\',\'081234567892\',\'customer\',\'2026-06-13 03:55:27\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `users` (`bus_id`, `created_at`, `email`, `name`, `password`, `phone`, `role`, `updated_at`)
+VALUES (NULL,\'2026-06-13 03:55:27\',\'admin@bus.com\',\'Super Admin PO Bus\',\'$2y$10$Yk1iKz1ia5.VXuE5DFqk0ur0YcsGo7q.8od9gsvXYHypBrPJ0CTim\',\'081234567890\',\'admin\',\'2026-06-13 03:55:27\'), (1,\'2026-06-13 03:55:27\',\'petugas@bus.com\',\'Budi Petugas Terminal\',\'$2y$10$HHUXZ9u09Hj7VbNIdggoFuJx2JA1ko.Vk/tlapGBYG1Ihg8DiJy8S\',\'081234567891\',\'petugas\',\'2026-06-13 03:55:27\'), (NULL,\'2026-06-13 03:55:27\',\'customer@bus.com\',\'Andi Penumpang Setia\',\'$2y$10$eAGGIK3v4rj.p7e.6M0Y3O2oggMlHwnIZGvM/gIJ7eNXD3Y2qWQXO\',\'081234567892\',\'customer\',\'2026-06-13 03:55:27\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `users` (`bus_id`, `created_at`, `email`, `name`, `password`, `phone`, `role`, `updated_at`)
+VALUES (NULL,\'2026-06-13 03:55:27\',\'admin@bus.com\',\'Super Admin PO Bus\',\'$2y$10$Yk1iKz1ia5.VXuE5DFqk0ur0YcsGo7q.8od9gsvXYHypBrPJ0CTim\',\'081234567890\',\'admin\',\'2026-06-13 03:55:27\'), (1,\'2026-06-13 03:55:27\',\'petugas@bus.com\',\'Budi Petugas Terminal\',\'$2y$10$HHUXZ9u09Hj7VbNIdggoFuJx2JA1ko.Vk/tlapGBYG1Ihg8DiJy8S\',\'081234567891\',\'petugas\',\'2026-06-13 03:55:27\'), (NULL,\'2026-06-13 03:55:27\',\'customer@bus.com\',\'Andi Penumpang Setia\',\'$2y$10$eAGGIK3v4rj.p7e.6M0Y3O2oggMlHwnIZGvM/gIJ7eNXD3Y2qWQXO\',\'081234567892\',\'customer\',\'2026-06-13 03:55:27\')')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1841): CodeIgniter\Database\BaseConnection->query('INSERT INTO `users` (`bus_id`, `created_at`, `email`, `name`, `password`, `phone`, `role`, `updated_at`)
+VALUES (NULL,\'2026-06-13 03:55:27\',\'admin@bus.com\',\'Super Admin PO Bus\',\'$2y$10$Yk1iKz1ia5.VXuE5DFqk0ur0YcsGo7q.8od9gsvXYHypBrPJ0CTim\',\'081234567890\',\'admin\',\'2026-06-13 03:55:27\'), (1,\'2026-06-13 03:55:27\',\'petugas@bus.com\',\'Budi Petugas Terminal\',\'$2y$10$HHUXZ9u09Hj7VbNIdggoFuJx2JA1ko.Vk/tlapGBYG1Ihg8DiJy8S\',\'081234567891\',\'petugas\',\'2026-06-13 03:55:27\'), (NULL,\'2026-06-13 03:55:27\',\'customer@bus.com\',\'Andi Penumpang Setia\',\'$2y$10$eAGGIK3v4rj.p7e.6M0Y3O2oggMlHwnIZGvM/gIJ7eNXD3Y2qWQXO\',\'081234567892\',\'customer\',\'2026-06-13 03:55:27\')', null, false)
+ 5 SYSTEMPATH\Database\BaseBuilder.php(2230): CodeIgniter\Database\BaseBuilder->batchExecute('_insertBatch', 100)
+ 6 APPPATH\Database\Seeds\UserSeeder.php(44): CodeIgniter\Database\BaseBuilder->insertBatch([...])
+ 7 SYSTEMPATH\Database\Seeder.php(155): App\Database\Seeds\UserSeeder->run()
+ 8 APPPATH\Database\Seeds\DatabaseSeeder.php(11): CodeIgniter\Database\Seeder->call('App\\Database\\Seeds\\UserSeeder')
+ 9 SYSTEMPATH\Database\Seeder.php(155): App\Database\Seeds\DatabaseSeeder->run()
+10 SYSTEMPATH\Commands\Database\Seed.php(79): CodeIgniter\Database\Seeder->call('App\\Database\\Seeds\\DatabaseSeeder')
+11 SYSTEMPATH\CLI\Commands.php(74): CodeIgniter\Commands\Database\Seed->run([])
+12 SYSTEMPATH\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('db:seed', [...])
+13 SYSTEMPATH\Boot.php(442): CodeIgniter\CLI\Console->run()
+14 SYSTEMPATH\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+15 ROOTPATH\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+CRITICAL - 2026-06-13 05:56:11 --> ErrorException: session_destroy(): Trying to destroy uninitialized session
+[Method: CLI, Route: /]
+in SYSTEMPATH\Session\Session.php on line 280.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'session_destroy(): Trying to destroy uninitialized session', 'D:\\Learn\\KULIAH\\WEB LANJUTAN\\UAS\\uas-bus\\bus-ticket-uas\\system\\Session\\Session.php', 280)
+ 2 SYSTEMPATH\Session\Session.php(280): session_destroy()
+ 3 ROOTPATH\scratch_render_login.php(10): CodeIgniter\Session\Session->destroy()
+CRITICAL - 2026-06-13 05:56:21 --> TypeError: Cannot assign CodeIgniter\HTTP\CLIRequest to property CodeIgniter\Security\Security::$request of type CodeIgniter\HTTP\IncomingRequest
+[Method: CLI, Route: /]
+in SYSTEMPATH\Security\Security.php on line 210.
+ 1 SYSTEMPATH\Config\Services.php(657): CodeIgniter\Security\Security->__construct(Object(Config\Security))
+ 2 SYSTEMPATH\Config\BaseService.php(325): CodeIgniter\Config\Services::security(Object(Config\Security), false)
+ 3 SYSTEMPATH\Config\BaseService.php(264): CodeIgniter\Config\BaseService::__callStatic('security', [...])
+ 4 SYSTEMPATH\Config\Services.php(652): CodeIgniter\Config\BaseService::getSharedInstance('security', null)
+ 5 SYSTEMPATH\Config\BaseService.php(334): CodeIgniter\Config\Services::security()
+ 6 SYSTEMPATH\Config\BaseService.php(203): CodeIgniter\Config\BaseService::__callStatic('security', [])
+ 7 SYSTEMPATH\Common.php(1078): CodeIgniter\Config\BaseService::get('security')
+ 8 SYSTEMPATH\Common.php(266): service('security')
+ 9 SYSTEMPATH\Common.php(302): csrf_token()
+10 APPPATH\Views\auth\login.php(81): csrf_field()
+11 SYSTEMPATH\View\View.php(240): include('D:\\Learn\\KULIAH\\WEB LANJUTAN\\UAS\\uas-bus\\bus-ticket-uas\\app\\Views\\auth\\login.php')
+12 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+13 ROOTPATH\scratch_render_login.php(11): CodeIgniter\View\View->render('auth/login')
+ERROR - 2026-06-13 05:56:46 --> Cannot add or update a child row: a foreign key constraint fails (`db_bus_ticket`.`bookings`, CONSTRAINT `bookings_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE)
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('INSERT INTO `bookings` (`booking_code`, `user_id`, `schedule_id`, `total_price`, `payment_status`, `booking_status`, `created_at`, `updated_at`) VALUES (\'BK-TEST-959435\', 3, \'1\', \'120000.00\', \'pending\', \'active\', \'2026-06-13 05:56:46\', \'2026-06-13 05:56:46\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `bookings` (`booking_code`, `user_id`, `schedule_id`, `total_price`, `payment_status`, `booking_status`, `created_at`, `updated_at`) VALUES (\'BK-TEST-959435\', 3, \'1\', \'120000.00\', \'pending\', \'active\', \'2026-06-13 05:56:46\', \'2026-06-13 05:56:46\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `bookings` (`booking_code`, `user_id`, `schedule_id`, `total_price`, `payment_status`, `booking_status`, `created_at`, `updated_at`) VALUES (\'BK-TEST-959435\', 3, \'1\', \'120000.00\', \'pending\', \'active\', \'2026-06-13 05:56:46\', \'2026-06-13 05:56:46\')')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `bookings` (`booking_code`, `user_id`, `schedule_id`, `total_price`, `payment_status`, `booking_status`, `created_at`, `updated_at`) VALUES (:booking_code:, :user_id:, :schedule_id:, :total_price:, :payment_status:, :booking_status:, :created_at:, :updated_at:)', [...], false)
+ 5 ROOTPATH\scratch_test_e2e.php(182): CodeIgniter\Database\BaseBuilder->insert([...])
+ERROR - 2026-06-13 05:57:24 --> Gemini API Error: {"error":{"code":429,"message":"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https:\/\/ai.google.dev\/gemini-api\/docs\/rate-limits. To monitor your current usage, head to: https:\/\/ai.dev\/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com\/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 36.824397323s.","status":"RESOURCE_EXHAUSTED","details":[{"@type":"type.googleapis.com\/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https:\/\/ai.google.dev\/gemini-api\/docs\/rate-limits"}]},{"@type":"type.googleapis.com\/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com\/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier","quotaDimensions":{"location":"global","model":"gemini-2.5-flash"},"quotaValue":"20"}]},{"@type":"type.googleapis.com\/google.rpc.RetryInfo","retryDelay":"36s"}]}}
+ERROR - 2026-06-13 05:57:24 --> Cannot add or update a child row: a foreign key constraint fails (`db_bus_ticket`.`reviews`, CONSTRAINT `reviews_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE)
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('INSERT INTO `reviews` (`booking_id`, `user_id`, `rating`, `comment`, `sentiment`, `created_at`, `updated_at`) VALUES (2, 3, 5, \'Sopir bus sangat berhati-hati dan tepat waktu. Peta kursi di dashboard sangat membantu!\', \'[ai error] gagal memproses permintaan anda. kode status: 429\', \'2026-06-13 05:57:24\', \'2026-06-13 05:57:24\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `reviews` (`booking_id`, `user_id`, `rating`, `comment`, `sentiment`, `created_at`, `updated_at`) VALUES (2, 3, 5, \'Sopir bus sangat berhati-hati dan tepat waktu. Peta kursi di dashboard sangat membantu!\', \'[ai error] gagal memproses permintaan anda. kode status: 429\', \'2026-06-13 05:57:24\', \'2026-06-13 05:57:24\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `reviews` (`booking_id`, `user_id`, `rating`, `comment`, `sentiment`, `created_at`, `updated_at`) VALUES (2, 3, 5, \'Sopir bus sangat berhati-hati dan tepat waktu. Peta kursi di dashboard sangat membantu!\', \'[ai error] gagal memproses permintaan anda. kode status: 429\', \'2026-06-13 05:57:24\', \'2026-06-13 05:57:24\')')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `reviews` (`booking_id`, `user_id`, `rating`, `comment`, `sentiment`, `created_at`, `updated_at`) VALUES (:booking_id:, :user_id:, :rating:, :comment:, :sentiment:, :created_at:, :updated_at:)', [...], false)
+ 5 ROOTPATH\scratch_test_e2e.php(376): CodeIgniter\Database\BaseBuilder->insert([...])
+ERROR - 2026-06-13 05:57:37 --> Gemini API Error: {"error":{"code":429,"message":"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https:\/\/ai.google.dev\/gemini-api\/docs\/rate-limits. To monitor your current usage, head to: https:\/\/ai.dev\/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com\/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 23.293753249s.","status":"RESOURCE_EXHAUSTED","details":[{"@type":"type.googleapis.com\/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https:\/\/ai.google.dev\/gemini-api\/docs\/rate-limits"}]},{"@type":"type.googleapis.com\/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com\/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier","quotaDimensions":{"location":"global","model":"gemini-2.5-flash"},"quotaValue":"20"}]},{"@type":"type.googleapis.com\/google.rpc.RetryInfo","retryDelay":"23s"}]}}
+ERROR - 2026-06-13 06:08:55 --> Gemini API Error: {"error":{"code":429,"message":"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https:\/\/ai.google.dev\/gemini-api\/docs\/rate-limits. To monitor your current usage, head to: https:\/\/ai.dev\/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com\/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 5.660951155s.","status":"RESOURCE_EXHAUSTED","details":[{"@type":"type.googleapis.com\/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https:\/\/ai.google.dev\/gemini-api\/docs\/rate-limits"}]},{"@type":"type.googleapis.com\/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com\/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier","quotaDimensions":{"location":"global","model":"gemini-2.5-flash"},"quotaValue":"20"}]},{"@type":"type.googleapis.com\/google.rpc.RetryInfo","retryDelay":"5s"}]}}
+CRITICAL - 2026-06-13 04:08:59 --> ParseError: syntax error, unexpected token "else", expecting end of file
+[Method: GET, Route: /]
+in APPPATH\Views\layout\main.php on line 285.
+ 1 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\View\View.php(256): CodeIgniter\View\View->render('layout/main', [], true)
+ 3 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('landing/index', [], true)
+ 4 APPPATH\Controllers\Public\LandingPage.php(52): view('landing/index', [...])
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Public\LandingPage->index()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Public\LandingPage))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('D:\\Learn\\KULIAH\\WEB LANJUTAN\\UAS\\uas-bus\\bus-ticket-uas\\public\\index.php')
+CRITICAL - 2026-06-13 04:09:07 --> ParseError: syntax error, unexpected token "else", expecting end of file
+[Method: GET, Route: customer/home]
+in APPPATH\Views\layout\main.php on line 285.
+ 1 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\View\View.php(256): CodeIgniter\View\View->render('layout/main', [], true)
+ 3 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('customer/home', [], true)
+ 4 APPPATH\Controllers\Customer\Home.php(98): view('customer/home', [...])
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Customer\Home->index()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Customer\Home))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('D:\\Learn\\KULIAH\\WEB LANJUTAN\\UAS\\uas-bus\\bus-ticket-uas\\public\\index.php')
+CRITICAL - 2026-06-13 04:09:15 --> ParseError: syntax error, unexpected token "else", expecting end of file
+[Method: GET, Route: login]
+in APPPATH\Views\layout\main.php on line 285.
+ 1 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\View\View.php(256): CodeIgniter\View\View->render('layout/main', [], true)
+ 3 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/login', [], true)
+ 4 APPPATH\Controllers\Auth\Auth.php(25): view('auth/login')
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth\Auth->login()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\Auth))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('D:\\Learn\\KULIAH\\WEB LANJUTAN\\UAS\\uas-bus\\bus-ticket-uas\\public\\index.php')
+ERROR - 2026-06-13 06:09:46 --> Gemini API Error: {"error":{"code":429,"message":"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https:\/\/ai.google.dev\/gemini-api\/docs\/rate-limits. To monitor your current usage, head to: https:\/\/ai.dev\/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com\/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 14.97767263s.","status":"RESOURCE_EXHAUSTED","details":[{"@type":"type.googleapis.com\/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https:\/\/ai.google.dev\/gemini-api\/docs\/rate-limits"}]},{"@type":"type.googleapis.com\/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com\/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier","quotaDimensions":{"model":"gemini-2.5-flash","location":"global"},"quotaValue":"20"}]},{"@type":"type.googleapis.com\/google.rpc.RetryInfo","retryDelay":"14s"}]}}
+CRITICAL - 2026-06-13 04:16:13 --> ErrorException: Undefined array key "payment_status"
+[Method: POST, Route: petugas/scan/verify]
+in APPPATH\Controllers\Petugas\Scan.php on line 64.
+ 1 APPPATH\Controllers\Petugas\Scan.php(64): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "payment_status"', 'D:\\Learn\\KULIAH\\WEB LANJUTAN\\UAS\\uas-bus\\bus-ticket-uas\\app\\Controllers\\Petugas\\Scan.php', 64)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Petugas\Scan->verify()
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Petugas\Scan))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 8 SYSTEMPATH\rewrite.php(44): require_once('D:\\Learn\\KULIAH\\WEB LANJUTAN\\UAS\\uas-bus\\bus-ticket-uas\\public\\index.php')
+CRITICAL - 2026-06-13 04:16:14 --> ErrorException: Undefined array key "payment_status"
+[Method: POST, Route: petugas/scan/verify]
+in APPPATH\Controllers\Petugas\Scan.php on line 64.
+ 1 APPPATH\Controllers\Petugas\Scan.php(64): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "payment_status"', 'D:\\Learn\\KULIAH\\WEB LANJUTAN\\UAS\\uas-bus\\bus-ticket-uas\\app\\Controllers\\Petugas\\Scan.php', 64)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Petugas\Scan->verify()
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Petugas\Scan))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 8 SYSTEMPATH\rewrite.php(44): require_once('D:\\Learn\\KULIAH\\WEB LANJUTAN\\UAS\\uas-bus\\bus-ticket-uas\\public\\index.php')
+CRITICAL - 2026-06-13 04:16:15 --> ErrorException: Undefined array key "payment_status"
+[Method: POST, Route: petugas/scan/verify]
+in APPPATH\Controllers\Petugas\Scan.php on line 64.
+ 1 APPPATH\Controllers\Petugas\Scan.php(64): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "payment_status"', 'D:\\Learn\\KULIAH\\WEB LANJUTAN\\UAS\\uas-bus\\bus-ticket-uas\\app\\Controllers\\Petugas\\Scan.php', 64)
+ 2 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Petugas\Scan->verify()
+ 3 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Petugas\Scan))
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 8 SYSTEMPATH\rewrite.php(44): require_once('D:\\Learn\\KULIAH\\WEB LANJUTAN\\UAS\\uas-bus\\bus-ticket-uas\\public\\index.php')
+ERROR - 2026-06-13 06:20:23 --> Gemini API Error: {"error":{"code":429,"message":"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https:\/\/ai.google.dev\/gemini-api\/docs\/rate-limits. To monitor your current usage, head to: https:\/\/ai.dev\/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com\/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 37.486907606s.","status":"RESOURCE_EXHAUSTED","details":[{"@type":"type.googleapis.com\/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https:\/\/ai.google.dev\/gemini-api\/docs\/rate-limits"}]},{"@type":"type.googleapis.com\/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com\/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier","quotaDimensions":{"location":"global","model":"gemini-2.5-flash"},"quotaValue":"20"}]},{"@type":"type.googleapis.com\/google.rpc.RetryInfo","retryDelay":"37s"}]}}
+ERROR - 2026-06-13 06:24:34 --> Gemini API Error: {"error":{"code":429,"message":"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https:\/\/ai.google.dev\/gemini-api\/docs\/rate-limits. To monitor your current usage, head to: https:\/\/ai.dev\/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com\/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 26.899142467s.","status":"RESOURCE_EXHAUSTED","details":[{"@type":"type.googleapis.com\/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https:\/\/ai.google.dev\/gemini-api\/docs\/rate-limits"}]},{"@type":"type.googleapis.com\/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com\/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier","quotaDimensions":{"location":"global","model":"gemini-2.5-flash"},"quotaValue":"20"}]},{"@type":"type.googleapis.com\/google.rpc.RetryInfo","retryDelay":"26s"}]}}
+ERROR - 2026-06-13 06:29:39 --> Gemini API Error: {"error":{"code":429,"message":"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https:\/\/ai.google.dev\/gemini-api\/docs\/rate-limits. To monitor your current usage, head to: https:\/\/ai.dev\/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com\/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 21.931082681s.","status":"RESOURCE_EXHAUSTED","details":[{"@type":"type.googleapis.com\/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https:\/\/ai.google.dev\/gemini-api\/docs\/rate-limits"}]},{"@type":"type.googleapis.com\/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com\/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier","quotaDimensions":{"location":"global","model":"gemini-2.5-flash"},"quotaValue":"20"}]},{"@type":"type.googleapis.com\/google.rpc.RetryInfo","retryDelay":"21s"}]}}
+CRITICAL - 2026-06-13 12:07:25 --> Error: Call to undefined method CodeIgniter\View\View::includeScheduleTable()
+[Method: GET, Route: admin/dashboard]
+in APPPATH\Views\admin\dashboard.php on line 214.
+ 1 SYSTEMPATH\View\View.php(240): include()
+ 2 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 3 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('admin/dashboard', [], true)
+ 4 APPPATH\Controllers\Admin\Dashboard.php(43): view('admin/dashboard', [...])
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Admin\Dashboard->index()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin\Dashboard))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('D:\\Learn\\KULIAH\\WEB LANJUTAN\\UAS\\uas-bus\\bus-ticket-uas\\public\\index.php')
+CRITICAL - 2026-06-13 12:08:25 --> Error: Call to undefined method CodeIgniter\View\View::includeScheduleTable()
+[Method: GET, Route: admin/dashboard]
+in APPPATH\Views\admin\dashboard.php on line 214.
+ 1 SYSTEMPATH\View\View.php(240): include()
+ 2 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 3 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('admin/dashboard', [], true)
+ 4 APPPATH\Controllers\Admin\Dashboard.php(43): view('admin/dashboard', [...])
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Admin\Dashboard->index()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin\Dashboard))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('D:\\Learn\\KULIAH\\WEB LANJUTAN\\UAS\\uas-bus\\bus-ticket-uas\\public\\index.php')
+ERROR - 2026-06-13 12:29:27 --> Gemini API Error: {"error":{"code":429,"message":"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https:\/\/ai.google.dev\/gemini-api\/docs\/rate-limits. To monitor your current usage, head to: https:\/\/ai.dev\/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com\/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 34.826633533s.","status":"RESOURCE_EXHAUSTED","details":[{"@type":"type.googleapis.com\/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https:\/\/ai.google.dev\/gemini-api\/docs\/rate-limits"}]},{"@type":"type.googleapis.com\/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com\/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier","quotaDimensions":{"location":"global","model":"gemini-2.5-flash"},"quotaValue":"20"}]},{"@type":"type.googleapis.com\/google.rpc.RetryInfo","retryDelay":"34s"}]}}
+CRITICAL - 2026-06-13 07:37:56 --> TypeError: CodeIgniter\Superglobals::get(): Return value must be of type array|string|null, int returned
+[Method: GET, Route: /]
+in SYSTEMPATH\Superglobals.php on line 167.
+ 1 SYSTEMPATH\Pager\Pager.php(437): CodeIgniter\Superglobals->get('page_buses', '1')
+ 2 SYSTEMPATH\Pager\Pager.php(412): CodeIgniter\Pager\Pager->calculateCurrentPage('buses')
+ 3 SYSTEMPATH\Pager\Pager.php(217): CodeIgniter\Pager\Pager->ensureGroup('buses')
+ 4 SYSTEMPATH\BaseModel.php(1331): CodeIgniter\Pager\Pager->getCurrentPage('buses')
+ 5 ROOTPATH\scratch_test_pager.php(38): CodeIgniter\BaseModel->paginate(10, 'buses')
+CRITICAL - 2026-06-13 12:38:29 --> Error: Call to undefined method CodeIgniter\Pager\PagerRenderer::getCurrentPage()
+[Method: GET, Route: admin/bus]
+in APPPATH\Views\layout\pager.php on line 29.
+ 1 SYSTEMPATH\View\View.php(240): include()
+ 2 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 3 SYSTEMPATH\Pager\Pager.php(130): CodeIgniter\View\View->render('layout/pager')
+ 4 SYSTEMPATH\Pager\Pager.php(87): CodeIgniter\Pager\Pager->displayLinks('buses', 'tailwind_pagination')
+ 5 APPPATH\Views\admin\bus\index.php(129): CodeIgniter\Pager\Pager->links('buses', 'tailwind_pagination')
+ 6 SYSTEMPATH\View\View.php(240): include('D:\\Learn\\KULIAH\\WEB LANJUTAN\\UAS\\uas-bus\\bus-ticket-uas\\app\\Views\\admin\\bus\\index.php')
+ 7 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('admin/bus/index', [], true)
+ 9 APPPATH\Controllers\Admin\Bus.php(31): view('admin/bus/index', [...])
+10 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Admin\Bus->index()
+11 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin\Bus))
+12 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+16 SYSTEMPATH\rewrite.php(44): require_once('D:\\Learn\\KULIAH\\WEB LANJUTAN\\UAS\\uas-bus\\bus-ticket-uas\\public\\index.php')
