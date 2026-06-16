@@ -98,6 +98,11 @@ $routes->group('admin', ['filter' => 'role:admin'], function($routes) {
     $routes->post('promo/update/(:num)', 'Admin\Promo::update/$1');
     $routes->get('promo/delete/(:num)', 'Admin\Promo::delete/$1');
     
+    // Report Routes
+    $routes->get('report', 'Admin\Report::index');
+    $routes->get('report/export/financial', 'Admin\Report::exportFinancial');
+    $routes->get('report/export/fleet', 'Admin\Report::exportFleet');
+    
 });
 
 // Boarding Monitor Routes (Accessible by both admin and petugas roles)

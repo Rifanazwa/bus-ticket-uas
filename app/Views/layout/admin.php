@@ -280,6 +280,12 @@
                         <i data-lucide="message-circle" class="w-4 h-4 flex-shrink-0 text-emerald-400"></i>
                         <span>Sentimen Review</span>
                     </a>
+
+                    <a href="<?= base_url('admin/report') ?>"
+                       class="nav-item flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl <?= strpos(service('router')->getMatchedRoute()[0], 'admin/report') === 0 ? 'nav-item-active' : 'text-slate-400' ?>">
+                        <i data-lucide="bar-chart-3" class="w-4 h-4 flex-shrink-0 text-indigo-400"></i>
+                        <span>Laporan &amp; Analitik</span>
+                    </a>
                 </div>
 
                 <!-- Divider -->
