@@ -2,7 +2,7 @@
 /**
  * Standalone Database Reset Script
  * Access: https://uas.mondigi.biz.id/db_setup.php?token=...&action=reset
- * Force redeploy v5
+ * Force redeploy v6
  */
 set_time_limit(300);
 ini_set('memory_limit', '512M');
