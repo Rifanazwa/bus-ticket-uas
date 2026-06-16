@@ -106,7 +106,7 @@ EOT;
 require FCPATH . '../app/Config/Paths.php';
 $paths = new Config\Paths();
 require $paths->systemDirectory . '/Boot.php';
-CodeIgniter\Boot::bootSpark($paths);
+CodeIgniter\Boot::bootWeb($paths);
 
 $output = '';
 try {
