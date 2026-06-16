@@ -438,10 +438,11 @@ class Schedule extends BaseController
         $db = \Config\Database::connect();
         
         // We select bookings for this schedule that are confirmed/completed (not cancelled)
-        // We join tickets, users
         $passengers = $db->table('booking_seats')
-            ->select('booking_seats.seat_number, bookings.booking_code, bookings.passenger_name, bookings.passenger_phone, bookings.boarding_status')
+            ->select('booking_seats.seat_number, booking_seats.passenger_name, bookings.booking_code, users.phone as passenger_phone, tickets.status as boarding_status')
             ->join('bookings', 'bookings.id = booking_seats.booking_id')
+            ->join('users', 'users.id = bookings.user_id')
+            ->join('tickets', 'tickets.booking_id = bookings.id', 'left')
             ->where('bookings.schedule_id', $id)
             ->where('bookings.booking_status !=', 'cancelled')
             ->orderBy('CAST(booking_seats.seat_number AS UNSIGNED)', 'ASC')
