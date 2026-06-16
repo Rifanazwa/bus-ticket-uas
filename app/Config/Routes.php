@@ -104,4 +104,6 @@ $routes->group('petugas', ['filter' => 'role:petugas'], function($routes) {
     $routes->get('scan', 'Petugas\Scan::index');
     $routes->post('scan/verify', 'Petugas\Scan::verify');
     $routes->post('scan/confirm', 'Petugas\Scan::confirmBoarding');
+    $routes->get('scan/manifest/(:num)', 'Petugas\Scan::manifest/$1');
+    $routes->get('scan/print/(:num)', 'Petugas\Scan::printReport/$1');
 });
