@@ -44,33 +44,9 @@ jobs:
             **/vendor/**
             **/system/**
 
-      - name: Trigger Database Reset
+      - name: Run Pending Migrations
         run: |
-          echo "Waiting 5 seconds for server to pick up new files..."
-          sleep 5
-
-          echo "Trying db_setup.php (standalone, bypasses CI4 routing)..."
-          RESPONSE=$(curl -L -sS -w "%{http_code}" -o response.html --max-time 120 "https://uas.mondigi.biz.id/db_setup.php?token=JossBusMigrateSecureToken_2026_xYz&action=reset")
+          echo "Running pending database migrations..."
+          RESPONSE=$(curl -L -sS -w "%{http_code}" -o response.html --max-time 120 "https://uas.mondigi.biz.id/?db_op=migrate&token=JossBusMigrateSecureToken_2026_xYz&action=migrate")
           echo "HTTP Response code: $RESPONSE"
-          cat response.html
-          if [ "$RESPONSE" -eq 200 ]; then
-            echo "Database reset successful via db_setup.php!"
-            exit 0
-          fi
-
-          echo ""
-          echo "db_setup.php failed (HTTP $RESPONSE), trying landing page query param..."
-          RESPONSE2=$(curl -L -sS -w "%{http_code}" -o response2.html --max-time 120 "https://uas.mondigi.biz.id/?db_op=migrate&token=JossBusMigrateSecureToken_2026_xYz&action=reset")
-          echo "HTTP Response code: $RESPONSE2"
-          cat response2.html
-          if [ "$RESPONSE2" -eq 200 ]; then
-            echo "Database operation completed via landing page."
-            exit 0
-          fi
-
-          echo ""
-          echo "Both methods failed. Trying /migrate-db route..."
-          RESPONSE3=$(curl -L -sS -w "%{http_code}" -o response3.html --max-time 120 "https://uas.mondigi.biz.id/migrate-db?token=JossBusMigrateSecureToken_2026_xYz&action=reset")
-          echo "HTTP Response code: $RESPONSE3"
-          cat response3.html
-          echo "Migration step completed with HTTP $RESPONSE3 (non-blocking)."
+          echo "Migration step completed (non-blocking)."
