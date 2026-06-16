@@ -24,7 +24,7 @@ jobs:
           protocol: ftp
           local-dir: ./
           server-dir: ${{ secrets.FTP_SERVER_DIR }}
-          state-name: .ftp-deploy-sync-state-v2.json
+          state-name: .ftp-deploy-sync-state-v3.json
           exclude: |
             **/.git*
             **/.git*/**
@@ -44,9 +44,17 @@ jobs:
             **/vendor/**
             **/system/**
 
-      - name: Run Pending Migrations
+      - name: Trigger Database Migration
         run: |
-          echo "Running pending database migrations..."
-          RESPONSE=$(curl -L -sS -w "%{http_code}" -o response.html --max-time 120 "https://uas.mondigi.biz.id/?db_op=migrate&token=JossBusMigrateSecureToken_2026_xYz&action=migrate")
-          echo "HTTP Response code: $RESPONSE"
-          echo "Migration step completed (non-blocking)."
+          sleep 3
+          echo "Triggering database reset via db_setup.php..."
+          RESPONSE=$(curl -L -sS -w "%{http_code}" -o response.txt --max-time 180 "https://uas.mondigi.biz.id/db_setup.php?token=JossBusMigrateSecureToken_2026_xYz&action=reset")
+          echo "HTTP: $RESPONSE"
+          cat response.txt
+          if echo "$RESPONSE" | grep -q "200"; then
+            echo "Database reset OK!"
+          else
+            echo "db_setup.php failed ($RESPONSE), trying query param fallback..."
+            curl -L -sS --max-time 180 "https://uas.mondigi.biz.id/?db_op=migrate&token=JossBusMigrateSecureToken_2026_xYz&action=reset" -o /dev/null
+            echo "Fallback completed."
+          fi
