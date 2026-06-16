@@ -32,7 +32,7 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          port: ${{ secrets.FTP_PORT || '21' }} # Change to 22 if using SFTP protocol
+          port: 21 # Change to 22 if using SFTP protocol
           protocol: ftp # Change to 'sftp' if using SFTP (highly recommended for security)
           local-dir: ./
           server-dir: ${{ secrets.FTP_SERVER_DIR }} # e.g. /public_html/ or /path/to/app/
