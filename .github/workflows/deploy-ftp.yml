@@ -36,11 +36,22 @@ jobs:
           protocol: ftp # Change to 'sftp' if using SFTP (highly recommended for security)
           local-dir: ./
           server-dir: ${{ secrets.FTP_SERVER_DIR }} # e.g. /public_html/ or /path/to/app/
-          # exclude: |
-          #   **/.git*
-          #   **/.git*/**
-          #   **/node_modules/**
-          #   **/tests/**
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.github*
+            **/.github*/**
+            **/node_modules/**
+            **/tests/**
+            **/phpunit.xml.dist
+            **/db_bus_ticket.sql
+            **/vendor.zip
+            **/scratch_*.php
+            **/test_e2e_ticket.pdf
+            **/writable/session/**
+            **/writable/cache/**
+            **/writable/debugbar/**
+            **/writable/logs/**
 
       - name: Trigger Remote Database Migration
         run: |
