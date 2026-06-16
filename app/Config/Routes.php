@@ -100,7 +100,7 @@ $routes->group('admin', ['filter' => 'role:admin'], function($routes) {
 });
 
 // Petugas Routes (Protected)
-$routes->group('petugas', ['filter' => 'role:petugas'], function($routes) {
+$routes->group('petugas', ['filter' => 'role:petugas,admin'], function($routes) {
     $routes->get('scan', 'Petugas\Scan::index');
     $routes->post('scan/verify', 'Petugas\Scan::verify');
     $routes->post('scan/confirm', 'Petugas\Scan::confirmBoarding');
