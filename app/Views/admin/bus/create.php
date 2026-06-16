@@ -45,8 +45,8 @@ $subtitle = 'Definisikan Armada & Konfigurasi Kursi';
                     <label for="type" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Kelas Bus</label>
                     <select id="type" name="type" required @change="changePreset($el.value)"
                         class="block w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
-                        <option value="Executive">Executive (40 Kursi, 2-2)</option>
-                        <option value="VIP">VIP (24 Kursi, 2-1)</option>
+                        <option value="Eksekutif">Eksekutif (40 Kursi, 2-2)</option>
+                        <option value="Bisnis">Bisnis (24 Kursi, 2-1)</option>
                         <option value="Ekonomi">Ekonomi (48 Kursi, 2-2)</option>
                     </select>
                 </div>
@@ -171,16 +171,16 @@ function seatBuilder() {
         rows: 10,
         cols: 5,
         layout: [],
-        preset: 'Executive',
+        preset: 'Eksekutif',
         
         init() {
-            this.changePreset('Executive');
+            this.changePreset('Eksekutif');
         },
         
         changePreset(type) {
             this.preset = type;
             this.layout = [];
-            if (type === 'VIP') {
+            if (type === 'Bisnis') {
                 this.rows = 8;
                 this.cols = 4;
                 for (let r = 1; r <= this.rows; r++) {
@@ -189,7 +189,7 @@ function seatBuilder() {
                     this.layout.push({row: r, col: 'aisle', number: null, type: 'aisle'});
                     this.layout.push({row: r, col: 'C', number: r + 'C', type: 'seat'});
                 }
-            } else if (type === 'Executive') {
+            } else if (type === 'Eksekutif') {
                 this.rows = 10;
                 this.cols = 5;
                 for (let r = 1; r <= this.rows; r++) {
@@ -272,7 +272,7 @@ function seatBuilder() {
             this.rows++;
             let r = this.rows;
             let colNames = ['A', 'B', 'aisle', 'C', 'D'];
-            if (this.preset === 'VIP') {
+            if (this.preset === 'Bisnis') {
                 colNames = ['A', 'B', 'aisle', 'C'];
             }
             colNames.forEach(col => {

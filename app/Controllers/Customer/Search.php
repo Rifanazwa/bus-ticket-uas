@@ -95,7 +95,7 @@ class Search extends BaseController
             if (!$aiRecommendation) {
                 $recommended = $schedules[0];
                 foreach ($schedules as $s) {
-                    if ($s['bus_type'] === 'VIP' || $s['price'] < $recommended['price']) {
+                    if ($s['bus_type'] === 'Bisnis' || $s['price'] < $recommended['price']) {
                         $recommended = $s;
                     }
                 }

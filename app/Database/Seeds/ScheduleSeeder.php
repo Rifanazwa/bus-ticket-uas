@@ -38,9 +38,9 @@ class ScheduleSeeder extends Seeder
                 $pricePerKm = 450;
                 $price = $basePrice + ($route['distance_km'] * $pricePerKm);
 
-                if ($bus['type'] === 'VIP') {
+                if ($bus['type'] === 'Bisnis') {
                     $price *= 1.25;
-                } elseif ($bus['type'] === 'Executive') {
+                } elseif ($bus['type'] === 'Eksekutif') {
                     $price *= 1.10;
                 } else {
                     $price *= 0.90;

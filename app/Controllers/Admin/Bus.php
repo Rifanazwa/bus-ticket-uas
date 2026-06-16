@@ -222,9 +222,9 @@ class Bus extends BaseController
         fputcsv($output, ['code', 'name', 'type']);
         
         // Sample rows
-        fputcsv($output, ['RI-EXE01', 'Rosalia Indah (Executive)', 'Executive']);
-        fputcsv($output, ['HJ-VIP03', 'Harapan Jaya (VIP)', 'VIP']);
-        fputcsv($output, ['PJ-EKO05', 'Primajasa (Ekonomi)', 'Ekonomi']);
+        fputcsv($output, ['JB-EXE01', 'Joss Bus (Eksekutif)', 'Eksekutif']);
+        fputcsv($output, ['JB-BIS01', 'Joss Bus (Bisnis)', 'Bisnis']);
+        fputcsv($output, ['JB-EKO01', 'Joss Bus (Ekonomi)', 'Ekonomi']);
         
         fclose($output);
         exit();
@@ -338,9 +338,9 @@ class Bus extends BaseController
                 continue;
             }
             
-            $validTypes = ['Executive', 'VIP', 'Ekonomi'];
+            $validTypes = ['Eksekutif', 'Bisnis', 'Ekonomi'];
             if (!in_array($type, $validTypes)) {
-                $errors[] = "Baris {$rowNum}: Kelas Bus '{$type}' tidak valid. Harus salah satu dari: Executive, VIP, Ekonomi.";
+                $errors[] = "Baris {$rowNum}: Kelas Bus '{$type}' tidak valid. Harus salah satu dari: Eksekutif, Bisnis, Ekonomi.";
                 continue;
             }
             
@@ -349,10 +349,10 @@ class Bus extends BaseController
             // Build details
             $layout = [];
             $seats = 0;
-            if ($type === 'VIP') {
+            if ($type === 'Bisnis') {
                 $layout = $vipLayout;
                 $seats = 24;
-            } elseif ($type === 'Executive') {
+            } elseif ($type === 'Eksekutif') {
                 $layout = $execLayout;
                 $seats = 40;
             } else {

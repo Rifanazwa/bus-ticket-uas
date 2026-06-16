@@ -45,8 +45,8 @@ $subtitle = 'Edit Rincian Armada & Konfigurasi Kursi';
                     <label for="type" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Kelas Bus</label>
                     <select id="type" name="type" required @change="changePreset($el.value)"
                         class="block w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
-                        <option value="Executive" <?= $bus['type'] === 'Executive' ? 'selected' : '' ?>>Executive (40 Kursi, 2-2)</option>
-                        <option value="VIP" <?= $bus['type'] === 'VIP' ? 'selected' : '' ?>>VIP (24 Kursi, 2-1)</option>
+                        <option value="Eksekutif" <?= $bus['type'] === 'Eksekutif' ? 'selected' : '' ?>>Eksekutif (40 Kursi, 2-2)</option>
+                        <option value="Bisnis" <?= $bus['type'] === 'Bisnis' ? 'selected' : '' ?>>Bisnis (24 Kursi, 2-1)</option>
                         <option value="Ekonomi" <?= $bus['type'] === 'Ekonomi' ? 'selected' : '' ?>>Ekonomi (48 Kursi, 2-2)</option>
                     </select>
                 </div>
@@ -185,8 +185,8 @@ function seatBuilder() {
                     if (c.row > maxRow) maxRow = c.row;
                 });
                 this.rows = maxRow;
-                // Determine column grid structure (e.g. VIP is usually 4 wide, Executive is 5 wide)
-                if (this.preset === 'VIP') {
+                // Determine column grid structure (e.g. Bisnis is usually 4 wide, Eksekutif is 5 wide)
+                if (this.preset === 'Bisnis') {
                     this.cols = 4;
                 } else {
                     this.cols = 5;
@@ -200,7 +200,7 @@ function seatBuilder() {
         changePreset(type) {
             this.preset = type;
             this.layout = [];
-            if (type === 'VIP') {
+            if (type === 'Bisnis') {
                 this.rows = 8;
                 this.cols = 4;
                 for (let r = 1; r <= this.rows; r++) {
@@ -209,7 +209,7 @@ function seatBuilder() {
                     this.layout.push({row: r, col: 'aisle', number: null, type: 'aisle'});
                     this.layout.push({row: r, col: 'C', number: r + 'C', type: 'seat'});
                 }
-            } else if (type === 'Executive') {
+            } else if (type === 'Eksekutif') {
                 this.rows = 10;
                 this.cols = 5;
                 for (let r = 1; r <= this.rows; r++) {
@@ -289,7 +289,7 @@ function seatBuilder() {
             this.rows++;
             let r = this.rows;
             let colNames = ['A', 'B', 'aisle', 'C', 'D'];
-            if (this.preset === 'VIP') {
+            if (this.preset === 'Bisnis') {
                 colNames = ['A', 'B', 'aisle', 'C'];
             }
             colNames.forEach(col => {

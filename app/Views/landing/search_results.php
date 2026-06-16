@@ -103,8 +103,8 @@
                 <?php
                     $pct = $s['total_seats'] > 0 ? round((($s['total_seats'] - $s['remaining_seats']) / $s['total_seats']) * 100) : 0;
                     $typeColor = match($s['bus_type']) {
-                        'VIP'       => 'amber',
-                        'Executive' => 'brand',
+                        'Bisnis'    => 'amber',
+                        'Eksekutif' => 'brand',
                         default     => 'emerald'
                     };
                     $dur_h = floor($s['estimated_duration'] / 60);

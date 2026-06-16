@@ -112,10 +112,10 @@ $subtitle = 'Daftar Armada Bus PO';
                             <td class="py-4 px-6 font-mono font-semibold text-brand-400"><?= esc($bus['code']) ?></td>
                             <td class="py-4 px-6 text-slate-200 font-semibold"><?= esc($bus['name']) ?></td>
                             <td class="py-4 px-6">
-                                <?php if ($bus['type'] === 'VIP'): ?>
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">VIP</span>
-                                <?php elseif ($bus['type'] === 'Executive'): ?>
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-500/10 text-brand-400 border border-brand-500/20">Executive</span>
+                                <?php if ($bus['type'] === 'Bisnis'): ?>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Bisnis</span>
+                                <?php elseif ($bus['type'] === 'Eksekutif'): ?>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-500/10 text-brand-400 border border-brand-500/20">Eksekutif</span>
                                 <?php else: ?>
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Ekonomi</span>
                                 <?php endif; ?>
