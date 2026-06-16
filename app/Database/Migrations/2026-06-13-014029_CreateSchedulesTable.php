@@ -40,19 +40,22 @@ class CreateSchedulesTable extends Migration
                 'constraint' => ['scheduled', 'ongoing', 'completed', 'cancelled'],
                 'default'    => 'scheduled',
             ],
-            'driver_1' => [
-                'type'       => 'VARCHAR',
-                'constraint' => 100,
+            'driver_1_id' => [
+                'type'       => 'INT',
+                'constraint' => 11,
+                'unsigned'   => true,
                 'null'       => true,
             ],
-            'driver_2' => [
-                'type'       => 'VARCHAR',
-                'constraint' => 100,
+            'driver_2_id' => [
+                'type'       => 'INT',
+                'constraint' => 11,
+                'unsigned'   => true,
                 'null'       => true,
             ],
-            'conductor' => [
-                'type'       => 'VARCHAR',
-                'constraint' => 100,
+            'conductor_id' => [
+                'type'       => 'INT',
+                'constraint' => 11,
+                'unsigned'   => true,
                 'null'       => true,
             ],
             'created_at' => [
@@ -67,6 +70,9 @@ class CreateSchedulesTable extends Migration
         $this->forge->addKey('id', true);
         $this->forge->addForeignKey('route_id', 'routes', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('bus_id', 'buses', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('driver_1_id', 'users', 'id', 'SET NULL', 'CASCADE');
+        $this->forge->addForeignKey('driver_2_id', 'users', 'id', 'SET NULL', 'CASCADE');
+        $this->forge->addForeignKey('conductor_id', 'users', 'id', 'SET NULL', 'CASCADE');
         $this->forge->createTable('schedules');
     }
 

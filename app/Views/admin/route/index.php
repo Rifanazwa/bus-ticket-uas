@@ -132,8 +132,8 @@ $subtitle = 'Daftar Rute Perjalanan Bus';
                                     <a href="<?= base_url('admin/route/edit/' . $route['id']) ?>" class="p-1.5 bg-slate-850 hover:bg-slate-800 text-slate-300 hover:text-white rounded-lg transition-colors border border-slate-800" title="Edit">
                                         <i data-lucide="edit-3" class="w-4 h-4"></i>
                                     </a>
-                                    <a href="<?= base_url('admin/route/delete/' . $route['id']) ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus rute ini?')" class="p-1.5 bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white rounded-lg transition-colors border border-rose-500/20" title="Hapus">
-                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                    <a href="javascript:void(0)" onclick="confirmDelete('<?= base_url('admin/route/delete/' . $route['id']) ?>', 'Apakah Anda yakin ingin menghapus rute ini? Menghapus rute akan menghapus semua jadwal keberangkatan bus dan transaksi pesanan tiket terkait rute perjalanan ini secara permanen.')" class="p-1.5 bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white rounded-lg transition-colors border border-rose-500/20" title="Hapus">
+                                         <i data-lucide="trash-2" class="w-4 h-4"></i>
                                     </a>
                                 </div>
                             </td>

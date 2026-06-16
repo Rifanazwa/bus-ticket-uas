@@ -6,7 +6,7 @@ $subtitle = 'Atur Penjadwalan Rute & Armada Bus';
 ?>
 
 <?= $this->section('admin_content') ?>
-<div class="max-w-2xl bg-slate-900/60 border border-slate-800/80 p-6 sm:p-8 rounded-3xl shadow-xl">
+<div class="w-full bg-slate-900/60 border border-slate-800/80 p-6 sm:p-8 rounded-3xl shadow-xl">
     <!-- Errors Alert -->
     <?php if (session()->getFlashdata('errors')): ?>
         <div class="mb-6 bg-rose-500/10 border border-rose-500/20 text-rose-400 p-4 rounded-xl text-xs space-y-1">
@@ -114,35 +114,56 @@ $subtitle = 'Atur Penjadwalan Rute & Armada Bus';
             <h4 class="text-xs font-bold text-brand-400 uppercase tracking-widest mb-4">Informasi Kru Bus (Opsional)</h4>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 <div>
-                    <label for="driver_1" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Sopir Utama (Sopir 1)</label>
+                    <label for="driver_1_id" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Sopir Utama (Sopir 1)</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
                             <i data-lucide="user" class="w-4 h-4"></i>
                         </div>
-                        <input id="driver_1" name="driver_1" type="text" value="<?= old('driver_1') ?>" placeholder="Nama Sopir Utama"
-                            class="block w-full pl-10 pr-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 placeholder-slate-655 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+                        <select id="driver_1_id" name="driver_1_id"
+                            class="block w-full pl-10 pr-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+                            <option value="">Pilih Sopir Utama</option>
+                            <?php foreach ($drivers1 as $d): ?>
+                                <option value="<?= $d['id'] ?>" <?= old('driver_1_id') == $d['id'] ? 'selected' : '' ?>>
+                                    <?= esc($d['name']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                 </div>
 
                 <div>
-                    <label for="driver_2" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Sopir Cadangan (Sopir 2)</label>
+                    <label for="driver_2_id" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Sopir Cadangan (Sopir 2)</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
                             <i data-lucide="user" class="w-4 h-4"></i>
                         </div>
-                        <input id="driver_2" name="driver_2" type="text" value="<?= old('driver_2') ?>" placeholder="Nama Sopir Cadangan"
-                            class="block w-full pl-10 pr-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 placeholder-slate-655 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+                        <select id="driver_2_id" name="driver_2_id"
+                            class="block w-full pl-10 pr-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+                            <option value="">Pilih Sopir Cadangan</option>
+                            <?php foreach ($drivers2 as $d): ?>
+                                <option value="<?= $d['id'] ?>" <?= old('driver_2_id') == $d['id'] ? 'selected' : '' ?>>
+                                    <?= esc($d['name']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                 </div>
 
                 <div>
-                    <label for="conductor" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Kondektur</label>
+                    <label for="conductor_id" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Kondektur</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
                             <i data-lucide="user" class="w-4 h-4"></i>
                         </div>
-                        <input id="conductor" name="conductor" type="text" value="<?= old('conductor') ?>" placeholder="Nama Kondektur"
-                            class="block w-full pl-10 pr-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 placeholder-slate-655 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+                        <select id="conductor_id" name="conductor_id"
+                            class="block w-full pl-10 pr-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+                            <option value="">Pilih Kondektur</option>
+                            <?php foreach ($conductors as $c): ?>
+                                <option value="<?= $c['id'] ?>" <?= old('conductor_id') == $c['id'] ? 'selected' : '' ?>>
+                                    <?= esc($c['name']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                 </div>
             </div>

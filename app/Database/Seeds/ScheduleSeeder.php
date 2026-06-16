@@ -20,6 +20,15 @@ class ScheduleSeeder extends Seeder
         if (empty($routes) || empty($buses)) {
             return;
         }
+
+        // Fetch and map crew users by bus_id and crew_role
+        $crewUsers = $this->db->table('users')->where('role', 'petugas')->get()->getResultArray();
+        $crewMap = [];
+        foreach ($crewUsers as $cu) {
+            if ($cu['bus_id']) {
+                $crewMap[$cu['bus_id']][$cu['crew_role']] = $cu['id'];
+            }
+        }
  
         $schedules = [];
         $now = date('Y-m-d H:i:s');
@@ -78,23 +87,21 @@ class ScheduleSeeder extends Seeder
                 $arrivalTimestamp = $departureTimestamp + ($route['estimated_duration'] * 60);
                 $arrivalTime = date('Y-m-d H:i:s', $arrivalTimestamp);
  
-                $drivers = ['Bambang Wijaya', 'Sutrisno', 'Joko Sunarto', 'Heri Prasetyo', 'Ahmad Subagyo', 'Budi Raharjo', 'Dwi Cahyono', 'Eko Susilo', 'Rudi Hermawan', 'Agus Santoso'];
-                $conductors = ['Asep Sunandar', 'Dadang Hermawan', 'Maman Suherman', 'Cecep Solihin', 'Ujang Sutisna', 'Gatot Subroto', 'Teguh Saputra', 'Indra Wijaya', 'Yayan Ruhian', 'Rian Hidayat'];
-                
-                $d1 = $drivers[($busIndex + $day) % count($drivers)];
-                $d2 = $drivers[($busIndex + $day + 1) % count($drivers)];
-                $cond = $conductors[($busIndex + $day) % count($conductors)];
+                $busId = $bus['id'];
+                $driver1Id   = $crewMap[$busId]['driver_1'] ?? null;
+                $driver2Id   = $crewMap[$busId]['driver_2'] ?? null;
+                $conductorId = $crewMap[$busId]['conductor'] ?? null;
 
                 $schedules[] = [
                     'route_id'       => $route['id'],
-                    'bus_id'         => $bus['id'],
+                    'bus_id'         => $busId,
                     'departure_time' => $departureTime,
                     'arrival_time'   => $arrivalTime,
                     'price'          => $price,
                     'status'         => 'scheduled',
-                    'driver_1'       => $d1,
-                    'driver_2'       => $d2,
-                    'conductor'      => $cond,
+                    'driver_1_id'    => $driver1Id,
+                    'driver_2_id'    => $driver2Id,
+                    'conductor_id'   => $conductorId,
                     'created_at'     => $now,
                     'updated_at'     => $now,
                 ];

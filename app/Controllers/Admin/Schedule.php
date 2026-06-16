@@ -26,9 +26,12 @@ class Schedule extends BaseController
         $search = $this->request->getGet('search');
         
         // Base query with joins
-        $query = $this->scheduleModel->select('schedules.*, routes.origin, routes.destination, buses.name as bus_name, buses.type as bus_type')
+        $query = $this->scheduleModel->select('schedules.*, routes.origin, routes.destination, buses.name as bus_name, buses.type as bus_type, d1.name as driver_1_name, d2.name as driver_2_name, cond.name as conductor_name')
                                       ->join('routes', 'routes.id = schedules.route_id')
                                       ->join('buses', 'buses.id = schedules.bus_id')
+                                      ->join('users d1', 'd1.id = schedules.driver_1_id', 'left')
+                                      ->join('users d2', 'd2.id = schedules.driver_2_id', 'left')
+                                      ->join('users cond', 'cond.id = schedules.conductor_id', 'left')
                                       ->orderBy('schedules.departure_time', 'ASC');
         
         if (!empty($search)) {
@@ -38,9 +41,9 @@ class Schedule extends BaseController
                   ->orLike('buses.name', $search)
                   ->orLike('buses.type', $search)
                   ->orLike('schedules.departure_time', $search)
-                  ->orLike('schedules.driver_1', $search)
-                  ->orLike('schedules.driver_2', $search)
-                  ->orLike('schedules.conductor', $search)
+                  ->orLike('d1.name', $search)
+                  ->orLike('d2.name', $search)
+                  ->orLike('cond.name', $search)
                   ->groupEnd();
         }
         
@@ -60,11 +63,19 @@ class Schedule extends BaseController
     {
         $routes = $this->routeModel->findAll();
         $buses  = $this->busModel->findAll();
+        
+        $userModel = new \App\Models\UserModel();
+        $drivers1 = $userModel->where('role', 'petugas')->where('crew_role', 'driver_1')->findAll();
+        $drivers2 = $userModel->where('role', 'petugas')->where('crew_role', 'driver_2')->findAll();
+        $conductors = $userModel->where('role', 'petugas')->where('crew_role', 'conductor')->findAll();
 
         return view('admin/schedule/create', [
-            'title'  => 'Tambah Jadwal Baru - SiTeBus',
-            'routes' => $routes,
-            'buses'  => $buses
+            'title'      => 'Tambah Jadwal Baru - SiTeBus',
+            'routes'     => $routes,
+            'buses'      => $buses,
+            'drivers1'   => $drivers1,
+            'drivers2'   => $drivers2,
+            'conductors' => $conductors
         ]);
     }
 
@@ -77,9 +88,9 @@ class Schedule extends BaseController
             'arrival_time'   => 'required',
             'price'          => 'required|decimal',
             'status'         => 'required|in_list[scheduled,ongoing,completed,cancelled]',
-            'driver_1'       => 'permit_empty|max_length[100]',
-            'driver_2'       => 'permit_empty|max_length[100]',
-            'conductor'      => 'permit_empty|max_length[100]',
+            'driver_1_id'    => 'permit_empty|numeric',
+            'driver_2_id'    => 'permit_empty|numeric',
+            'conductor_id'   => 'permit_empty|numeric',
         ];
 
         if (!$this->validate($rules)) {
@@ -93,9 +104,9 @@ class Schedule extends BaseController
             'arrival_time'   => $this->request->getPost('arrival_time'),
             'price'          => $this->request->getPost('price'),
             'status'         => $this->request->getPost('status'),
-            'driver_1'       => $this->request->getPost('driver_1'),
-            'driver_2'       => $this->request->getPost('driver_2'),
-            'conductor'      => $this->request->getPost('conductor'),
+            'driver_1_id'    => $this->request->getPost('driver_1_id') ?: null,
+            'driver_2_id'    => $this->request->getPost('driver_2_id') ?: null,
+            'conductor_id'   => $this->request->getPost('conductor_id') ?: null,
         ];
 
         if ($this->scheduleModel->save($data)) {
@@ -114,12 +125,20 @@ class Schedule extends BaseController
 
         $routes = $this->routeModel->findAll();
         $buses  = $this->busModel->findAll();
+        
+        $userModel = new \App\Models\UserModel();
+        $drivers1 = $userModel->where('role', 'petugas')->where('crew_role', 'driver_1')->findAll();
+        $drivers2 = $userModel->where('role', 'petugas')->where('crew_role', 'driver_2')->findAll();
+        $conductors = $userModel->where('role', 'petugas')->where('crew_role', 'conductor')->findAll();
 
         return view('admin/schedule/edit', [
-            'title'    => 'Edit Jadwal - SiTeBus',
-            'schedule' => $schedule,
-            'routes'   => $routes,
-            'buses'    => $buses
+            'title'      => 'Edit Jadwal - SiTeBus',
+            'schedule'   => $schedule,
+            'routes'     => $routes,
+            'buses'      => $buses,
+            'drivers1'   => $drivers1,
+            'drivers2'   => $drivers2,
+            'conductors' => $conductors
         ]);
     }
 
@@ -132,9 +151,9 @@ class Schedule extends BaseController
             'arrival_time'   => 'required',
             'price'          => 'required|decimal',
             'status'         => 'required|in_list[scheduled,ongoing,completed,cancelled]',
-            'driver_1'       => 'permit_empty|max_length[100]',
-            'driver_2'       => 'permit_empty|max_length[100]',
-            'conductor'      => 'permit_empty|max_length[100]',
+            'driver_1_id'    => 'permit_empty|numeric',
+            'driver_2_id'    => 'permit_empty|numeric',
+            'conductor_id'   => 'permit_empty|numeric',
         ];
 
         if (!$this->validate($rules)) {
@@ -149,9 +168,9 @@ class Schedule extends BaseController
             'arrival_time'   => $this->request->getPost('arrival_time'),
             'price'          => $this->request->getPost('price'),
             'status'         => $this->request->getPost('status'),
-            'driver_1'       => $this->request->getPost('driver_1'),
-            'driver_2'       => $this->request->getPost('driver_2'),
-            'conductor'      => $this->request->getPost('conductor'),
+            'driver_1_id'    => $this->request->getPost('driver_1_id') ?: null,
+            'driver_2_id'    => $this->request->getPost('driver_2_id') ?: null,
+            'conductor_id'   => $this->request->getPost('conductor_id') ?: null,
         ];
 
         if ($this->scheduleModel->save($data)) {
@@ -213,9 +232,9 @@ class Schedule extends BaseController
                 $sched['arrival_time'],
                 $sched['price'],
                 $sched['status'],
-                $sched['driver_1'] ?? '',
-                $sched['driver_2'] ?? '',
-                $sched['conductor'] ?? ''
+                $sched['driver_1_name'] ?? '',
+                $sched['driver_2_name'] ?? '',
+                $sched['conductor_name'] ?? ''
             ]);
         }
         
@@ -284,6 +303,14 @@ class Schedule extends BaseController
         $busMap = [];
         foreach ($buses as $b) {
             $busMap[strtolower($b['name'])] = $b['id'];
+        }
+
+        // Cache all crews by name and role to map in import
+        $userModel = new \App\Models\UserModel();
+        $allCrews = $userModel->where('role', 'petugas')->findAll();
+        $crewMapByName = [];
+        foreach ($allCrews as $c) {
+            $crewMapByName[strtolower($c['name'])][$c['crew_role']] = $c['id'];
         }
         
         $rowNum = 1;
@@ -367,18 +394,38 @@ class Schedule extends BaseController
                 continue;
             }
 
-            // Crew validation lengths
-            if (strlen($driver_1) > 100) {
-                $errors[] = "Baris {$rowNum}: Nama Sopir 1 terlalu panjang (max 100 karakter).";
-                continue;
+            // Crew validation and mapping
+            $d1_id = null;
+            if (!empty($driver_1)) {
+                $dKey = strtolower($driver_1);
+                if (isset($crewMapByName[$dKey]['driver_1'])) {
+                    $d1_id = $crewMapByName[$dKey]['driver_1'];
+                } else {
+                    $errors[] = "Baris {$rowNum}: Sopir Utama '{$driver_1}' tidak terdaftar atau perannya tidak sesuai.";
+                    continue;
+                }
             }
-            if (strlen($driver_2) > 100) {
-                $errors[] = "Baris {$rowNum}: Nama Sopir 2 terlalu panjang (max 100 karakter).";
-                continue;
+
+            $d2_id = null;
+            if (!empty($driver_2)) {
+                $dKey = strtolower($driver_2);
+                if (isset($crewMapByName[$dKey]['driver_2'])) {
+                    $d2_id = $crewMapByName[$dKey]['driver_2'];
+                } else {
+                    $errors[] = "Baris {$rowNum}: Sopir Cadangan '{$driver_2}' tidak terdaftar atau perannya tidak sesuai.";
+                    continue;
+                }
             }
-            if (strlen($conductor) > 100) {
-                $errors[] = "Baris {$rowNum}: Nama Kondektur terlalu panjang (max 100 karakter).";
-                continue;
+
+            $cond_id = null;
+            if (!empty($conductor)) {
+                $cKey = strtolower($conductor);
+                if (isset($crewMapByName[$cKey]['conductor'])) {
+                    $cond_id = $crewMapByName[$cKey]['conductor'];
+                } else {
+                    $errors[] = "Baris {$rowNum}: Kondektur '{$conductor}' tidak terdaftar atau perannya tidak sesuai.";
+                    continue;
+                }
             }
             
             // Duplicate check (same bus at same departure time)
@@ -400,9 +447,9 @@ class Schedule extends BaseController
                 'arrival_time'   => $formattedArrTime,
                 'price'          => (float)$price,
                 'status'         => $status,
-                'driver_1'       => !empty($driver_1) ? $driver_1 : null,
-                'driver_2'       => !empty($driver_2) ? $driver_2 : null,
-                'conductor'      => !empty($conductor) ? $conductor : null,
+                'driver_1_id'    => $d1_id,
+                'driver_2_id'    => $d2_id,
+                'conductor_id'   => $cond_id,
                 'created_at'     => date('Y-m-d H:i:s'),
                 'updated_at'     => date('Y-m-d H:i:s'),
             ];

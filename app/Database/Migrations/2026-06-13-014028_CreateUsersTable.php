@@ -37,6 +37,11 @@ class CreateUsersTable extends Migration
                 'constraint' => ['customer', 'admin', 'petugas'],
                 'default'    => 'customer',
             ],
+            'crew_role' => [
+                'type'       => 'ENUM',
+                'constraint' => ['staff', 'driver_1', 'driver_2', 'conductor'],
+                'default'    => 'staff',
+            ],
             'created_at' => [
                 'type' => 'DATETIME',
                 'null' => true,

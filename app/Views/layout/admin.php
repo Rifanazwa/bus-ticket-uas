@@ -395,7 +395,62 @@
     </div>
 </div>
 
+<!-- Custom Delete Confirmation Modal -->
+<div x-data="{ open: false, url: '', message: '' }"
+     x-show="open"
+     x-cloak
+     @open-delete-modal.window="open = true; url = $event.detail.url; message = $event.detail.message; setTimeout(() => lucide.createIcons(), 50)"
+     class="fixed inset-0 z-50 flex items-center justify-center p-4"
+     x-transition:enter="transition ease-out duration-300"
+     x-transition:enter-start="opacity-0"
+     x-transition:enter-end="opacity-100"
+     x-transition:leave="transition ease-in duration-200"
+     x-transition:leave-start="opacity-100"
+     x-transition:leave-end="opacity-0">
+    
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" @click="open = false"></div>
+    
+    <!-- Modal Dialog -->
+    <div class="bg-slate-900 border border-slate-800 p-6 rounded-3xl w-full max-w-md relative z-10 shadow-2xl transition-all"
+         x-transition:enter="transition ease-out duration-300 transform"
+         x-transition:enter-start="scale-95"
+         x-transition:enter-end="scale-100"
+         x-transition:leave="transition ease-in duration-200 transform"
+         x-transition:leave-start="scale-100"
+         x-transition:leave-end="scale-95">
+        
+        <div class="flex items-start gap-4">
+            <div class="h-10 w-10 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 flex-shrink-0">
+                <i data-lucide="trash-2" class="w-5 h-5"></i>
+            </div>
+            <div class="flex-1">
+                <h3 class="text-sm font-bold text-white uppercase tracking-wider">Konfirmasi Hapus</h3>
+                <p class="text-xs text-slate-400 mt-2 leading-relaxed" x-text="message"></p>
+            </div>
+        </div>
+        
+        <div class="flex gap-3 pt-6 mt-4 border-t border-slate-800/80">
+            <button @click="open = false" 
+                    class="flex-1 py-2.5 px-4 rounded-xl font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-850 border border-slate-800 text-xs transition-all text-center">
+                Batal
+            </button>
+            <a :href="url" 
+               class="flex-1 py-2.5 px-4 rounded-xl font-semibold text-white bg-rose-600 hover:bg-rose-500 shadow-lg shadow-rose-650/15 text-xs transition-all text-center flex items-center justify-center gap-1.5">
+                <i data-lucide="check" class="w-4 h-4"></i> Ya, Hapus
+            </a>
+        </div>
+    </div>
+</div>
+
 <script>
+    // Global function to trigger custom delete modal
+    function confirmDelete(url, message) {
+        window.dispatchEvent(new CustomEvent('open-delete-modal', {
+            detail: { url: url, message: message }
+        }));
+    }
+
     // Init icons after DOM ready
     document.addEventListener('DOMContentLoaded', function () {
         lucide.createIcons();

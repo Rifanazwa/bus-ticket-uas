@@ -16,15 +16,25 @@
             background-color: #f8fafc;
         }
         @media print {
+            @page {
+                size: A4 portrait;
+                margin: 8mm 12mm 8mm 12mm;
+            }
             body {
                 background-color: #ffffff;
                 color: #000000;
+                padding: 0 !important;
+                margin: 0 !important;
             }
             .no-print {
                 display: none !important;
             }
             .print-border {
                 border-color: #000000 !important;
+            }
+            .signature-section {
+                break-inside: avoid;
+                page-break-inside: avoid;
             }
         }
     </style>
@@ -42,10 +52,10 @@
     </div>
 
     <!-- Main Manifest Card -->
-    <div class="max-w-4xl mx-auto bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm print:shadow-none print:border-none">
+    <div class="max-w-4xl mx-auto bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm print:shadow-none print:border-none print:p-0">
         
         <!-- Header -->
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-200 pb-6 mb-6 print:border-black">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-200 pb-6 mb-6 print:border-black print:pb-3 print:mb-4">
             <div>
                 <h1 class="text-2xl font-extrabold tracking-tight text-slate-900 flex items-center gap-2">
                     <span class="bg-indigo-650 text-white px-3 py-1 rounded-xl text-lg font-black tracking-widest no-print">JOSS</span>
@@ -61,7 +71,7 @@
         </div>
 
         <!-- Trip & Crew Details Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 border-b border-slate-200 pb-6 mb-6 print:border-black">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 border-b border-slate-200 pb-6 mb-6 print:border-black print:pb-3 print:mb-4">
             <!-- Left: Journey Info -->
             <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 print:bg-white print:border-black">
                 <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-1.5">
@@ -99,15 +109,15 @@
                 <table class="w-full text-xs">
                     <tr class="h-7">
                         <td class="text-slate-500 w-1/3">Sopir Utama</td>
-                        <td class="font-bold text-slate-950">: <?= esc($schedule['driver_1'] ?? 'Belum Ditugaskan') ?></td>
+                        <td class="font-bold text-slate-950">: <?= esc($schedule['driver_1_name'] ?? 'Belum Ditugaskan') ?></td>
                     </tr>
                     <tr class="h-7">
                         <td class="text-slate-500">Sopir Cadangan</td>
-                        <td class="font-bold text-slate-950">: <?= esc($schedule['driver_2'] ?? 'Belum Ditugaskan') ?></td>
+                        <td class="font-bold text-slate-950">: <?= esc($schedule['driver_2_name'] ?? 'Belum Ditugaskan') ?></td>
                     </tr>
                     <tr class="h-7">
                         <td class="text-slate-500">Kondektur</td>
-                        <td class="font-bold text-slate-950">: <?= esc($schedule['conductor'] ?? 'Belum Ditugaskan') ?></td>
+                        <td class="font-bold text-slate-950">: <?= esc($schedule['conductor_name'] ?? 'Belum Ditugaskan') ?></td>
                     </tr>
                     <tr class="h-7">
                         <td class="text-slate-500">Status Tugas</td>
@@ -184,7 +194,7 @@
         </div>
 
         <!-- Signatures (Tanda Tangan) -->
-        <div class="grid grid-cols-3 gap-6 text-center mt-12 pt-8 border-t border-slate-200 print:border-black text-xs">
+        <div class="grid grid-cols-3 gap-6 text-center mt-12 pt-8 border-t border-slate-200 print:border-black text-xs print:mt-6 print:pt-4 signature-section">
             <div>
                 <p class="text-slate-500 font-semibold uppercase tracking-wider mb-16">Pengawas Terminal</p>
                 <p class="font-bold text-slate-900 underline">( ____________________ )</p>
@@ -192,7 +202,7 @@
             </div>
             <div>
                 <p class="text-slate-500 font-semibold uppercase tracking-wider mb-16">Sopir Utama (Kru 1)</p>
-                <p class="font-bold text-slate-900 underline"><?= esc($schedule['driver_1'] ?? '( ____________________ )') ?></p>
+                <p class="font-bold text-slate-900 underline"><?= esc($schedule['driver_1_name'] ?? '( ____________________ )') ?></p>
                 <p class="text-[10px] text-slate-400 mt-1 font-semibold">Tanda Tangan Kru</p>
             </div>
             <div>

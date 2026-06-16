@@ -12,7 +12,7 @@ class ScheduleModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['route_id', 'bus_id', 'departure_time', 'arrival_time', 'price', 'status', 'driver_1', 'driver_2', 'conductor'];
+    protected $allowedFields    = ['route_id', 'bus_id', 'departure_time', 'arrival_time', 'price', 'status', 'driver_1_id', 'driver_2_id', 'conductor_id'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -32,9 +32,9 @@ class ScheduleModel extends Model
         'arrival_time'   => 'required',
         'price'          => 'required|decimal',
         'status'         => 'required|in_list[scheduled,ongoing,completed,cancelled]',
-        'driver_1'       => 'permit_empty|max_length[100]',
-        'driver_2'       => 'permit_empty|max_length[100]',
-        'conductor'      => 'permit_empty|max_length[100]',
+        'driver_1_id'    => 'permit_empty|numeric',
+        'driver_2_id'    => 'permit_empty|numeric',
+        'conductor_id'   => 'permit_empty|numeric',
     ];
     protected $validationMessages   = [];
     protected $skipValidation       = false;
@@ -43,9 +43,15 @@ class ScheduleModel extends Model
     // Fetch schedule with route and bus details
     public function getDetailedSchedules($id = null)
     {
-        $builder = $this->select('schedules.*, routes.origin, routes.destination, routes.distance_km, routes.estimated_duration, buses.name as bus_name, buses.type as bus_type, buses.total_seats, buses.seat_layout')
+        $builder = $this->select('schedules.*, 
+                                  routes.origin, routes.destination, routes.distance_km, routes.estimated_duration, 
+                                  buses.name as bus_name, buses.type as bus_type, buses.total_seats, buses.seat_layout,
+                                  d1.name as driver_1_name, d2.name as driver_2_name, cond.name as conductor_name')
             ->join('routes', 'routes.id = schedules.route_id')
-            ->join('buses', 'buses.id = schedules.bus_id');
+            ->join('buses', 'buses.id = schedules.bus_id')
+            ->join('users d1', 'd1.id = schedules.driver_1_id', 'left')
+            ->join('users d2', 'd2.id = schedules.driver_2_id', 'left')
+            ->join('users cond', 'cond.id = schedules.conductor_id', 'left');
 
         if ($id !== null) {
             return $builder->where('schedules.id', $id)->first();
@@ -106,6 +112,9 @@ class ScheduleModel extends Model
                 'arrival_time'   => $newArrTime->format('Y-m-d H:i:s'),
                 'price'          => $sched['price'],
                 'status'         => 'scheduled',
+                'driver_1_id'    => $sched['driver_1_id'],
+                'driver_2_id'    => $sched['driver_2_id'],
+                'conductor_id'   => $sched['conductor_id'],
                 'created_at'     => $now,
                 'updated_at'     => $now,
             ];

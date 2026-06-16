@@ -6,7 +6,7 @@ $subtitle = 'Perbarui Jarak & Estimasi Waktu Perjalanan';
 ?>
 
 <?= $this->section('admin_content') ?>
-<div class="max-w-xl bg-slate-900/60 border border-slate-800/80 p-6 sm:p-8 rounded-3xl shadow-xl">
+<div class="w-full bg-slate-900/60 border border-slate-800/80 p-6 sm:p-8 rounded-3xl shadow-xl">
     <!-- Errors Alert -->
     <?php if (session()->getFlashdata('errors')): ?>
         <div class="mb-6 bg-rose-500/10 border border-rose-500/20 text-rose-400 p-4 rounded-xl text-xs space-y-1">

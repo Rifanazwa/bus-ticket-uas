@@ -139,7 +139,7 @@ $subtitle = 'Daftar Armada Bus PO';
                                     <a href="<?= base_url('admin/bus/edit/' . $bus['id']) ?>" class="p-1.5 bg-slate-850 hover:bg-slate-800 text-slate-300 hover:text-white rounded-lg transition-colors border border-slate-800" title="Edit">
                                         <i data-lucide="edit-3" class="w-4 h-4"></i>
                                     </a>
-                                    <a href="<?= base_url('admin/bus/delete/' . $bus['id']) ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus bus ini?')" class="p-1.5 bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white rounded-lg transition-colors border border-rose-500/20" title="Hapus">
+                                    <a href="javascript:void(0)" onclick="confirmDelete('<?= base_url('admin/bus/delete/' . $bus['id']) ?>', 'Apakah Anda yakin ingin menghapus bus ini? Menghapus armada akan secara otomatis menghapus semua jadwal keberangkatan, manifes, dan data transaksi terkait bus ini.')" class="p-1.5 bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white rounded-lg transition-colors border border-rose-500/20" title="Hapus">
                                         <i data-lucide="trash-2" class="w-4 h-4"></i>
                                     </a>
                                 </div>

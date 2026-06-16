@@ -12,7 +12,7 @@ class UserModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['name', 'email', 'phone', 'password', 'role', 'bus_id'];
+    protected $allowedFields    = ['name', 'email', 'phone', 'password', 'role', 'bus_id', 'crew_role'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -26,12 +26,13 @@ class UserModel extends Model
 
     // Validation
     protected $validationRules      = [
-        'name'     => 'required|min_length[3]|max_length[100]',
-        'email'    => 'required|valid_email|is_unique[users.email,id,{id}]',
-        'phone'    => 'required|min_length[8]|max_length[20]',
-        'password' => 'required|min_length[6]',
-        'role'     => 'required|in_list[customer,admin,petugas]',
-        'bus_id'   => 'permit_empty|numeric',
+        'name'      => 'required|min_length[3]|max_length[100]',
+        'email'     => 'required|valid_email|is_unique[users.email,id,{id}]',
+        'phone'     => 'required|min_length[8]|max_length[20]',
+        'password'  => 'required|min_length[6]',
+        'role'      => 'required|in_list[customer,admin,petugas]',
+        'bus_id'    => 'permit_empty|numeric',
+        'crew_role' => 'permit_empty|in_list[staff,driver_1,driver_2,conductor]',
     ];
     protected $validationMessages   = [];
     protected $skipValidation       = false;
