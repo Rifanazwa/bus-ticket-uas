@@ -23,8 +23,10 @@ class Scan extends BaseController
 
     public function index()
     {
+        $history = $this->ticketModel->getBoardingHistory(5);
         return view('petugas/scan', [
-            'title' => 'Portal Boarding Petugas - SiTeBus'
+            'title'   => 'Portal Boarding Petugas - SiTeBus',
+            'history' => $history
         ]);
     }
 
@@ -153,9 +155,11 @@ class Scan extends BaseController
 
         // Update status to boarded
         if ($this->ticketModel->update($ticketId, $updateData)) {
+            $history = $this->ticketModel->getBoardingHistory(5);
             return $this->response->setJSON([
                 'status'  => 'success',
-                'message' => 'Boarding berhasil dikonfirmasi. Selamat jalan penumpang!'
+                'message' => 'Boarding berhasil dikonfirmasi. Selamat jalan penumpang!',
+                'history' => $history
             ]);
         }
 

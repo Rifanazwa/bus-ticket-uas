@@ -162,6 +162,55 @@
         </div>
 
     </div>
+
+    <!-- Riwayat Boarding Terkini -->
+    <div class="mt-8 bg-slate-900/60 backdrop-blur-xl border border-slate-800/80 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
+        <h2 class="text-md font-bold text-white font-outfit border-b border-slate-800 pb-3 flex items-center gap-2">
+            <i data-lucide="history" class="w-5 h-5 text-emerald-450"></i> Riwayat Boarding Terkini
+        </h2>
+        
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                    <tr class="border-b border-slate-800 text-slate-500 uppercase tracking-wider font-semibold text-[10px]">
+                        <th class="py-3 px-4">Waktu</th>
+                        <th class="py-3 px-4">Kode Tiket</th>
+                        <th class="py-3 px-4">Penumpang</th>
+                        <th class="py-3 px-4">Kursi</th>
+                        <th class="py-3 px-4">Rute / Bus</th>
+                        <th class="py-3 px-4">Petugas Scanner</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template x-if="history.length === 0">
+                        <tr>
+                            <td colspan="6" class="py-8 text-center text-slate-500 font-medium">Belum ada aktivitas boarding hari ini.</td>
+                        </tr>
+                    </template>
+                    <template x-for="item in history" :key="item.id">
+                        <tr class="border-b border-slate-850 hover:bg-slate-950/20 text-slate-300 transition-colors">
+                            <td class="py-3 px-4 font-mono text-slate-450" x-text="formatTimeOnly(item.scanned_at || item.issued_at)"></td>
+                            <td class="py-3 px-4 font-mono font-bold text-white" x-text="item.qr_code"></td>
+                            <td class="py-3 px-4 font-semibold" x-text="item.customer_name"></td>
+                            <td class="py-3 px-4 font-mono font-bold">
+                                <span class="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded text-[10px]" x-text="item.seats"></span>
+                            </td>
+                            <td class="py-3 px-4">
+                                <div class="font-bold text-white" x-text="`${item.origin} &rarr; ${item.destination}`"></div>
+                                <div class="text-[10px] text-slate-500 mt-0.5" x-text="item.bus_name"></div>
+                            </td>
+                            <td class="py-3 px-4">
+                                <div class="flex items-center gap-1.5 text-slate-400">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+                                    <span x-text="item.scanner_name || 'Sistem / Auto'"></span>
+                                </div>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </main>
 
 <!-- html5-qrcode webcam library -->
@@ -177,6 +226,7 @@ function scanApp() {
         html5QrCode: null,
         errorMessage: '',
         warningMessage: '',
+        history: <?= json_encode($history) ?>,
 
         startCamera() {
             this.cameraActive = true;
@@ -267,6 +317,9 @@ function scanApp() {
                 if (res.status === 'success') {
                     this.ticketData.status = 'boarded';
                     alert(res.message);
+                    if (res.history) {
+                        this.history = res.history;
+                    }
                     this.$nextTick(() => lucide.createIcons());
                 } else {
                     this.errorMessage = res.message;
@@ -287,6 +340,12 @@ function scanApp() {
             };
             const formatted = date.toLocaleString('id-ID', options);
             return formatted + ' WIB';
+        },
+
+        formatTimeOnly(dateTimeStr) {
+            if (!dateTimeStr) return '-';
+            const date = new Date(dateTimeStr);
+            return date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB';
         }
     };
 }
