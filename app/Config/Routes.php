@@ -1,27 +1,32 @@
 <?php
 
 use CodeIgniter\Router\RouteCollection;
+use App\Controllers\Public\LandingPage;
+use App\Controllers\Auth\Auth;
+use App\Controllers\Api\PaymentWebhook;
+use App\Controllers\Public\MigrateController;
+use App\Controllers\Admin\Boarding;
 
 /**
  * @var RouteCollection $routes
  */
 
 // Public Landing Page Routes (No Auth Required)
-$routes->get('/', 'Public\LandingPage::index');
-$routes->get('search', 'Public\LandingPage::search');
+$routes->get('/', [LandingPage::class, 'index']);
+$routes->get('search', [LandingPage::class, 'search']);
 
 // Authentication Routes
-$routes->get('login', 'Auth\Auth::login');
-$routes->post('login', 'Auth\Auth::attemptLogin');
-$routes->get('register', 'Auth\Auth::register');
-$routes->post('register', 'Auth\Auth::attemptRegister');
-$routes->get('logout', 'Auth\Auth::logout');
+$routes->get('login', [Auth::class, 'login']);
+$routes->post('login', [Auth::class, 'attemptLogin']);
+$routes->get('register', [Auth::class, 'register']);
+$routes->post('register', [Auth::class, 'attemptRegister']);
+$routes->get('logout', [Auth::class, 'logout']);
 
 // Public Webhook Route (Exempted from Auth)
-$routes->post('api/payment/webhook', 'Api\PaymentWebhook::index');
+$routes->post('api/payment/webhook', [PaymentWebhook::class, 'index']);
 
 // Public DB Migration hook
-$routes->get('migrate-db', 'Public\MigrateController::index');
+$routes->get('migrate-db', [MigrateController::class, 'index']);
 
 // Customer Routes (Protected)
 $routes->group('customer', ['filter' => 'role:customer'], function($routes) {
@@ -106,9 +111,9 @@ $routes->group('admin', ['filter' => 'role:admin'], function($routes) {
 });
 
 // Boarding Monitor Routes (Accessible by both admin and petugas roles)
-$routes->get('admin/boarding', 'Admin\Boarding::index', ['filter' => 'role:admin,petugas']);
-$routes->get('admin/boarding/manifest/(:num)', 'Admin\Boarding::manifest/$1', ['filter' => 'role:admin,petugas']);
-$routes->get('admin/boarding/print/(:num)', 'Admin\Boarding::printReport/$1', ['filter' => 'role:admin,petugas']);
+$routes->get('admin/boarding', [Boarding::class, 'index'], ['filter' => 'role:admin,petugas']);
+$routes->get('admin/boarding/manifest/(:num)', [Boarding::class, 'manifest'], ['filter' => 'role:admin,petugas']);
+$routes->get('admin/boarding/print/(:num)', [Boarding::class, 'printReport'], ['filter' => 'role:admin,petugas']);
 
 // Petugas Routes (Protected)
 $routes->group('petugas', ['filter' => 'role:petugas'], function($routes) {
