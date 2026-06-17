@@ -47,14 +47,14 @@ jobs:
       - name: Trigger Database Migration
         run: |
           sleep 3
-          echo "Triggering database reset via db_setup.php..."
-          RESPONSE=$(curl -L -sS -w "%{http_code}" -o response.txt --max-time 180 "https://uas.mondigi.biz.id/db_setup.php?token=JossBusMigrateSecureToken_2026_xYz&action=reset")
+          echo "Triggering database migration via db_setup.php..."
+          RESPONSE=$(curl -L -sS -w "%{http_code}" -o response.txt --max-time 180 "https://uas.mondigi.biz.id/db_setup.php?token=JossBusMigrateSecureToken_2026_xYz&action=migrate")
           echo "HTTP: $RESPONSE"
           cat response.txt
           if echo "$RESPONSE" | grep -q "200"; then
-            echo "Database reset OK!"
+            echo "Database migration OK!"
           else
             echo "db_setup.php failed ($RESPONSE), trying query param fallback..."
-            curl -L -sS --max-time 180 "https://uas.mondigi.biz.id/?db_op=migrate&token=JossBusMigrateSecureToken_2026_xYz&action=reset" -o /dev/null
+            curl -L -sS --max-time 180 "https://uas.mondigi.biz.id/?db_op=migrate&token=JossBusMigrateSecureToken_2026_xYz&action=migrate" -o /dev/null
             echo "Fallback completed."
           fi
