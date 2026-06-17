@@ -119,3 +119,14 @@ in SYSTEMPATH\Database\BaseConnection.php on line 606.
  9 SYSTEMPATH\Boot.php(442): CodeIgniter\CLI\Console->run()
 10 SYSTEMPATH\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
 11 ROOTPATH\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+CRITICAL - 2026-06-16 23:01:44 --> ErrorException: ini_set(): Session ini settings cannot be changed after headers have already been sent
+[Method: CLI, Route: /]
+in SYSTEMPATH\Session\Handlers\FileHandler.php on line 73.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'ini_set(): Session ini settings cannot be changed after headers have already been sent', 'D:\\Learn\\KULIAH\\WEB LANJUTAN\\UAS\\uas-bus\\bus-ticket-uas\\system\\Session\\Handlers\\FileHandler.php', 73)
+ 2 SYSTEMPATH\Session\Handlers\FileHandler.php(73): ini_set('session.save_path', 'writable/session')
+ 3 SYSTEMPATH\Config\Services.php(702): CodeIgniter\Session\Handlers\FileHandler->__construct(Object(Config\Session), '0.0.0.0')
+ 4 SYSTEMPATH\Config\BaseService.php(325): CodeIgniter\Config\Services::session(Object(Config\Session), false)
+ 5 SYSTEMPATH\Config\BaseService.php(264): CodeIgniter\Config\BaseService::__callStatic('session', [...])
+ 6 SYSTEMPATH\Config\Services.php(668): CodeIgniter\Config\BaseService::getSharedInstance('session', null)
+ 7 SYSTEMPATH\Config\BaseService.php(334): CodeIgniter\Config\Services::session()
+ 8 ROOTPATH\scratch_test_boarding.php(41): CodeIgniter\Config\BaseService::__callStatic('session', [])

@@ -172,9 +172,16 @@ class Booking extends BaseController
             $dbError = $db->error();
             $bookingErrors = $this->bookingModel->errors();
             $seatErrors = $this->bookingSeatModel->errors();
+            
+            $queries = [];
+            foreach ($db->getQueries() as $query) {
+                $queries[] = (string) $query;
+            }
+            
             $errDetail = "DB Error: " . json_encode($dbError) . 
                          " | Booking Model: " . json_encode($bookingErrors) . 
-                         " | Seat Model: " . json_encode($seatErrors);
+                         " | Seat Model: " . json_encode($seatErrors) . 
+                         " | Queries: " . json_encode($queries);
             return redirect()->back()->withInput()->with('error', 'Gagal memproses pemesanan. Detail: ' . $errDetail);
         }
 
