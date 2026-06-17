@@ -89,6 +89,15 @@
             <!-- State: Success Details -->
             <div x-show="ticketData && !loading" class="space-y-6" x-cloak>
                 
+                <!-- Warning Banner -->
+                <div x-show="warningMessage" class="p-4 bg-amber-500/10 border border-amber-500/25 rounded-2xl text-amber-450 text-xs flex items-start gap-2.5" x-cloak>
+                    <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5"></i>
+                    <div>
+                        <span class="font-bold text-amber-300 block text-xs">Peringatan Boarding (Salah Armada)</span>
+                        <p class="mt-1 leading-relaxed text-[11px]" x-text="warningMessage"></p>
+                    </div>
+                </div>
+
                 <!-- Status Badge -->
                 <div class="flex justify-between items-center p-3 rounded-2xl border"
                     :class="ticketData.status === 'boarded' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-450' : 'bg-brand-500/10 border-brand-500/20 text-brand-400'">
@@ -167,11 +176,13 @@ function scanApp() {
         seats: [],
         html5QrCode: null,
         errorMessage: '',
+        warningMessage: '',
 
         startCamera() {
             this.cameraActive = true;
             this.ticketData = null;
             this.errorMessage = '';
+            this.warningMessage = '';
             this.$nextTick(() => {
                 this.html5QrCode = new Html5Qrcode("reader");
                 const config = { fps: 10, qrbox: 200 };
@@ -214,6 +225,7 @@ function scanApp() {
             this.loading = true;
             this.ticketData = null;
             this.errorMessage = '';
+            this.warningMessage = '';
             
             let formData = new FormData();
             formData.append('booking_code', codeVal);
@@ -228,6 +240,7 @@ function scanApp() {
                 if (res.status === 'success') {
                     this.ticketData = res.ticket;
                     this.seats = res.seats;
+                    this.warningMessage = res.warning || '';
                     this.$nextTick(() => lucide.createIcons());
                 } else {
                     this.errorMessage = res.message;

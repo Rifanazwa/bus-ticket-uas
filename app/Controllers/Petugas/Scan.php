@@ -71,7 +71,38 @@ class Scan extends BaseController
         // Get detailed booking info
         $details = $this->ticketModel->getDetailedTicket($ticket['id']);
 
-        // (Assignment enforcement removed to allow all officers to scan all tickets)
+        // Check if the logged-in petugas has a crew role and verify assignment
+        $userId   = session()->get('userId');
+        $userRole = session()->get('userRole');
+        
+        $userModel = new \App\Models\UserModel();
+        $user = $userModel->find($userId);
+        
+        $warning = null;
+        $isCrew  = ($userRole === 'petugas' && $user && !empty($user['crew_role']) && in_array($user['crew_role'], ['driver_1', 'driver_2', 'conductor']));
+        
+        if ($isCrew) {
+            $ticketScheduleId = $details['schedule_id'] ?? null;
+            if (!$ticketScheduleId) {
+                $booking = $this->bookingModel->find($ticket['booking_id']);
+                $ticketScheduleId = $booking['schedule_id'];
+            }
+            
+            $scheduleModel = new \App\Models\ScheduleModel();
+            $today = date('Y-m-d');
+            
+            $assignedSchedules = $scheduleModel->getDetailedSchedules(null, $today, $userId);
+            $assignedScheduleIds = array_column($assignedSchedules, 'id');
+            
+            if (!in_array($ticketScheduleId, $assignedScheduleIds)) {
+                if (empty($assignedSchedules)) {
+                    $warning = "Anda tidak ditugaskan pada jadwal perjalanan manapun hari ini. Penumpang terdaftar pada " . $details['bus_name'] . " (" . $details['origin'] . " -> " . $details['destination'] . ") keberangkatan " . date('H:i', strtotime($details['departure_time'])) . " WIB.";
+                } else {
+                    $firstSched = $assignedSchedules[0];
+                    $warning = "Salah Armada! Penumpang terdaftar pada " . $details['bus_name'] . " (" . $details['origin'] . " -> " . $details['destination'] . "), sedangkan Anda hari ini ditugaskan untuk " . $firstSched['bus_name'] . " (" . $firstSched['origin'] . " -> " . $firstSched['destination'] . ").";
+                }
+            }
+        }
 
         $seats = $this->bookingSeatModel->where('booking_id', $ticket['booking_id'])->findAll();
 
@@ -79,7 +110,8 @@ class Scan extends BaseController
             'status'    => 'success',
             'ticket'    => $details,
             'seats'     => $seats,
-            'isBoarded' => $ticket['status'] === 'boarded'
+            'isBoarded' => $ticket['status'] === 'boarded',
+            'warning'   => $warning
         ]);
     }
 
@@ -102,8 +134,6 @@ class Scan extends BaseController
             ]);
         }
 
-        // (Assignment enforcement removed to allow all officers to confirm all boarding tickets)
-
         if ($ticket['status'] === 'boarded') {
             return $this->response->setJSON([
                 'status'  => 'error',
@@ -111,8 +141,18 @@ class Scan extends BaseController
             ]);
         }
 
+        $userId = session()->get('userId');
+        $updateData = ['status' => 'boarded'];
+
+        // Audit Logging: Check if scanned_by column exists in table to avoid errors if migration has not been run yet
+        $db = \Config\Database::connect();
+        if ($db->fieldExists('scanned_by', 'tickets')) {
+            $updateData['scanned_by'] = $userId;
+            $updateData['scanned_at'] = date('Y-m-d H:i:s');
+        }
+
         // Update status to boarded
-        if ($this->ticketModel->update($ticketId, ['status' => 'boarded'])) {
+        if ($this->ticketModel->update($ticketId, $updateData)) {
             return $this->response->setJSON([
                 'status'  => 'success',
                 'message' => 'Boarding berhasil dikonfirmasi. Selamat jalan penumpang!'
