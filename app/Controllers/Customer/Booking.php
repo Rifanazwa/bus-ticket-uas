@@ -146,42 +146,58 @@ class Booking extends BaseController
             'booking_status' => 'active',
         ];
         
-        $this->bookingModel->save($bookingData);
+        $bookingSaved = $this->bookingModel->save($bookingData);
+        $bookingErrors = $this->bookingModel->errors();
+        $bookingDbError = $db->error();
         $bookingId = $this->bookingModel->getInsertID();
 
         // 5. Save seats
+        $seatErrors = [];
+        $seatsSaved = true;
         foreach ($selectedSeatNumbers as $seatNum) {
             $seatData = [
                 'booking_id'     => $bookingId,
                 'seat_number'    => $seatNum,
                 'passenger_name' => $passengers[$seatNum] ?? 'Penumpang',
             ];
-            $this->bookingSeatModel->save($seatData);
+            $saved = $this->bookingSeatModel->save($seatData);
+            if (!$saved) {
+                $seatsSaved = false;
+                $seatErrors[] = [
+                    'seat' => $seatNum,
+                    'errors' => $this->bookingSeatModel->errors(),
+                    'db_error' => $db->error(),
+                ];
+            }
         }
 
         // 6. Decrement promo limit if applied
+        $promoUpdated = true;
+        $promoDbError = null;
         if ($promoId) {
-            $db->table('promos')
+            $promoUpdated = $db->table('promos')
                 ->where('id', $promoId)
                 ->decrement('usage_limit', 1);
+            if (!$promoUpdated) {
+                $promoDbError = $db->error();
+            }
         }
+
+        // Capture transStatus before transComplete triggers rollback/commit
+        $transStatus = $db->transStatus();
+        $lastQuery = (string)$db->getLastQuery();
 
         $db->transComplete();
 
-        if ($db->transStatus() === false) {
-            $dbError = $db->error();
-            $bookingErrors = $this->bookingModel->errors();
-            $seatErrors = $this->bookingSeatModel->errors();
-            
-            $queries = [];
-            foreach ($db->getQueries() as $query) {
-                $queries[] = (string) $query;
-            }
-            
-            $errDetail = "DB Error: " . json_encode($dbError) . 
-                         " | Booking Model: " . json_encode($bookingErrors) . 
-                         " | Seat Model: " . json_encode($seatErrors) . 
-                         " | Queries: " . json_encode($queries);
+        if ($db->transStatus() === false || !$bookingSaved || !$seatsSaved || !$promoUpdated) {
+            $errDetail = "TransStatus: " . ($transStatus ? 'true' : 'false') . 
+                         " | BookingSaved: " . ($bookingSaved ? 'true' : 'false') . 
+                         " (Errors: " . json_encode($bookingErrors) . ", DbError: " . json_encode($bookingDbError) . ", Booking ID: " . var_export($bookingId, true) . ")" . 
+                         " | SeatsSaved: " . ($seatsSaved ? 'true' : 'false') . 
+                         " (Errors: " . json_encode($seatErrors) . ")" .
+                         " | PromoUpdated: " . ($promoUpdated ? 'true' : 'false') . 
+                         " (DbError: " . json_encode($promoDbError) . ")" .
+                         " | Last Query: " . $lastQuery;
             return redirect()->back()->withInput()->with('error', 'Gagal memproses pemesanan. Detail: ' . $errDetail);
         }
 
