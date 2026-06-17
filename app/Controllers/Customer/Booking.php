@@ -169,7 +169,13 @@ class Booking extends BaseController
         $db->transComplete();
 
         if ($db->transStatus() === false) {
-            return redirect()->back()->withInput()->with('error', 'Gagal memproses pemesanan. Silakan coba lagi.');
+            $dbError = $db->error();
+            $bookingErrors = $this->bookingModel->errors();
+            $seatErrors = $this->bookingSeatModel->errors();
+            $errDetail = "DB Error: " . json_encode($dbError) . 
+                         " | Booking Model: " . json_encode($bookingErrors) . 
+                         " | Seat Model: " . json_encode($seatErrors);
+            return redirect()->back()->withInput()->with('error', 'Gagal memproses pemesanan. Detail: ' . $errDetail);
         }
 
         return redirect()->to(base_url('customer/payment/' . $bookingId));
