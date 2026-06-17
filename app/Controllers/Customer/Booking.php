@@ -34,6 +34,12 @@ class Booking extends BaseController
             return redirect()->to(base_url('customer/home'))->with('error', 'Jadwal keberangkatan tidak ditemukan.');
         }
 
+        // Check if schedule's departure time has already passed
+        $now = date('Y-m-d H:i:s');
+        if ($schedule['departure_time'] <= $now) {
+            return redirect()->to(base_url('customer/home'))->with('error', 'Mohon maaf, jadwal bus ini sudah lewat. Silakan pesan jadwal di lain hari/waktu.');
+        }
+
         // Fetch already booked seat numbers for this schedule
         $bookedSeats = $this->bookingSeatModel->select('booking_seats.seat_number')
             ->join('bookings', 'bookings.id = booking_seats.booking_id')
@@ -67,6 +73,12 @@ class Booking extends BaseController
         $schedule = $this->scheduleModel->getDetailedSchedules($scheduleId);
         if (!$schedule) {
             return redirect()->back()->withInput()->with('error', 'Jadwal tidak valid.');
+        }
+
+        // Check if schedule's departure time has already passed
+        $now = date('Y-m-d H:i:s');
+        if ($schedule['departure_time'] <= $now) {
+            return redirect()->to(base_url('customer/home'))->with('error', 'Mohon maaf, jadwal bus ini sudah lewat. Silakan pesan jadwal di lain hari/waktu.');
         }
 
         $selectedSeatNumbers = array_filter(array_map('trim', explode(',', $seats)));

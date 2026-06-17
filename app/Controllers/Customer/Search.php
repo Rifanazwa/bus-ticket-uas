@@ -38,6 +38,7 @@ class Search extends BaseController
             ->where('routes.origin', $origin)
             ->where('routes.destination', $destination)
             ->where('DATE(schedules.departure_time)', $date)
+            ->where('schedules.departure_time >', date('Y-m-d H:i:s'))
             ->where('schedules.status', 'scheduled')
             ->orderBy('schedules.departure_time', 'ASC')
             ->findAll();

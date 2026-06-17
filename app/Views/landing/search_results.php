@@ -91,8 +91,12 @@
                     <i data-lucide="calendar-x" class="w-8 h-8 text-slate-600"></i>
                 </div>
                 <div>
-                    <h4 class="text-lg font-bold text-white">Jadwal Tidak Ditemukan</h4>
-                    <p class="text-sm text-slate-500 mt-1 max-w-sm mx-auto">Maaf, tidak ada jadwal bus untuk rute dan tanggal yang Anda pilih. Coba tanggal lain.</p>
+                    <h4 class="text-lg font-bold text-white">Jadwal Tidak Tersedia</h4>
+                    <?php if ($date < date('Y-m-d')): ?>
+                        <p class="text-sm text-slate-400 mt-1 max-w-sm mx-auto">Mohon maaf, tanggal keberangkatan yang Anda pilih sudah terlewat. Silakan pilih tanggal di lain hari.</p>
+                    <?php else: ?>
+                        <p class="text-sm text-slate-400 mt-1 max-w-sm mx-auto">Mohon maaf, jadwal bus untuk waktu tersebut tidak tersedia atau sudah terlewat. Silakan cari jadwal di lain hari/waktu.</p>
+                    <?php endif; ?>
                 </div>
                 <a href="<?= base_url('/') ?>" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-brand-600 hover:bg-brand-500 transition-all">
                     <i data-lucide="search" class="w-4 h-4"></i> Cari Ulang
