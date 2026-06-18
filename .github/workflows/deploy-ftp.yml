@@ -25,6 +25,7 @@ jobs:
           local-dir: ./
           server-dir: ${{ secrets.FTP_SERVER_DIR }}
           state-name: .ftp-deploy-sync-state-v3.json
+          timeout: 180000
           exclude: |
             **/.git*
             **/.git*/**
