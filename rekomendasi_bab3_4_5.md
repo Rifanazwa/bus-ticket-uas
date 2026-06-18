@@ -599,6 +599,125 @@ graph TD
 
 ---
 
+##### 4. Activity Diagram Alur Sistem Terintegrasi (End-to-End System Workflow)
+Alur ini memodelkan seluruh aktivitas bisnis sistem secara menyeluruh dari hulu ke hilir, mulai dari pencarian jadwal penumpang, integrasi sistem pembayaran, konfirmasi boarding petugas, hingga analitik laporan admin menggunakan kecerdasan buatan.
+
+###### Script PlantUML (Konversi di [planttext.com](https://www.planttext.com/)):
+```plantuml
+@startuml
+|Penumpang (Customer)|
+start
+:Mencari Rute & Jadwal;
+:Melihat Rekomendasi AI\nuntuk jadwal terbaik;
+:Memilih Kursi & Input Manifest;
+
+|Sistem & Database|
+:Memulai Transaksi DB;
+:Memeriksa ketersediaan kursi;
+if (Apakah Kursi Terisi?) then (Ya)
+  |Penumpang (Customer)|
+  :Pilih nomor kursi lainnya;
+  stop
+else (Tidak)
+  |Sistem & Database|
+  :Mengunci Kursi & Membuat Kode Booking;
+  
+  |Penumpang (Customer)|
+  :Membayar Tiket via Midtrans;
+  
+  |Sistem & Database|
+  :Menerima Webhook Settlement;
+  :Mengubah status tiket menjadi PAID;
+  :Menerbitkan E-Ticket + QR Code;
+  
+  |Penumpang (Customer)|
+  :Mendatangi Terminal Keberangkatan\ndan menunjukkan QR Code;
+  
+  |Petugas (Officer)|
+  :Memindai QR Code Tiket Penumpang;
+  
+  |Sistem & Database|
+  :Memvalidasi status pembayaran & jadwal;
+  if (Tiket Valid?) then (Ya)
+    |Petugas (Officer)|
+    :Konfirmasi Boarding Masuk Bus;
+    
+    |Sistem & Database|
+    :Mengubah status tiket menjadi BOARDED;
+    
+    |Penumpang (Customer)|
+    :Mengisi Ulasan/Rating Layanan Bus;
+    
+    |Sistem & Database|
+    :Analisis sentimen ulasan via AI;
+    
+    |Admin|
+    :Melihat Laporan Keuangan,\nSentimen, & Prediksi Okupansi AI;
+    stop
+  else (Tidak / Invalid)
+    |Petugas (Officer)|
+    :Menolak Akses Masuk Boarding;
+    stop
+  endif
+endif
+@endum
+```
+
+###### Script Mermaid.js (Konversi di [mermaid.live](https://mermaid.live/)):
+```mermaid
+graph TD
+    subgraph Penumpang ["Penumpang (Customer)"]
+        C_Start([Mulai]) --> C_Search[Cari Rute & Jadwal]
+        C_Search --> C_Rec[Lihat Rekomendasi AI]
+        C_Rec --> C_Select[Pilih Kursi & Input Manifest]
+        C_Select --> C_Pay[Bayar Tiket via Midtrans]
+        C_Pay --> C_Show[Tunjukkan QR Code di Terminal]
+        C_Show --> C_Travel[Melakukan Perjalanan]
+        C_Travel --> C_Review[Kirim Rating & Ulasan]
+    end
+
+    subgraph Sistem ["Sistem CI4, Database, & AI"]
+        S_Check{Apakah Kursi Terisi?}
+        S_Lock[Kunci Kursi & Buat Booking]
+        S_PayCheck{Status Midtrans PAID?}
+        S_Ticket[Terbitkan E-Ticket + QR Code]
+        S_Validate{Validasi QR Code}
+        S_Board[Update Tiket: BOARDED]
+        S_Sentiment[AI Analisis Sentimen Ulasan]
+    end
+
+    subgraph Petugas ["Petugas (Officer)"]
+        O_Scan[Scan QR Code Tiket]
+        O_Confirm[Konfirmasi Boarding]
+        O_Reject[Tolak Akses Boarding]
+    end
+
+    subgraph Administrator ["Admin"]
+        A_Dashboard[Pantau Dashboard Laporan & Prediksi Okupansi AI]
+    end
+
+    %% Flow Connections
+    C_Select --> S_Check
+    S_Check -- Ya --> C_Select
+    S_Check -- Tidak --> S_Lock
+    S_Lock --> C_Pay
+    C_Pay --> S_PayCheck
+    S_PayCheck -- Ya --> S_Ticket
+    S_PayCheck -- Tidak --> C_Pay
+    S_Ticket --> C_Show
+    C_Show --> O_Scan
+    O_Scan --> S_Validate
+    S_Validate -- Valid --> O_Confirm
+    S_Validate -- Invalid --> O_Reject
+    O_Confirm --> S_Board
+    S_Board --> C_Travel
+    C_Review --> S_Sentiment
+    S_Sentiment --> A_Dashboard
+    A_Dashboard --> S_End([Selesai])
+```
+
+---
+
 #### 3.3.4. Sequence Diagram
 Sequence diagram menggambarkan interaksi antar objek dalam sistem (seperti View, Controller, Model, Database, dan API eksternal) yang disusun berdasarkan urutan waktu kejadian kronologis. Berikut adalah 2 sequence diagram utama dalam sistem e-ticketing ini:
 
