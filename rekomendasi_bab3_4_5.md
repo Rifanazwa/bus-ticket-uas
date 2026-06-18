@@ -2520,12 +2520,35 @@ Berikut adalah detail tahapan beserta hasil log eksekusi dari skrip pengujian in
 ## BAB V: PENUTUP
 
 ### 5.1. Kesimpulan
-1. Sistem E-Ticketing bus online berbasis website berhasil dibangun menggunakan framework CodeIgniter 4 dan database MySQL dengan mengadopsi metodologi pengembangan Agile Scrum secara terstruktur.
-2. Fitur peta denah kursi (*seat map*) interaktif yang didukung oleh database transaction rollback sukses mencegah terjadinya pemesanan ganda (*double-booking*) pada sistem reservasi.
-3. Integrasi sandbox payment gateway (Midtrans) dan verifikasi manifes digital berbasis QR Code berhasil mempermudah alur pembayaran otomatis serta mempercepat proses masuk (*boarding*) penumpang di terminal.
-4. Integrasi kecerdasan buatan Google Gemini AI berhasil diimplementasikan untuk melakukan analisis klasifikasi sentimen ulasan pelanggan secara real-time dan memberikan prediksi analitik tren okupansi bus bagi pihak manajemen PO Bus.
+
+Berdasarkan seluruh tahapan analisis, perancangan, implementasi, serta pengujian yang telah dilaksanakan pada proyek pembangunan *Sistem E-Ticketing Bus Online Berbasis Website Menggunakan Metode Agile Development*, maka dapat ditarik beberapa kesimpulan sebagai berikut:
+
+1. **Efektivitas Metodologi Pengembangan Agile Scrum:** 
+   Pembangunan sistem berhasil diselesaikan secara terstruktur melalui pendekatan Agile Scrum dengan siklus pengerjaan *Sprint* mingguan yang dinamis. Pendekatan ini memungkinkan tim untuk secara responsif melakukan iterasi perbaikan pada *product backlog*, mulai dari fitur pendaftaran pengguna, pencarian jadwal, hingga integrasi API, sehingga menghasilkan perangkat lunak yang fungsional (*working software*) dan sesuai dengan kebutuhan nyata pengguna (Aktor Penumpang, Petugas, dan Administrator).
+
+2. **Keandalan Sistem Reservasi Kursi Dinamis (Anti Double-Booking):**
+   Implementasi peta denah kursi (*interactive seat map*) berbasis JavaScript di sisi klien yang diintegrasikan dengan transaksi database relasional (*MySQL Database Transaction*) di sisi server terbukti andal. Penggunaan perintah transaksi terisolasi (`$db->transStart()` dan `$db->transComplete()`) berhasil mencegah masalah konkurensi data berupa pemesanan ganda (*double-booking*) pada nomor kursi yang sama oleh pengguna berbeda dalam waktu bersamaan. Sistem secara otomatis menggagalkan (*rollback*) transaksi kedua dan mengunci kursi secara eksklusif bagi transaksi pertama yang selesai diproses.
+
+3. **Efisiensi Pembayaran dan Keamanan Operasional Boarding:**
+   Integrasi pustaka Midtrans Snap API sebagai gerbang pembayaran (*payment gateway*) sandbox mempermudah alur pembayaran otomatis secara *real-time* melalui notifikasi *webhook callback* asinkron tanpa memerlukan verifikasi manual dari administrator. Hal ini secara langsung meningkatkan efisiensi administrasi keuangan PO Bus. Selain itu, boarding pass dinamis menggunakan teknologi QR Code terenkripsi yang dipindai langsung melalui kamera web petugas terminal terbukti mempercepat proses check-in masuk bus dan meminimalkan kesalahan manifes di lapangan.
+
+4. **Kontribusi Kecerdasan Buatan (AI) untuk Pengambilan Keputusan Bisnis:**
+   Penerapan model kecerdasan buatan Google Gemini AI (`gemini-2.5-flash`) berhasil memberikan nilai tambah yang signifikan pada sistem administrasi PO Bus. Fitur klasifikasi sentimen ulasan (*reviews NLP classifier*) mampu melabeli feedback penumpang menjadi kategori positif, netral, atau negatif secara akurat untuk mempermudah evaluasi pelayanan. Di samping itu, fitur prediksi keterisian bus (*occupancy prediction*) yang didukung oleh analisis AI mampu meramalkan tingkat kepadatan penumpang untuk 7 hari ke depan, membantu pihak manajemen PO Bus dalam mengambil keputusan strategis seperti penambahan unit bus pada jadwal padat.
+
+---
 
 ### 5.2. Saran
-1. **Pengembangan Aplikasi Mobile (App Version):** Diharapkan pada pengembangan selanjutnya sistem ini dapat dirilis dalam platform mobile (Android/iOS) menggunakan framework cross-platform seperti Flutter agar penumpang dapat mengakses tiket secara offline lebih mudah saat di terminal.
-2. **Implementasi Payment Gateway Live:** Menghubungkan Midtrans API ke mode produksi (Live Mode) untuk mengakomodasi transfer real pembayaran uang dari bank, e-wallet, dan gerai ritel umum.
-3. **Optimasi Infrastruktur Server:** Menerapkan sistem caching Redis untuk mengurangi beban kueri database pada jadwal perjalanan yang sangat padat guna menjaga waktu respon (*latency*) tetap minimal.
+
+Untuk pengembangan dan penyempurnaan sistem *E-Ticketing Bus Online* ini lebih lanjut di masa mendatang, terdapat beberapa saran yang direkomendasikan sebagai berikut:
+
+1. **Pengembangan Aplikasi Versi Mobile (Cross-Platform Mobile Application):**
+   Disarankan untuk mengembangkan aplikasi versi mobile (Android dan iOS) menggunakan kerangka kerja lintas platform seperti Flutter atau React Native. Versi mobile akan memudahkan penumpang dalam mengakses tiket elektronik secara offline tanpa bergantung pada koneksi browser, serta memungkinkan penerapan fitur notifikasi push (*push notifications*) untuk mengingatkan penumpang mengenai jadwal keberangkatan yang mendekati waktu operasional.
+
+2. **Migrasi ke Gerbang Pembayaran Mode Produksi (Go-Live Midtrans):**
+   Untuk dapat meluncurkan aplikasi ke publik secara nyata, disarankan untuk segera melakukan migrasi kredensial Midtrans ke mode produksi (*Live Mode*). Langkah ini memerlukan pengurusan legalitas bisnis PO Bus dan konfigurasi sertifikat SSL penuh di server produksi, guna menjamin transaksi pembayaran menggunakan uang asli melalui Virtual Account perbankan, dompet digital (GoPay, OVO, ShopeePay), dan gerai retail dapat berjalan secara aman sesuai dengan standar kepatuhan PCI-DSS.
+
+3. **Optimasi Kinerja Server Melalui Redis Caching & Load Balancing:**
+   Pada masa puncak pemesanan tiket (*peak season* seperti mudik lebaran atau libur natal), beban kueri database untuk pencarian jadwal bus diperkirakan akan meningkat sangat tajam. Oleh karena itu, disarankan untuk mengimplementasikan sistem caching memori menggunakan Redis untuk menyimpan sementara data hasil pencarian rute populer. Selain itu, penerapan arsitektur *horizontal scaling* dengan pemuatan penyeimbang beban (*load balancer*) pada server hosting akan menjaga agar waktu respons aplikasi tetap di bawah 2 detik.
+
+4. **Peningkatan Akurasi Prediksi Melalui Model Pembelajaran Mesin Kustom:**
+   Meskipun Gemini AI saat ini sudah sangat baik dalam menganalisis data okupansi, akurasinya dapat lebih ditingkatkan dengan menerapkan model pembelajaran mesin (*machine learning*) kustom yang dilatih menggunakan data historis transaksi internal PO Bus selama beberapa tahun. Model kustom ini dapat mempertimbangkan faktor musiman secara lebih spesifik, seperti hari libur nasional daerah, cuaca, dan promosi kompetitor lokal, guna menghasilkan prediksi okupansi kursi yang jauh lebih presisi.
