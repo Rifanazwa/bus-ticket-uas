@@ -57,9 +57,12 @@
                 </button>
             </div>
         <?php else: ?>
-            <div>
+            <div class="space-y-3">
                 <button type="button" id="pay-button" class="w-full py-3.5 px-4 rounded-xl font-bold text-white bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 shadow-lg shadow-brand-600/10 flex items-center justify-center gap-2 transition-all text-sm transform hover:scale-[1.01]">
                     <i data-lucide="credit-card" class="w-4 h-4"></i> Bayar Sekarang via Midtrans
+                </button>
+                <button type="button" id="simulate-success" class="w-full py-3 px-4 rounded-xl font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 shadow-lg shadow-emerald-600/10 flex items-center justify-center gap-2 transition-all text-sm">
+                    <i data-lucide="check-circle" class="w-4 h-4"></i> Simulasi Bayar Sukses (Cepat)
                 </button>
             </div>
         <?php endif; ?>

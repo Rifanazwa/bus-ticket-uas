@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kamus Data - E-Ticketing Bus</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      margin: 40px auto;
+      max-width: 1000px;
+      padding: 0 20px;
+      color: #333333;
+    }
+    h1 {
+      border-bottom: 2px solid #0056b3;
+      padding-bottom: 10px;
+      color: #0056b3;
+    }
+    h3 {
+      margin-top: 30px;
+      color: #0056b3;
+      border-left: 4px solid #0056b3;
+      padding-left: 10px;
+      font-size: 14pt;
+    }
+    p {
+      color: #555555;
+      font-size: 11pt;
+    }
+  </style>
+</head>
+<body>
+  <h1>Kamus Data (Data Dictionary)</h1>
+  <p>Silakan blok/select tabel di bawah ini, salin (Ctrl+C), dan tempel (Ctrl+V) langsung ke Microsoft Word.</p>
+  <hr style="border: 0; border-top: 1px solid #eeeeee; margin: 20px 0;">
+  <p>Kamus data menjelaskan secara rinci spesifikasi teknis dari setiap tabel yang digunakan dalam sistem E-Ticketing Bus Online, meliputi nama kolom, tipe data, kunci (key), serta keterangan fungsinya.</p>
+<h3>1. Tabel users</h3>
+<p>Tabel ini digunakan untuk menyimpan seluruh data pengguna aplikasi yang terbagi menjadi tiga peran utama (*customer*, *admin*, *petugas*), serta kru bus (*driver* dan *conductor*).</p>
+<table width="100%" border="1" style="border-collapse: collapse; width: 100%; border: 1px solid #cccccc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 10.5pt; margin: 10px 0;">
+  <thead>
+    <tr style="background-color: #f2f2f2; height: 26px;">
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Nama Kolom</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Tipe Data</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Kunci</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Keterangan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">id</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11) unsigned</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">PK, Auto Increment</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ID unik untuk setiap pengguna</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">name</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">VARCHAR(100)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Nama lengkap pengguna</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">email</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">VARCHAR(100)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Unique</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Alamat email unik untuk login</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">phone</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">VARCHAR(20)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Nomor telepon aktif pengguna</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">password</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">VARCHAR(255)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Kata sandi pengguna yang di-hash dengan BCrypt</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">role</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ENUM('customer', 'admin', 'petugas')</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Hak akses sistem (default: 'customer')</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">bus_id</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11) unsigned</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">FK (buses.id)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Afiliasi bus untuk kru (Null jika bukan kru)</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">crew_role</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ENUM('staff', 'driver_1', 'driver_2', 'conductor')</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Peran spesifik kru bus (default: 'staff')</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">created_at</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DATETIME</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Tanggal dan waktu akun didaftarkan</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">updated_at</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DATETIME</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Tanggal dan waktu data akun diperbarui</td>
+    </tr>
+  </tbody>
+</table>
+<h3>2. Tabel buses</h3>
+<p>Tabel ini digunakan untuk menyimpan informasi armada bus PO Bus yang dimiliki.</p>
+<table width="100%" border="1" style="border-collapse: collapse; width: 100%; border: 1px solid #cccccc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 10.5pt; margin: 10px 0;">
+  <thead>
+    <tr style="background-color: #f2f2f2; height: 26px;">
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Nama Kolom</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Tipe Data</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Kunci</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Keterangan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">id</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11) unsigned</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">PK, Auto Increment</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ID unik untuk setiap armada bus</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">code</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">VARCHAR(20)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Kode identifikasi bus (misal: PO-001)</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">name</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">VARCHAR(100)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Nama atau lambung bus</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">type</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">VARCHAR(50)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Tipe kelas bus (misal: Eksekutif, Ekonomi)</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">seat_layout</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">JSON</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Struktur tata letak denah kursi bus</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">total_seats</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Kapasitas total kursi bus</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">created_at</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DATETIME</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Tanggal dan waktu armada bus ditambahkan</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">updated_at</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DATETIME</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Tanggal dan waktu data armada diperbarui</td>
+    </tr>
+  </tbody>
+</table>
+<h3>3. Tabel routes</h3>
+<p>Tabel ini digunakan untuk menyimpan data rute perjalanan atau trayek antarkota yang dilayani.</p>
+<table width="100%" border="1" style="border-collapse: collapse; width: 100%; border: 1px solid #cccccc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 10.5pt; margin: 10px 0;">
+  <thead>
+    <tr style="background-color: #f2f2f2; height: 26px;">
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Nama Kolom</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Tipe Data</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Kunci</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Keterangan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">id</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11) unsigned</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">PK, Auto Increment</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ID unik untuk setiap rute</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">origin</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">VARCHAR(100)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Terminal/Kota asal keberangkatan</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">destination</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">VARCHAR(100)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Terminal/Kota tujuan akhir perjalanan</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">distance_km</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DECIMAL(8,2)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Jarak tempuh rute dalam satuan kilometer</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">estimated_duration</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Estimasi durasi perjalanan (dalam menit)</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">created_at</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DATETIME</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Tanggal dan waktu rute ditambahkan</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">updated_at</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DATETIME</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Tanggal dan waktu data rute diperbarui</td>
+    </tr>
+  </tbody>
+</table>
+<h3>4. Tabel schedules</h3>
+<p>Tabel ini digunakan untuk menyimpan jadwal keberangkatan bus beserta penetapan kru bus yang bertugas dan harga tiket.</p>
+<table width="100%" border="1" style="border-collapse: collapse; width: 100%; border: 1px solid #cccccc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 10.5pt; margin: 10px 0;">
+  <thead>
+    <tr style="background-color: #f2f2f2; height: 26px;">
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Nama Kolom</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Tipe Data</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Kunci</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Keterangan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">id</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11) unsigned</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">PK, Auto Increment</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ID unik untuk setiap jadwal perjalanan</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">route_id</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11) unsigned</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">FK (routes.id)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Rute perjalanan yang ditempuh</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">bus_id</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11) unsigned</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">FK (buses.id)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Armada bus yang ditugaskan</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">departure_time</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DATETIME</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Tanggal dan jam keberangkatan bus</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">arrival_time</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DATETIME</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Estimasi tanggal dan jam kedatangan</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">price</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DECIMAL(10,2)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Harga dasar tiket per kursi</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">status</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ENUM('scheduled', 'ongoing', 'completed', 'cancelled')</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Status operasional jadwal (default: 'scheduled')</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">driver_1_id</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11) unsigned</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">FK (users.id)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ID Supir Utama (driver 1) yang bertugas</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">driver_2_id</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11) unsigned</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">FK (users.id)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ID Supir Cadangan (driver 2) jika ada</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">conductor_id</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11) unsigned</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">FK (users.id)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ID Kondektur yang bertugas</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">created_at</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DATETIME</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Tanggal dan waktu jadwal dibuat</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">updated_at</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DATETIME</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Tanggal dan waktu jadwal diperbarui</td>
+    </tr>
+  </tbody>
+</table>
+<h3>5. Tabel promos</h3>
+<p>Tabel ini digunakan untuk menyimpan data voucher promo diskon yang dapat diklaim saat checkout tiket.</p>
+<table width="100%" border="1" style="border-collapse: collapse; width: 100%; border: 1px solid #cccccc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 10.5pt; margin: 10px 0;">
+  <thead>
+    <tr style="background-color: #f2f2f2; height: 26px;">
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Nama Kolom</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Tipe Data</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Kunci</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Keterangan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">id</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11) unsigned</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">PK, Auto Increment</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ID unik untuk setiap promo</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">code</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">VARCHAR(30)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Unique</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Kode promo/kupon unik (misal: MUDIKAMAN)</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">discount_type</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ENUM('percent', 'fixed')</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Jenis diskon (persentase atau nominal tetap)</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">discount_value</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DECIMAL(10,2)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Nilai potongan harga</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">valid_from</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DATE</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Batas awal tanggal kupon aktif</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">valid_until</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DATE</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Batas akhir tanggal kupon aktif</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">usage_limit</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Kuota batas maksimum penggunaan kupon</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">created_at</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DATETIME</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Tanggal dan waktu promo dibuat</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">updated_at</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DATETIME</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Tanggal dan waktu promo diperbarui</td>
+    </tr>
+  </tbody>
+</table>
+<h3>6. Tabel bookings</h3>
+<p>Tabel ini digunakan untuk menyimpan data transaksi reservasi tiket bus oleh customer.</p>
+<table width="100%" border="1" style="border-collapse: collapse; width: 100%; border: 1px solid #cccccc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 10.5pt; margin: 10px 0;">
+  <thead>
+    <tr style="background-color: #f2f2f2; height: 26px;">
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Nama Kolom</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Tipe Data</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Kunci</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Keterangan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">id</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11) unsigned</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">PK, Auto Increment</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ID unik untuk setiap booking</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">booking_code</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">VARCHAR(20)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Unique</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Kode unik invoice pemesanan</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">user_id</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11) unsigned</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">FK (users.id)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ID customer yang melakukan reservasi</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">schedule_id</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11) unsigned</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">FK (schedules.id)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ID jadwal perjalanan yang dipesan</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">total_price</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DECIMAL(10,2)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Total tagihan akhir setelah potongan diskon</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">payment_status</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ENUM('pending', 'paid', 'failed', 'refunded')</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Status transaksi pembayaran (default: 'pending')</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">booking_status</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ENUM('active', 'completed', 'cancelled')</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Status keaktifan reservasi (default: 'active')</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">created_at</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DATETIME</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Tanggal dan waktu pesanan dibuat</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">updated_at</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DATETIME</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Tanggal dan waktu data pesanan diperbarui</td>
+    </tr>
+  </tbody>
+</table>
+<h3>7. Tabel booking_seats</h3>
+<p>Tabel ini digunakan untuk mencatat detail manifest nama penumpang beserta alokasi nomor kursi yang dipilih pada setiap transaksi booking.</p>
+<table width="100%" border="1" style="border-collapse: collapse; width: 100%; border: 1px solid #cccccc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 10.5pt; margin: 10px 0;">
+  <thead>
+    <tr style="background-color: #f2f2f2; height: 26px;">
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Nama Kolom</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Tipe Data</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Kunci</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Keterangan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">id</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11) unsigned</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">PK, Auto Increment</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ID unik baris manifest kursi</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">booking_id</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11) unsigned</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">FK (bookings.id)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Referensi ke transaksi booking induk</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">seat_number</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">VARCHAR(10)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Nomor kursi yang dipesan (misal: 1A, 2B)</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">passenger_name</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">VARCHAR(100)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Nama penumpang yang menempati kursi tersebut</td>
+    </tr>
+  </tbody>
+</table>
+<h3>8. Tabel payments</h3>
+<p>Tabel ini menyimpan detail transaksi pembayaran digital dari payment gateway Midtrans.</p>
+<table width="100%" border="1" style="border-collapse: collapse; width: 100%; border: 1px solid #cccccc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 10.5pt; margin: 10px 0;">
+  <thead>
+    <tr style="background-color: #f2f2f2; height: 26px;">
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Nama Kolom</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Tipe Data</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Kunci</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Keterangan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">id</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11) unsigned</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">PK, Auto Increment</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ID unik transaksi pembayaran</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">booking_id</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11) unsigned</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">FK (bookings.id)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ID booking yang dibayar</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">method</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">VARCHAR(50)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Metode pembayaran (misal: bank_transfer, qris)</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">amount</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DECIMAL(10,2)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Jumlah nominal pembayaran yang disetor</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">transaction_id</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">VARCHAR(100)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ID transaksi resmi dari Midtrans</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">status</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ENUM('pending', 'success', 'failed')</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Status pelunasan pembayaran (default: 'pending')</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">paid_at</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DATETIME</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Waktu tepat transaksi terbayar lunas</td>
+    </tr>
+  </tbody>
+</table>
+<h3>9. Tabel tickets</h3>
+<p>Tabel ini mencatat tiket elektronik penumpang yang diterbitkan otomatis setelah pembayaran lunas beserta log scanner boarding petugas.</p>
+<table width="100%" border="1" style="border-collapse: collapse; width: 100%; border: 1px solid #cccccc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 10.5pt; margin: 10px 0;">
+  <thead>
+    <tr style="background-color: #f2f2f2; height: 26px;">
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Nama Kolom</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Tipe Data</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Kunci</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Keterangan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">id</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11) unsigned</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">PK, Auto Increment</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ID unik tiket elektronik</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">booking_id</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11) unsigned</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">FK (bookings.id)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ID booking transaksi asal</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">qr_code</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">VARCHAR(255)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Data token enkripsi untuk QR Code e-ticket</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">status</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ENUM('issued', 'boarded', 'expired')</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Status boarding tiket (default: 'issued')</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">scanned_by</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11) unsigned</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">FK (users.id)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ID petugas scanner yang memindai tiket</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">scanned_at</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DATETIME</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Tanggal dan waktu pemindaian boarding</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">issued_at</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DATETIME</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Tanggal dan waktu tiket diterbitkan</td>
+    </tr>
+  </tbody>
+</table>
+<h3>10. Tabel reviews</h3>
+<p>Tabel ini digunakan untuk menyimpan rating, ulasan perjalanan, dan hasil analisis sentimen AI dari penumpang.</p>
+<table width="100%" border="1" style="border-collapse: collapse; width: 100%; border: 1px solid #cccccc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 10.5pt; margin: 10px 0;">
+  <thead>
+    <tr style="background-color: #f2f2f2; height: 26px;">
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Nama Kolom</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Tipe Data</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Kunci</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Keterangan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">id</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11) unsigned</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">PK, Auto Increment</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ID unik data ulasan</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">booking_id</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11) unsigned</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">FK (bookings.id)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ID transaksi perjalanan terkait</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">user_id</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11) unsigned</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">FK (users.id)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ID customer pemberi ulasan</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">rating</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">TINYINT(4)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Skor penilaian (rating 1-5 bintang)</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">comment</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">TEXT</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Isi pesan ulasan tertulis dari customer</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">sentiment</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ENUM('positive', 'neutral', 'negative')</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Klasifikasi sentimen otomatis berbasis Gemini AI</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">created_at</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DATETIME</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Tanggal dan waktu ulasan dikirim</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">updated_at</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DATETIME</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Tanggal dan waktu ulasan diperbarui</td>
+    </tr>
+  </tbody>
+</table>
+<h3>11. Tabel chat_logs</h3>
+<p>Tabel ini menyimpan data log riwayat komunikasi asisten chatbot rekomendasi perjalanan bus berbasis Gemini AI.</p>
+<table width="100%" border="1" style="border-collapse: collapse; width: 100%; border: 1px solid #cccccc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 10.5pt; margin: 10px 0;">
+  <thead>
+    <tr style="background-color: #f2f2f2; height: 26px;">
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Nama Kolom</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Tipe Data</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Kunci</th>
+      <th style="padding: 8px 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Keterangan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">id</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11) unsigned</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">PK, Auto Increment</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ID unik log pesan chat</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">user_id</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">INT(11) unsigned</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">FK (users.id)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">ID customer pengirim chat (Null jika guest)</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">session_id</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">VARCHAR(50)</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Sesi identifikasi obrolan chat</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">message</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">TEXT</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Pesan teks pertanyaan dari pengguna</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">response</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">TEXT</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Jawaban teks balasan dari chatbot Gemini AI</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">created_at</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DATETIME</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Tanggal dan waktu pesan dikirim</td>
+    </tr>
+    <tr style="height: 24px;">
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">updated_at</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">DATETIME</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">-</td>
+      <td style="padding: 8px 10px; text-align: left; border: 1px solid #cccccc;">Tanggal dan waktu data log diperbarui</td>
+    </tr>
+  </tbody>
+</table>
+
+</body>
+</html>
