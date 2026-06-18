@@ -5,16 +5,20 @@ namespace App\Libraries;
 class GeminiClient
 {
     protected $apiKey;
+    protected $baseUrl;
+    protected $model;
     protected $client;
 
     public function __construct()
     {
         $this->apiKey = env('gemini.apiKey');
+        $this->baseUrl = env('gemini.baseUrl');
+        $this->model = env('gemini.model') ?: 'gemini-2.5-flash';
         $this->client = \Config\Services::curlrequest();
     }
 
     /**
-     * Generate content from Gemini API using gemini-1.5-flash model
+     * Generate content from Gemini API or OpenAI-compatible endpoint
      */
     public function generate($prompt, $systemInstruction = null)
     {
@@ -24,30 +28,65 @@ class GeminiClient
         }
 
         try {
-            $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . $this->apiKey;
+            if (!empty($this->baseUrl)) {
+                // OpenAI-compatible endpoint (e.g. LiteLLM proxy)
+                $baseUrl = $this->baseUrl;
+                if (strpos($baseUrl, 'http://') !== 0 && strpos($baseUrl, 'https://') !== 0) {
+                    $baseUrl = 'https://' . $baseUrl;
+                }
+                $baseUrl = rtrim($baseUrl, '/');
+                $url = $baseUrl . '/chat/completions';
 
-            $payload = [
-                'contents' => [
-                    [
-                        'parts' => [
-                            ['text' => $prompt]
+                $messages = [];
+                if ($systemInstruction) {
+                    $messages[] = [
+                        'role' => 'system',
+                        'content' => $systemInstruction
+                    ];
+                }
+                $messages[] = [
+                    'role' => 'user',
+                    'content' => $prompt
+                ];
+
+                $payload = [
+                    'model' => $this->model,
+                    'messages' => $messages
+                ];
+
+                $headers = [
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer ' . $this->apiKey
+                ];
+            } else {
+                // Native Google Gemini API
+                $url = "https://generativelanguage.googleapis.com/v1beta/models/" . $this->model . ":generateContent?key=" . $this->apiKey;
+
+                $payload = [
+                    'contents' => [
+                        [
+                            'parts' => [
+                                ['text' => $prompt]
+                            ]
                         ]
                     ]
-                ]
-            ];
+                ];
 
-            if ($systemInstruction) {
-                $payload['systemInstruction'] = [
-                    'parts' => [
-                        ['text' => $systemInstruction]
-                    ]
+                if ($systemInstruction) {
+                    $payload['systemInstruction'] = [
+                        'parts' => [
+                            ['text' => $systemInstruction]
+                        ]
+                    ];
+                }
+
+                $headers = [
+                    'Content-Type' => 'application/json'
                 ];
             }
 
             $response = $this->client->request('POST', $url, [
-                'headers' => [
-                    'Content-Type' => 'application/json'
-                ],
+                'headers' => $headers,
                 'json' => $payload,
                 'http_errors' => false // don't throw exception on 4xx/5xx to handle errors gracefully
             ]);
@@ -55,8 +94,16 @@ class GeminiClient
             $statusCode = $response->getStatusCode();
             $body = json_decode($response->getBody(), true);
 
-            if ($statusCode === 200 && isset($body['candidates'][0]['content']['parts'][0]['text'])) {
-                return $body['candidates'][0]['content']['parts'][0]['text'];
+            if ($statusCode === 200) {
+                if (!empty($this->baseUrl)) {
+                    if (isset($body['choices'][0]['message']['content'])) {
+                        return $body['choices'][0]['message']['content'];
+                    }
+                } else {
+                    if (isset($body['candidates'][0]['content']['parts'][0]['text'])) {
+                        return $body['candidates'][0]['content']['parts'][0]['text'];
+                    }
+                }
             }
 
             // Error log and return dynamic mock response instead of error to ensure UI never breaks
@@ -70,7 +117,7 @@ class GeminiClient
     }
 
     /**
-     * Generate structured JSON content from Gemini
+     * Generate structured JSON content from Gemini API or OpenAI-compatible endpoint
      */
     public function generateJson($prompt, $systemInstruction = null)
     {
@@ -79,40 +126,88 @@ class GeminiClient
         }
 
         try {
-            $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . $this->apiKey;
+            if (!empty($this->baseUrl)) {
+                // OpenAI-compatible endpoint (e.g. LiteLLM proxy)
+                $baseUrl = $this->baseUrl;
+                if (strpos($baseUrl, 'http://') !== 0 && strpos($baseUrl, 'https://') !== 0) {
+                    $baseUrl = 'https://' . $baseUrl;
+                }
+                $baseUrl = rtrim($baseUrl, '/');
+                $url = $baseUrl . '/chat/completions';
 
-            $payload = [
-                'contents' => [
-                    [
-                        'parts' => [
-                            ['text' => $prompt]
+                $messages = [];
+                if ($systemInstruction) {
+                    $messages[] = [
+                        'role' => 'system',
+                        'content' => $systemInstruction
+                    ];
+                }
+                $messages[] = [
+                    'role' => 'user',
+                    'content' => $prompt
+                ];
+
+                $payload = [
+                    'model' => $this->model,
+                    'messages' => $messages,
+                    'response_format' => [
+                        'type' => 'json_object'
+                    ]
+                ];
+
+                $headers = [
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer ' . $this->apiKey
+                ];
+            } else {
+                // Native Google Gemini API
+                $url = "https://generativelanguage.googleapis.com/v1beta/models/" . $this->model . ":generateContent?key=" . $this->apiKey;
+
+                $payload = [
+                    'contents' => [
+                        [
+                            'parts' => [
+                                ['text' => $prompt]
+                            ]
                         ]
+                    ],
+                    'generationConfig' => [
+                        'responseMimeType' => 'application/json'
                     ]
-                ],
-                'generationConfig' => [
-                    'responseMimeType' => 'application/json'
-                ]
-            ];
+                ];
 
-            if ($systemInstruction) {
-                $payload['systemInstruction'] = [
-                    'parts' => [
-                        ['text' => $systemInstruction]
-                    ]
+                if ($systemInstruction) {
+                    $payload['systemInstruction'] = [
+                        'parts' => [
+                            ['text' => $systemInstruction]
+                        ]
+                    ];
+                }
+
+                $headers = [
+                    'Content-Type' => 'application/json'
                 ];
             }
 
             $response = $this->client->request('POST', $url, [
-                'headers' => [
-                    'Content-Type' => 'application/json'
-                ],
+                'headers' => $headers,
                 'json' => $payload,
                 'http_errors' => false
             ]);
 
+            $statusCode = $response->getStatusCode();
             $body = json_decode($response->getBody(), true);
-            if ($response->getStatusCode() === 200 && isset($body['candidates'][0]['content']['parts'][0]['text'])) {
-                return json_decode($body['candidates'][0]['content']['parts'][0]['text'], true);
+
+            if ($statusCode === 200) {
+                if (!empty($this->baseUrl)) {
+                    if (isset($body['choices'][0]['message']['content'])) {
+                        return json_decode($body['choices'][0]['message']['content'], true);
+                    }
+                } else {
+                    if (isset($body['candidates'][0]['content']['parts'][0]['text'])) {
+                        return json_decode($body['candidates'][0]['content']['parts'][0]['text'], true);
+                    }
+                }
             }
 
             log_message('error', 'Gemini JSON API Error: ' . json_encode($body));
