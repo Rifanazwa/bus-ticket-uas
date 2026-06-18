@@ -2288,14 +2288,42 @@ public function index()
 Pengujian sistem dilakukan menggunakan teknik *Black Box Testing* untuk menjamin fungsionalitas antarmuka aplikasi berjalan sesuai dengan tujuan perancangan.
 
 #### 4.2.1. Tabel Skenario Pengujian Fungsional Sistem
-| No | Fitur / Skenario Uji | Prosedur Pengujian | Hasil Yang Diharapkan | Status |
-|---|---|---|---|---|
-| 1 | Registrasi User Baru | Input nama, email baru, password lengkap, klik submit. | Akun tersimpan di tabel `users` dan diarahkan ke login. | Berhasil |
-| 2 | Cari Jadwal Bus | Pilih asal: "Jakarta", tujuan: "Bandung", tanggal esok hari, klik cari. | Menampilkan daftar bus kelas eksekutif dengan harga Rp125.000. | Berhasil |
-| 3 | Pilih Kursi Interaktif | Klik kursi "1D", input nama penumpang "AHMED", klik proses. | Sistem mengunci kursi, mengalihkan ke instruksi bayar Midtrans. | Berhasil |
-| 4 | Proteksi Double Booking | Dua tab browser memesan kursi "1D" di jadwal yang sama bersamaan. | Transaksi pertama berhasil, transaksi kedua ditolak dengan pesan error. | Berhasil |
-| 5 | Webhook Pembayaran | Kirim callback settlement QRIS dari simulator Midtrans. | Transaksi berubah jadi `paid` dan tombol download e-tiket muncul. | Berhasil |
-| 6 | Scan Boarding Tiket | Arahkan kamera web ke QR Code tiket aktif penumpang. | Status tiket berubah jadi `boarded` dan tercatat di histori scan. | Berhasil |
+
+> [!TIP]
+> Untuk menyalin tabel skenario pengujian dengan format yang rapi dan lebar kolom yang proporsional langsung ke Microsoft Word, silakan buka berkas [tabel_pengujian_sistem.html](file:///d:/Learn/KULIAH/WEB%20LANJUTAN/UAS/uas-bus/bus-ticket-uas/tabel_pengujian_sistem.html) di browser Anda, lalu salin (*Copy*) tabel dari sana dan tempel (*Paste*) ke Word.
+
+Berikut adalah ringkasan daftar skenario pengujian fungsional sistem yang telah dilakukan:
+
+* **Uji 1: Registrasi User Baru**
+  * **Prosedur:** Input nama, email baru, password lengkap, klik submit.
+  * **Hasil Yang Diharapkan:** Akun baru berhasil disimpan di database (tabel `users`) dan halaman dialihkan ke login.
+  * **Status:** Berhasil (100% Passed)
+
+* **Uji 2: Cari Jadwal Bus**
+  * **Prosedur:** Pilih asal: "Jakarta", tujuan: "Bandung", tanggal esok hari, klik cari.
+  * **Hasil Yang Diharapkan:** Sistem menampilkan daftar bus kelas eksekutif yang aktif dengan tarif Rp125.000.
+  * **Status:** Berhasil (100% Passed)
+
+* **Uji 3: Pilih Kursi Interaktif**
+  * **Prosedur:** Klik kursi "1D", input nama manifest penumpang "AHMED", klik proses.
+  * **Hasil Yang Diharapkan:** Sistem mengunci kursi "1D" secara instan, menyimpannya di database, dan mengalihkan pengguna ke instruksi bayar Midtrans.
+  * **Status:** Berhasil (100% Passed)
+
+* **Uji 4: Proteksi Double Booking**
+  * **Prosedur:** Dua tab browser memproses pesanan kursi "1D" pada jadwal yang sama secara bersamaan.
+  * **Hasil Yang Diharapkan:** Transaksi pertama diproses berhasil, sedangkan transaksi kedua ditolak dengan alert pesan error.
+  * **Status:** Berhasil (100% Passed)
+
+* **Uji 5: Webhook Pembayaran**
+  * **Prosedur:** Kirim callback settlement status dari simulator pembayaran Midtrans Sandbox.
+  * **Hasil Yang Diharapkan:** Status tagihan diperbarui menjadi `paid` (Lunas) di database dan tombol download e-ticket PDF aktif.
+  * **Status:** Berhasil (100% Passed)
+
+* **Uji 6: Scan Boarding Tiket**
+  * **Prosedur:** Arahkan lensa kamera perangkat web ke QR Code tiket aktif penumpang.
+  * **Hasil Yang Diharapkan:** Status tiket berubah menjadi `boarded` di database dan tercatat di panel manifest riwayat petugas.
+  * **Status:** Berhasil (100% Passed)
+
 
 #### 4.2.2. Prosedur dan Hasil Pengujian Manual via Antarmuka Web (Manual Web Testing)
 

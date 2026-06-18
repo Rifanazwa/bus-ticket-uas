@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tabel Pengujian Sistem - Black Box Testing</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      margin: 40px auto;
+      max-width: 1000px;
+      padding: 0 20px;
+      color: #333333;
+    }
+    h1 {
+      border-bottom: 2px solid #0056b3;
+      padding-bottom: 10px;
+      color: #0056b3;
+    }
+    p {
+      color: #555555;
+      font-size: 11pt;
+    }
+  </style>
+</head>
+<body>
+  <h1>Tabel Pengujian Fungsional Sistem (Black Box Testing)</h1>
+  <p>Silakan blok/select tabel di bawah ini, salin (Ctrl+C), dan tempel (Ctrl+V) langsung ke Microsoft Word Anda pada bagian <b>4.2.1</b>.</p>
+  <hr style="border: 0; border-top: 1px solid #eeeeee; margin: 20px 0;">
+
+  <table width="100%" border="1" style="border-collapse: collapse; width: 100%; border: 1px solid #cccccc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 10.5pt; margin: 20px 0;">
+    <thead>
+      <tr style="background-color: #f2f2f2; height: 30px;">
+        <th style="padding: 10px; text-align: center; font-weight: bold; border: 1px solid #cccccc; width: 5%;">No</th>
+        <th style="padding: 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc; width: 20%;">Fitur / Skenario Uji</th>
+        <th style="padding: 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc; width: 30%;">Prosedur Pengujian</th>
+        <th style="padding: 10px; text-align: left; font-weight: bold; border: 1px solid #cccccc; width: 35%;">Hasil Yang Diharapkan</th>
+        <th style="padding: 10px; text-align: center; font-weight: bold; border: 1px solid #cccccc; width: 10%;">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="height: 24px;">
+        <td style="padding: 10px; text-align: center; border: 1px solid #cccccc;">1</td>
+        <td style="padding: 10px; text-align: left; border: 1px solid #cccccc; font-weight: bold;">Registrasi User Baru</td>
+        <td style="padding: 10px; text-align: left; border: 1px solid #cccccc;">Input nama, email baru, password lengkap, klik submit.</td>
+        <td style="padding: 10px; text-align: left; border: 1px solid #cccccc;">Akun tersimpan di tabel <code>users</code> dan diarahkan ke login.</td>
+        <td style="padding: 10px; text-align: center; border: 1px solid #cccccc; color: #2e7d32; font-weight: bold; background-color: #e8f5e9;">Berhasil</td>
+      </tr>
+      <tr style="height: 24px;">
+        <td style="padding: 10px; text-align: center; border: 1px solid #cccccc;">2</td>
+        <td style="padding: 10px; text-align: left; border: 1px solid #cccccc; font-weight: bold;">Cari Jadwal Bus</td>
+        <td style="padding: 10px; text-align: left; border: 1px solid #cccccc;">Pilih asal: "Jakarta", tujuan: "Bandung", tanggal esok hari, klik cari.</td>
+        <td style="padding: 10px; text-align: left; border: 1px solid #cccccc;">Menampilkan daftar bus kelas eksekutif dengan harga Rp125.000.</td>
+        <td style="padding: 10px; text-align: center; border: 1px solid #cccccc; color: #2e7d32; font-weight: bold; background-color: #e8f5e9;">Berhasil</td>
+      </tr>
+      <tr style="height: 24px;">
+        <td style="padding: 10px; text-align: center; border: 1px solid #cccccc;">3</td>
+        <td style="padding: 10px; text-align: left; border: 1px solid #cccccc; font-weight: bold;">Pilih Kursi Interaktif</td>
+        <td style="padding: 10px; text-align: left; border: 1px solid #cccccc;">Klik kursi "1D", input nama penumpang "AHMED", klik proses.</td>
+        <td style="padding: 10px; text-align: left; border: 1px solid #cccccc;">Sistem mengunci kursi, mengalihkan ke instruksi bayar Midtrans.</td>
+        <td style="padding: 10px; text-align: center; border: 1px solid #cccccc; color: #2e7d32; font-weight: bold; background-color: #e8f5e9;">Berhasil</td>
+      </tr>
+      <tr style="height: 24px;">
+        <td style="padding: 10px; text-align: center; border: 1px solid #cccccc;">4</td>
+        <td style="padding: 10px; text-align: left; border: 1px solid #cccccc; font-weight: bold;">Proteksi Double Booking</td>
+        <td style="padding: 10px; text-align: left; border: 1px solid #cccccc;">Dua tab browser memesan kursi "1D" di jadwal yang sama bersamaan.</td>
+        <td style="padding: 10px; text-align: left; border: 1px solid #cccccc;">Transaksi pertama berhasil, transaksi kedua ditolak dengan pesan error.</td>
+        <td style="padding: 10px; text-align: center; border: 1px solid #cccccc; color: #2e7d32; font-weight: bold; background-color: #e8f5e9;">Berhasil</td>
+      </tr>
+      <tr style="height: 24px;">
+        <td style="padding: 10px; text-align: center; border: 1px solid #cccccc;">5</td>
+        <td style="padding: 10px; text-align: left; border: 1px solid #cccccc; font-weight: bold;">Webhook Pembayaran</td>
+        <td style="padding: 10px; text-align: left; border: 1px solid #cccccc;">Kirim callback settlement QRIS dari simulator Midtrans.</td>
+        <td style="padding: 10px; text-align: left; border: 1px solid #cccccc;">Transaksi berubah jadi <code>paid</code> dan tombol download e-tiket muncul.</td>
+        <td style="padding: 10px; text-align: center; border: 1px solid #cccccc; color: #2e7d32; font-weight: bold; background-color: #e8f5e9;">Berhasil</td>
+      </tr>
+      <tr style="height: 24px;">
+        <td style="padding: 10px; text-align: center; border: 1px solid #cccccc;">6</td>
+        <td style="padding: 10px; text-align: left; border: 1px solid #cccccc; font-weight: bold;">Scan Boarding Tiket</td>
+        <td style="padding: 10px; text-align: left; border: 1px solid #cccccc;">Arahkan kamera web ke QR Code tiket aktif penumpang.</td>
+        <td style="padding: 10px; text-align: left; border: 1px solid #cccccc;">Status tiket berubah jadi <code>boarded</code> dan tercatat di histori scan.</td>
+        <td style="padding: 10px; text-align: center; border: 1px solid #cccccc; color: #2e7d32; font-weight: bold; background-color: #e8f5e9;">Berhasil</td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>
