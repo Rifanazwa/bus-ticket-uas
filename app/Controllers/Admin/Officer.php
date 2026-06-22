@@ -185,20 +185,17 @@ class Officer extends BaseController
 
         $filename = 'petugas_terminal_' . date('Ymd_His') . '.csv';
 
-        header('Content-Type: text/csv; charset=utf-8');
-        header('Content-Disposition: attachment; filename=' . $filename);
-
-        $output = fopen('php://output', 'w');
+        $stream = fopen('php://temp', 'w+');
         
         // Add UTF-8 BOM for Excel compliance
-        fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
+        fprintf($stream, chr(0xEF).chr(0xBB).chr(0xBF));
 
         // CSV Header
-        fputcsv($output, ['name', 'email', 'phone', 'bus_code', 'bus_name']);
+        fputcsv($stream, ['name', 'email', 'phone', 'bus_code', 'bus_name']);
 
         foreach ($officers as $off) {
             $bus = $off['bus_id'] ? $this->busModel->find($off['bus_id']) : null;
-            fputcsv($output, [
+            fputcsv($stream, [
                 $off['name'],
                 $off['email'],
                 $off['phone'],
@@ -207,8 +204,11 @@ class Officer extends BaseController
             ]);
         }
 
-        fclose($output);
-        exit();
+        rewind($stream);
+        $csvContent = stream_get_contents($stream);
+        fclose($stream);
+
+        return $this->response->download($filename, $csvContent)->setContentType('text/csv');
     }
 
     public function template()

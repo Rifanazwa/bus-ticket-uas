@@ -239,19 +239,16 @@ class Schedule extends BaseController
         
         $filename = 'jadwal_keberangkatan_' . date('Ymd_His') . '.csv';
         
-        header('Content-Type: text/csv; charset=utf-8');
-        header('Content-Disposition: attachment; filename=' . $filename);
-        
-        $output = fopen('php://output', 'w');
+        $stream = fopen('php://temp', 'w+');
         
         // Add UTF-8 BOM for Excel compliance
-        fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
+        fprintf($stream, chr(0xEF).chr(0xBB).chr(0xBF));
         
         // CSV Header
-        fputcsv($output, ['origin', 'destination', 'bus_name', 'departure_time', 'arrival_time', 'price', 'status', 'driver_1', 'driver_2', 'conductor']);
+        fputcsv($stream, ['origin', 'destination', 'bus_name', 'departure_time', 'arrival_time', 'price', 'status', 'driver_1', 'driver_2', 'conductor']);
         
         foreach ($schedules as $sched) {
-            fputcsv($output, [
+            fputcsv($stream, [
                 $sched['origin'],
                 $sched['destination'],
                 $sched['bus_name'],
@@ -265,8 +262,11 @@ class Schedule extends BaseController
             ]);
         }
         
-        fclose($output);
-        exit();
+        rewind($stream);
+        $csvContent = stream_get_contents($stream);
+        fclose($stream);
+        
+        return $this->response->download($filename, $csvContent)->setContentType('text/csv');
     }
 
     public function import()

@@ -155,19 +155,16 @@ class Route extends BaseController
         
         $filename = 'rute_perjalanan_' . date('Ymd_His') . '.csv';
         
-        header('Content-Type: text/csv; charset=utf-8');
-        header('Content-Disposition: attachment; filename=' . $filename);
-        
-        $output = fopen('php://output', 'w');
+        $stream = fopen('php://temp', 'w+');
         
         // Add UTF-8 BOM for Excel compliance
-        fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
+        fprintf($stream, chr(0xEF).chr(0xBB).chr(0xBF));
         
         // CSV Header
-        fputcsv($output, ['origin', 'destination', 'distance_km', 'estimated_duration']);
+        fputcsv($stream, ['origin', 'destination', 'distance_km', 'estimated_duration']);
         
         foreach ($routes as $route) {
-            fputcsv($output, [
+            fputcsv($stream, [
                 $route['origin'],
                 $route['destination'],
                 $route['distance_km'],
@@ -175,8 +172,11 @@ class Route extends BaseController
             ]);
         }
         
-        fclose($output);
-        exit();
+        rewind($stream);
+        $csvContent = stream_get_contents($stream);
+        fclose($stream);
+        
+        return $this->response->download($filename, $csvContent)->setContentType('text/csv');
     }
 
     public function template()

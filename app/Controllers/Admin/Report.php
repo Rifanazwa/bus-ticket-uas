@@ -116,19 +116,16 @@ class Report extends BaseController
 
         $filename = 'Laporan_Keuangan_' . $startDate . '_s_d_' . $endDate . '.csv';
 
-        header('Content-Type: text/csv; charset=utf-8');
-        header('Content-Disposition: attachment; filename=' . $filename);
-
-        $output = fopen('php://output', 'w');
-
+        $stream = fopen('php://temp', 'w+');
+        
         // Add UTF-8 BOM for Excel compliance
-        fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
+        fprintf($stream, chr(0xEF).chr(0xBB).chr(0xBF));
 
         // Column headings
-        fputcsv($output, ['ID Transaksi', 'Kode Booking', 'Nama Pelanggan', 'Metode Pembayaran', 'Jumlah (IDR)', 'Status', 'Tanggal Lunas']);
+        fputcsv($stream, ['ID Transaksi', 'Kode Booking', 'Nama Pelanggan', 'Metode Pembayaran', 'Jumlah (IDR)', 'Status', 'Tanggal Lunas']);
 
         foreach ($payments as $p) {
-            fputcsv($output, [
+            fputcsv($stream, [
                 $p['transaction_id'],
                 $p['booking_code'],
                 $p['customer_name'],
@@ -139,8 +136,11 @@ class Report extends BaseController
             ]);
         }
 
-        fclose($output);
-        exit;
+        rewind($stream);
+        $csvContent = stream_get_contents($stream);
+        fclose($stream);
+
+        return $this->response->download($filename, $csvContent)->setContentType('text/csv');
     }
 
     public function exportFleet()
@@ -152,19 +152,16 @@ class Report extends BaseController
 
         $filename = 'Laporan_Performa_Armada_' . $startDate . '_s_d_' . $endDate . '.csv';
 
-        header('Content-Type: text/csv; charset=utf-8');
-        header('Content-Disposition: attachment; filename=' . $filename);
-
-        $output = fopen('php://output', 'w');
+        $stream = fopen('php://temp', 'w+');
 
         // Add UTF-8 BOM for Excel compliance
-        fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
+        fprintf($stream, chr(0xEF).chr(0xBB).chr(0xBF));
 
         // Column headings
-        fputcsv($output, ['ID Bus', 'Nama Bus', 'Tipe Bus', 'Kapasitas Kursi', 'Total Perjalanan (Trip)', 'Total Penumpang', 'Rata-rata Okupansi (%)', 'Pendapatan Dihasilkan (IDR)']);
+        fputcsv($stream, ['ID Bus', 'Nama Bus', 'Tipe Bus', 'Kapasitas Kursi', 'Total Perjalanan (Trip)', 'Total Penumpang', 'Rata-rata Okupansi (%)', 'Pendapatan Dihasilkan (IDR)']);
 
         foreach ($fleetReport as $f) {
-            fputcsv($output, [
+            fputcsv($stream, [
                 $f['bus_id'],
                 $f['bus_name'],
                 $f['bus_type'],
@@ -176,8 +173,11 @@ class Report extends BaseController
             ]);
         }
 
-        fclose($output);
-        exit;
+        rewind($stream);
+        $csvContent = stream_get_contents($stream);
+        fclose($stream);
+
+        return $this->response->download($filename, $csvContent)->setContentType('text/csv');
     }
 
     // ─────────────────────────────────────────────────────────────────────────

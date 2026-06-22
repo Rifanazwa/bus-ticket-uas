@@ -199,16 +199,13 @@ class Bus extends BaseController
         
         $filename = 'armada_bus_' . date('Ymd_His') . '.csv';
         
-        header('Content-Type: text/csv; charset=utf-8');
-        header('Content-Disposition: attachment; filename=' . $filename);
-        
-        $output = fopen('php://output', 'w');
+        $stream = fopen('php://temp', 'w+');
         
         // Add UTF-8 BOM for Excel compliance
-        fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
+        fprintf($stream, chr(0xEF).chr(0xBB).chr(0xBF));
         
         // CSV Header
-        fputcsv($output, ['BUS ID', 'Nama PO / Armada', 'Kelas Bus', 'Petugas Lapangan', 'Kapasitas Kursi']);
+        fputcsv($stream, ['BUS ID', 'Nama PO / Armada', 'Kelas Bus', 'Petugas Lapangan', 'Kapasitas Kursi']);
         
         foreach ($buses as $bus) {
             $officers = $userModel->where('role', 'petugas')->where('bus_id', $bus['id'])->findAll();
@@ -218,7 +215,7 @@ class Bus extends BaseController
             }
             $officersStr = empty($officerNames) ? 'Belum ditugaskan' : implode(', ', $officerNames);
             
-            fputcsv($output, [
+            fputcsv($stream, [
                 $bus['code'],
                 $bus['name'],
                 $bus['type'],
@@ -227,8 +224,11 @@ class Bus extends BaseController
             ]);
         }
         
-        fclose($output);
-        exit();
+        rewind($stream);
+        $csvContent = stream_get_contents($stream);
+        fclose($stream);
+        
+        return $this->response->download($filename, $csvContent)->setContentType('text/csv');
     }
 
     public function template()
