@@ -211,7 +211,31 @@ class Schedule extends BaseController
 
     public function export()
     {
-        $schedules = $this->scheduleModel->getDetailedSchedules();
+        $search = $this->request->getGet('search');
+        
+        // Base query with joins
+        $query = $this->scheduleModel->select('schedules.*, routes.origin, routes.destination, buses.name as bus_name, buses.type as bus_type, d1.name as driver_1_name, d2.name as driver_2_name, cond.name as conductor_name')
+                                      ->join('routes', 'routes.id = schedules.route_id')
+                                      ->join('buses', 'buses.id = schedules.bus_id')
+                                      ->join('users d1', 'd1.id = schedules.driver_1_id', 'left')
+                                      ->join('users d2', 'd2.id = schedules.driver_2_id', 'left')
+                                      ->join('users cond', 'cond.id = schedules.conductor_id', 'left')
+                                      ->orderBy('schedules.departure_time', 'ASC');
+        
+        if (!empty($search)) {
+            $query->groupStart()
+                  ->like('routes.origin', $search)
+                  ->orLike('routes.destination', $search)
+                  ->orLike('buses.name', $search)
+                  ->orLike('buses.type', $search)
+                  ->orLike('schedules.departure_time', $search)
+                  ->orLike('d1.name', $search)
+                  ->orLike('d2.name', $search)
+                  ->orLike('cond.name', $search)
+                  ->groupEnd();
+        }
+        
+        $schedules = $query->findAll();
         
         $filename = 'jadwal_keberangkatan_' . date('Ymd_His') . '.csv';
         
@@ -219,6 +243,9 @@ class Schedule extends BaseController
         header('Content-Disposition: attachment; filename=' . $filename);
         
         $output = fopen('php://output', 'w');
+        
+        // Add UTF-8 BOM for Excel compliance
+        fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
         
         // CSV Header
         fputcsv($output, ['origin', 'destination', 'bus_name', 'departure_time', 'arrival_time', 'price', 'status', 'driver_1', 'driver_2', 'conductor']);

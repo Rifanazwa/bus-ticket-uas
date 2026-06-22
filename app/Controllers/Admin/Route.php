@@ -142,6 +142,15 @@ class Route extends BaseController
 
     public function export()
     {
+        $search = $this->request->getGet('search');
+        
+        if (!empty($search)) {
+            $this->routeModel->groupStart()
+                             ->like('origin', $search)
+                             ->orLike('destination', $search)
+                             ->groupEnd();
+        }
+        
         $routes = $this->routeModel->findAll();
         
         $filename = 'rute_perjalanan_' . date('Ymd_His') . '.csv';
@@ -150,6 +159,9 @@ class Route extends BaseController
         header('Content-Disposition: attachment; filename=' . $filename);
         
         $output = fopen('php://output', 'w');
+        
+        // Add UTF-8 BOM for Excel compliance
+        fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
         
         // CSV Header
         fputcsv($output, ['origin', 'destination', 'distance_km', 'estimated_duration']);

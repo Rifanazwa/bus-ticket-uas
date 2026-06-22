@@ -106,7 +106,7 @@ if (!function_exists('parseMarkdown')) {
                 Ekspor Keuangan (CSV)
             </a>
             <a x-show="activeTab === 'armada'" 
-               href="<?= base_url('admin/report/export/fleet') ?>"
+               href="<?= base_url('admin/report/export/fleet?start_date=' . $startDate . '&end_date=' . $endDate) ?>"
                class="px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-xs font-bold text-slate-200 hover:text-white transition-all flex items-center gap-2 shadow-sm">
                 <i data-lucide="download" class="w-3.5 h-3.5 text-indigo-400"></i>
                 Ekspor Armada (CSV)

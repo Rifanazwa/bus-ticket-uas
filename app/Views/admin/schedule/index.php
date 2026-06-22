@@ -13,7 +13,7 @@ $subtitle = 'Daftar Jadwal Keberangkatan Bus';
     </a>
     
     <!-- Export Button -->
-    <a href="<?= base_url('admin/schedule/export') ?>" class="py-2 px-3 rounded-xl font-semibold text-slate-350 bg-slate-850 hover:bg-slate-800 hover:text-white border border-slate-800 shadow flex items-center gap-1.5 transition-all text-xs">
+    <a href="<?= base_url('admin/schedule/export' . (!empty($search) ? '?search=' . urlencode($search) : '')) ?>" class="py-2 px-3 rounded-xl font-semibold text-slate-350 bg-slate-850 hover:bg-slate-800 hover:text-white border border-slate-800 shadow flex items-center gap-1.5 transition-all text-xs">
         <i data-lucide="file-output" class="w-3.5 h-3.5"></i> Export CSV
     </a>
 

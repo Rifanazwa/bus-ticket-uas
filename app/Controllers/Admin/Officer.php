@@ -169,7 +169,19 @@ class Officer extends BaseController
 
     public function export()
     {
-        $officers = $this->userModel->where('role', 'petugas')->findAll();
+        $search = $this->request->getGet('search');
+        
+        $builder = $this->userModel->where('role', 'petugas');
+        
+        if (!empty($search)) {
+            $builder->groupStart()
+                    ->like('name', $search)
+                    ->orLike('email', $search)
+                    ->orLike('phone', $search)
+                    ->groupEnd();
+        }
+        
+        $officers = $builder->findAll();
 
         $filename = 'petugas_terminal_' . date('Ymd_His') . '.csv';
 
@@ -177,6 +189,9 @@ class Officer extends BaseController
         header('Content-Disposition: attachment; filename=' . $filename);
 
         $output = fopen('php://output', 'w');
+        
+        // Add UTF-8 BOM for Excel compliance
+        fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
 
         // CSV Header
         fputcsv($output, ['name', 'email', 'phone', 'bus_code', 'bus_name']);

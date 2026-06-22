@@ -51,7 +51,7 @@ class Report extends BaseController
         $monthlyRevenue = $this->getMonthlyRevenueData();
 
         // 4. Fleet Performance Report
-        $fleetReport = $this->getFleetPerformanceData();
+        $fleetReport = $this->getFleetPerformanceData($startDate, $endDate);
 
         // Calculate Average Fleet Occupancy
         $totalTrips = 0;
@@ -145,9 +145,12 @@ class Report extends BaseController
 
     public function exportFleet()
     {
-        $fleetReport = $this->getFleetPerformanceData();
+        $startDate = $this->request->getGet('start_date') ?: date('Y-m-d', strtotime('-30 days'));
+        $endDate   = $this->request->getGet('end_date') ?: date('Y-m-d');
 
-        $filename = 'Laporan_Performa_Armada_' . date('Y-m-d') . '.csv';
+        $fleetReport = $this->getFleetPerformanceData($startDate, $endDate);
+
+        $filename = 'Laporan_Performa_Armada_' . $startDate . '_s_d_' . $endDate . '.csv';
 
         header('Content-Type: text/csv; charset=utf-8');
         header('Content-Disposition: attachment; filename=' . $filename);
@@ -280,29 +283,44 @@ class Report extends BaseController
         return $monthlyData;
     }
 
-    private function getFleetPerformanceData(): array
+    private function getFleetPerformanceData($startDate = null, $endDate = null): array
     {
         $db = \Config\Database::connect();
         
-        $fleetReport = $db->query("
+        $params = [];
+        $dateFilter = "";
+        
+        if ($startDate !== null && $endDate !== null) {
+            $dateFilter = " AND s.departure_time >= ? AND s.departure_time <= ? ";
+            $params = [
+                $startDate . ' 00:00:00', $endDate . ' 23:59:59',
+                $startDate . ' 00:00:00', $endDate . ' 23:59:59',
+                $startDate . ' 00:00:00', $endDate . ' 23:59:59'
+            ];
+        }
+        
+        $queryStr = "
             SELECT 
                 b.id AS bus_id,
                 b.name AS bus_name,
                 b.type AS bus_type,
                 b.total_seats,
-                (SELECT COUNT(*) FROM schedules s WHERE s.bus_id = b.id) AS total_trips,
+                (SELECT COUNT(*) FROM schedules s 
+                 WHERE s.bus_id = b.id {$dateFilter}) AS total_trips,
                 (SELECT COUNT(bs.id) 
                  FROM booking_seats bs
                  JOIN bookings bo ON bo.id = bs.booking_id
                  JOIN schedules s ON s.id = bo.schedule_id
-                 WHERE s.bus_id = b.id AND bo.booking_status != 'cancelled') AS total_passengers,
+                 WHERE s.bus_id = b.id AND bo.booking_status != 'cancelled' {$dateFilter}) AS total_passengers,
                 (SELECT COALESCE(SUM(bo.total_price), 0)
                  FROM bookings bo
                  JOIN schedules s ON s.id = bo.schedule_id
-                 WHERE s.bus_id = b.id AND bo.payment_status = 'paid' AND bo.booking_status != 'cancelled') AS total_revenue
+                 WHERE s.bus_id = b.id AND bo.payment_status = 'paid' AND bo.booking_status != 'cancelled' {$dateFilter}) AS total_revenue
             FROM buses b
             ORDER BY total_revenue DESC
-        ")->getResultArray();
+        ";
+        
+        $fleetReport = $db->query($queryStr, $params)->getResultArray();
 
         foreach ($fleetReport as &$row) {
             $totalPossibleSeats = $row['total_trips'] * $row['total_seats'];

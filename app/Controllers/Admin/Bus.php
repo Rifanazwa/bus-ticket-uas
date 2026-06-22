@@ -185,7 +185,17 @@ class Bus extends BaseController
 
     public function export()
     {
+        $search = $this->request->getGet('search');
+        
+        if (!empty($search)) {
+            $this->busModel->groupStart()
+                           ->like('code', $search)
+                           ->orLike('name', $search)
+                           ->groupEnd();
+        }
+        
         $buses = $this->busModel->findAll();
+        $userModel = new \App\Models\UserModel();
         
         $filename = 'armada_bus_' . date('Ymd_His') . '.csv';
         
@@ -194,14 +204,26 @@ class Bus extends BaseController
         
         $output = fopen('php://output', 'w');
         
+        // Add UTF-8 BOM for Excel compliance
+        fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
+        
         // CSV Header
-        fputcsv($output, ['code', 'name', 'type']);
+        fputcsv($output, ['BUS ID', 'Nama PO / Armada', 'Kelas Bus', 'Petugas Lapangan', 'Kapasitas Kursi']);
         
         foreach ($buses as $bus) {
+            $officers = $userModel->where('role', 'petugas')->where('bus_id', $bus['id'])->findAll();
+            $officerNames = [];
+            foreach ($officers as $off) {
+                $officerNames[] = $off['name'];
+            }
+            $officersStr = empty($officerNames) ? 'Belum ditugaskan' : implode(', ', $officerNames);
+            
             fputcsv($output, [
                 $bus['code'],
                 $bus['name'],
-                $bus['type']
+                $bus['type'],
+                $officersStr,
+                $bus['total_seats']
             ]);
         }
         
